@@ -1,0 +1,20 @@
+\begin{thebibliography}{1}
+
+\bibitem{lcc1}
+M.~Anitescu and F.~Potra.
+\newblock Formulating dynamic multi-rigid-body contact problems with friction
+  as solvable linear complementarity problems.
+\newblock 14(93):231--247, 1997.
+
+\bibitem{seq}
+Dimitri~P. Bertsekas, John~N. Tsitsiklis, and Cynara. Wu.
+\newblock Rollout algorithms for combinatorial optimization.
+\newblock 3(3):245--262, 1997.
+
+\bibitem{fom}
+François Hogan and Alberto Rodriguez.
+\newblock Feedback control of the pusher-slider system: A story of hybrid and
+  underactuated contact dynamics.
+\newblock 2016.
+
+\end{thebibliography}
