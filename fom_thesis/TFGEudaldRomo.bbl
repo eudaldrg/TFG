@@ -11,10 +11,26 @@ Dimitri~P. Bertsekas, John~N. Tsitsiklis, and Cynara. Wu.
 \newblock Rollout algorithms for combinatorial optimization.
 \newblock 3(3):245--262, 1997.
 
+\bibitem{planar_sliding1}
+Suresh Goyal, Andy Ruina, and Jim Papadopoulos.
+\newblock Planar sliding with dry friction part 1. limit surface and moment
+  function.
+\newblock 143(2):307--330, 1991.
+
+\bibitem{planar_sliding2}
+Suresh Goyal, Andy Ruina, and Jim Papadopoulos.
+\newblock Planar sliding with dry friction part 2. dynamics of motion.
+\newblock 143(2):331--352, 1991.
+
 \bibitem{fom}
 François Hogan and Alberto Rodriguez.
 \newblock Feedback control of the pusher-slider system: A story of hybrid and
   underactuated contact dynamics.
 \newblock 2016.
+
+\bibitem{pushing4}
+Matthew~T Mason.
+\newblock Mechanics and planning of manipulator pushing operations.
+\newblock 5(3):53--71, 1986.
 
 \end{thebibliography}

@@ -5,46 +5,49 @@ The style file: plain.bst
 Database file #1: fom_bib.bib
 Warning--empty journal in lcc1
 Warning--empty journal in seq
+Warning--empty journal in planar_sliding1
+Warning--empty journal in planar_sliding2
 Warning--empty journal in fom
-You've used 3 entries,
+Warning--empty journal in pushing4
+You've used 6 entries,
             2118 wiz_defined-function locations,
-            515 strings with 4522 characters,
-and the built_in function-call counts, 954 in all, are:
-= -- 92
-> -- 44
+            532 strings with 4901 characters,
+and the built_in function-call counts, 1958 in all, are:
+= -- 193
+> -- 87
 < -- 0
-+ -- 17
-- -- 14
-* -- 71
-:= -- 167
-add.period$ -- 9
-call.type$ -- 3
-change.case$ -- 16
++ -- 34
+- -- 28
+* -- 153
+:= -- 333
+add.period$ -- 18
+call.type$ -- 6
+change.case$ -- 32
 chr.to.int$ -- 0
-cite$ -- 6
-duplicate$ -- 32
-empty$ -- 72
-format.name$ -- 14
-if$ -- 187
+cite$ -- 12
+duplicate$ -- 65
+empty$ -- 151
+format.name$ -- 28
+if$ -- 387
 int.to.chr$ -- 0
-int.to.str$ -- 3
-missing$ -- 3
-newline$ -- 18
-num.names$ -- 6
-pop$ -- 18
+int.to.str$ -- 6
+missing$ -- 6
+newline$ -- 33
+num.names$ -- 12
+pop$ -- 34
 preamble$ -- 1
-purify$ -- 13
+purify$ -- 26
 quote$ -- 0
-skip$ -- 23
+skip$ -- 44
 stack$ -- 0
-substring$ -- 65
+substring$ -- 149
 swap$ -- 0
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 12
-warning$ -- 3
-while$ -- 10
-width$ -- 4
-write$ -- 31
-(There were 3 warnings)
+type$ -- 24
+warning$ -- 6
+while$ -- 22
+width$ -- 7
+write$ -- 61
+(There were 6 warnings)

@@ -1,23 +1,30 @@
-\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
-\BOOKMARK [2][-]{subsection.1.1}{Prior Work}{section.1}% 2
-\BOOKMARK [2][-]{subsection.1.2}{Complementarity Constraints}{section.1}% 3
-\BOOKMARK [2][-]{subsection.1.3}{Model Predictive Control}{section.1}% 4
-\BOOKMARK [2][-]{subsection.1.4}{Family of Modes}{section.1}% 5
-\BOOKMARK [2][-]{subsection.1.5}{Nomenclature}{section.1}% 6
-\BOOKMARK [2][-]{subsection.1.6}{Sequential Properties}{section.1}% 7
-\BOOKMARK [1][-]{section.2}{My Work. TODO: Change name}{}% 8
-\BOOKMARK [2][-]{subsection.2.1}{Chameleon Mode}{section.2}% 9
-\BOOKMARK [2][-]{subsection.2.2}{Simulation Interface}{section.2}% 10
-\BOOKMARK [2][-]{subsection.2.3}{Systematic Protocol to Choose the Modes of the Family}{section.2}% 11
-\BOOKMARK [1][-]{section.3}{Experiments}{}% 12
-\BOOKMARK [1][-]{section.4}{TODO stuff}{}% 13
-\BOOKMARK [1][-]{section.5}{Adding the MAMME cover page to your document}{}% 14
-\BOOKMARK [1][-]{section.6}{Environments}{}% 15
-\BOOKMARK [2][-]{subsection.6.1}{Theorem-like environments}{section.6}% 16
-\BOOKMARK [2][-]{subsection.6.2}{Definition-like environments}{section.6}% 17
-\BOOKMARK [2][-]{subsection.6.3}{Remark-like environments}{section.6}% 18
-\BOOKMARK [1][-]{section.7}{Figures}{}% 19
-\BOOKMARK [1][-]{section.8}{Mathematics and packages}{}% 20
-\BOOKMARK [1][-]{section.9}{Bibliography}{}% 21
-\BOOKMARK [1][-]{appendix.A}{Title of the appendix}{}% 22
-\BOOKMARK [1][-]{appendix.B}{Title of the appendix}{}% 23
+\BOOKMARK [1][-]{section.1}{Introduction. On the mechanics of pushing.}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{Coulomb Friction}{section.1}% 2
+\BOOKMARK [2][-]{subsection.1.2}{Friction Cone}{section.1}% 3
+\BOOKMARK [2][-]{subsection.1.3}{Maximum Power Inequality, Limit Curve and Limit Surface}{section.1}% 4
+\BOOKMARK [2][-]{subsection.1.4}{Motion Cone and Limit Surfaces}{section.1}% 5
+\BOOKMARK [2][-]{subsection.1.5}{Quasi static formulation}{section.1}% 6
+\BOOKMARK [2][-]{subsection.1.6}{Data driven approach}{section.1}% 7
+\BOOKMARK [1][-]{section.2}{Prior Work}{}% 8
+\BOOKMARK [2][-]{subsection.2.1}{Pushing}{section.2}% 9
+\BOOKMARK [2][-]{subsection.2.2}{Complementarity Constraints}{section.2}% 10
+\BOOKMARK [2][-]{subsection.2.3}{Model Predictive Control}{section.2}% 11
+\BOOKMARK [2][-]{subsection.2.4}{Family of Modes}{section.2}% 12
+\BOOKMARK [2][-]{subsection.2.5}{Nomenclature}{section.2}% 13
+\BOOKMARK [2][-]{subsection.2.6}{Sequential Properties}{section.2}% 14
+\BOOKMARK [1][-]{section.3}{My Work. TODO: Change name}{}% 15
+\BOOKMARK [2][-]{subsection.3.1}{Chameleon Mode}{section.3}% 16
+\BOOKMARK [2][-]{subsection.3.2}{Simulation Interface}{section.3}% 17
+\BOOKMARK [2][-]{subsection.3.3}{Systematic Protocol to Choose the Modes of the Family}{section.3}% 18
+\BOOKMARK [1][-]{section.4}{Experiments}{}% 19
+\BOOKMARK [1][-]{section.5}{TODO stuff}{}% 20
+\BOOKMARK [1][-]{section.6}{Adding the MAMME cover page to your document}{}% 21
+\BOOKMARK [1][-]{section.7}{Environments}{}% 22
+\BOOKMARK [2][-]{subsection.7.1}{Theorem-like environments}{section.7}% 23
+\BOOKMARK [2][-]{subsection.7.2}{Definition-like environments}{section.7}% 24
+\BOOKMARK [2][-]{subsection.7.3}{Remark-like environments}{section.7}% 25
+\BOOKMARK [1][-]{section.8}{Figures}{}% 26
+\BOOKMARK [1][-]{section.9}{Mathematics and packages}{}% 27
+\BOOKMARK [1][-]{section.10}{Bibliography}{}% 28
+\BOOKMARK [1][-]{appendix.A}{Title of the appendix}{}% 29
+\BOOKMARK [1][-]{appendix.B}{Title of the appendix}{}% 30

@@ -44,7 +44,7 @@
 
 % Body of document
 
-\titol{A learning approach\\[3mm] to the FOM problem}
+\titol{A Learning Approach\\[3mm] To The FOM Problem}
 \titolcurt{A learning approach to the FOM problem}
 \authorStudent{Eudald Romo Grau}
 \supervisors{Alberto Rodriguez Garcia and Maria Alberich Carrami\~nana}
@@ -64,24 +64,80 @@ Thanks to Alberto Rodriguez for his tutoring, for providing me with the required
 
 \maketitle
 
-\section{Introduction}
+\section{Introduction. On the mechanics of pushing.}
 \label{sec:intro}
-Recently, there has been a lot of progress in the worlds of manipulation and locomotion. ADD SOME EXAMPLES HERE.
 
-Complementarity constraints led to hybrid state formulations. MPC allowed to convexify those formulations. MPC grows exponential with the number of  lookahead time steps.
+Traditionally, one of the main focus of interest of the manipulation community has been the mechanics of stable grasping: finding stable grasping points, encapsulation, etc. [add citations and some examples, Alberto's work, M. Mason, etc.]. But some drift towards the study of the mechanics of pushing started to appear at least as far as Mason's work on 1980's \cite{pushing4}. Some of the motivations for this new focus of interest were to allow the proper understanding of the internal mechanics of general grasping (by viewing it as a special case of multi-contact-point pushing) to {adsfa} and to address some of the issues found with stable grasping [TODO: Add some of the things mentioned in Mason(1986): Humans example, multiple objects handling, ...].
+
+Goyal et al. \cite{planar_sliding1}\cite{planar_sliding2} applied concepts of classical plastic theory to describe planar sliding, deriving the concepts of limit surfaces for dry contact manipulation.
+
+Planar pushing has been widely studied since, both by its simpler model as compared to free 3D pushing as for it's similarity to simple in-hand repositioning operations [TODO: add citation].
+
+%In Mason's study of the mechanics of pushing [TODO: Ask Maria if this is proper] there's an introduction to the traditional assumptions and previous results on the mechanics of pushing, which I'm going to borrow in this thesis.
+
+\subsection{Coulomb Friction}
+\label{subsec:coulomb}
+One of the usual assumptions in the robotics community is considering dry Coulomb contact forces. This model separates friction into two possible states (static and dynamic or kinetic friction) and the set of rules which describe it are a combination the work of Amonton [TODO: cite] and Coulomb [TODO: cite]:
+\begin{itemize}
+\item{Amonton's first law:} The force of friction is directly proportional to the applied load.
+\item{Amonton's second law:} The force of friction is independent of the apparent area of contact.
+\item{Coulomb's law:} Kinetic friction is independent of the sliding velocity.
+\end{itemize}
+Mason cites prior statements by Da Vinci[TODO: Cite] and experimental verification by Truesdell and Guillmor [TODO: Cite] and I would like to add the work of Euler[TODO: Cite], who first distinguished between static and kinetic friction.
+
+\subsection{Friction Cone}
+\label{subsec:frictioncone}
+A common and useful geometric interpretation of Coulomb’s law (according to Mason first constructed by Moseley[TODO: Cite]) is widely used in the robotics community. Given a point on a surface interacting with it with total contact force \textbf{f}, we decompose it into it's normal $f_n$ and tangential $f_t$ components with respect to the contact surface. Coulomb friction compact formulation states that $f_t \leq \mu f_n$, where $\mu$ is the proportionality factor usually called friction coefficient [TODO: Add note on why only one coefficient is used], where the equality holds on dynamic friction. Letting $\alpha$ be the angle between \textbf{f} and $f_n$ (or, alternatively, the normal of the surface on the point of contact), Coulomb's law is equivalent to 
+If we construct the normal to the surface, then Coulomb’s law is equivalent to $\alpha \leq tan^{-1} \frac{f_t}{f_n}$. So, the set of feasible contact forces lies inside a closed cone with aperture $2\alpha$. [TODO: Add image]
+
+\subsection{Maximum Power Inequality, Limit Curve and Limit Surface}
+\label{subsec:mpi}
+Goyal's work can be generalised to friction models which are more general but, for clarity, the main concepts will be introduced with the special case of isotropic Coulomb friction (as was presented in their original paper).
+
+Given rigid body sliding over a surface with a known normal force (or pressure distribution) and assuming that, at each point of contact, the frictional force depends only on the normal force, the slider's orientation and it's direction of slipping, isotropic Coulomb friction law allows us to obtain two important properties.
+\begin{enumerate}
+\item $|f| \leq K$, where f is the frictional force vector and K is a constant. Furthermore,
+\end{enumerate}
+
+The maximum-power inequality is introduced with which a convex limit curve describes the forces arising during slip of a point of contact. The limit curves for Coulomb friction (a circle), for an ideal wheel (a straight line), and for some less ideal wheels are given as examples. The load-motion inequality for the overall body is then derived and the resulting concept of a limit surface is introduced and illustrated with two somewhat artificial examples (a body with two points of Coulombic support, and a ring of ratcheted wheels). The moment function is then presented. We conclude with a discussion of some facts and results related to limit surfaces and to the moment function.
+
+\subsection{Motion Cone and Limit Surfaces}
+\label{subsec:motioncone}
+
+\subsection{Quasi static formulation}
+\label{subsec:quasistatic}
+
+\subsection{Data driven approach}
+\label{subsec:datadriven} 
+
+Work on how to link it with previous things (maybe some paper on problems of the model driven approach)
+
+\subsection{Hybridness}
+\label{subsec:hybridness}
+
+The study of the mechanics of pushing led to the concept of hybridness, inherent in the dynamical properties of traditional rigid body Coulomb contact  
 
 Feedback is hard/requires effort. All the teams in the ARC used open loop systems (as of the 2nd edition of the competition) [add reference]
 
 Feedback is important. Robots fall because control in hybrid systems still has a long way to go.
 
+TODO: UNDERACTUATION
+
 
 This allowed to tackle problems as state hybridness (ADD COMPLEMENTARITY CONSTRAINTS AND HYBRID PROBLEMS). This allowed further progress into the planning branch of these problems. Unluckily, the complexity of the traditional formulations for these problems requires discretization of the time space of the problem and the algorithmic cost of the used solvers usually grows exponentially with the number of considered time steps. This has been translated into a relatively lower progress of the correspondent online control branch.
 
-\subsection{Prior Work}
-\label{subsec:priorWork}
+\section{Prior Work}
+\label{sec:priorWork}
+
+\subsection{Pushing}
+\label{subsec:pushing}
+
+
 
 \subsection{Complementarity Constraints}
 \label{subsec:Complementarity Constraint}
+[TODO: Read Nima's paper].
+
 The Complementarity constraint formulation [TODO: INSERT REFERENCES] presented a systematic way of formulating hybrid system problems and the work of Anitescu and Potra \cite{lcc1} guaranteed a solution for this formulation on multi-rigid-body Coulomb friction contact problems and impact problems with friction and nonzero restitution coefficient. However, the complementarity constraints are generally non convex and using them in practical problems without further treatment makes the problem non-computable.
 
 \subsection{Model Predictive Control}
