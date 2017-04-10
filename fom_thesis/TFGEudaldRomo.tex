@@ -147,8 +147,11 @@ As the number of sub-problems grows exponentially with the number of time steps,
 
 [TODO: Add this: Es pot representar el conjunt de possibles problemes de programacio lineal que s'han de resoldre a traves d'un arbre. Cada node representa un dels tres estats possibles. L'arrel de l'arbre es un node buit i a cada pas de la trajectoria l'arbre es ramifica 3 nodes (un per cada possible estat). Cada cami des de l'arrel fins a una de les fulles defineix de manera unica un problema a solucionar.]
 
+\subsection{MIP and MIQP}
+\label{subsec:intro_miqp}
+
 \subsection{Family of Modes}
-\label{subsec:FOM}
+\label{subsec:fom}
 Recently, Hogan and Rodriguez \cite{fom} proposed an heuristic based procedure to solve MPC problems online called Family of Modes (FOM). In their work, they assume a finite horizon MPC problem. Periodically, the heuristic method explores the optimization problem over only a small set of all the possible combinations of hybrid states to decide the instantaneous controller policy. This policy is then recomputed frequently to take into account new information as the finite horizon advances in time as well as to tackle external interference with the system and errors in the dynamic model.
 
 FOM is applied to solve a planar system formed by a point pusher and a square slider supported on a board. The contact between the pusher and the slider is modelled as a single point Coulomb contact. Three possible hybrid states are considered with regards to this contact point: pushing without sliding and pushing while sliding in each of the two possible directions. The contact between the slider and the board is modelled by deriving the limit surface of the slider [TODO: Citation]. The motion and cone constraints are obtained by assuming a quasi-static formulation and linearising the motion equations and the motion cone [TODO: explain more and explain why we use full dynamics on the first step]. By exploring only three pre-chosen modes at every step their controller is able to successfully track a straight trajectory or pass through a set of waypoints even under external perturbations or perturbations on the dynamical model used. [TODO: add this:(per exemple, podriem estar esperant que en un pas el dit robotic es mantingues adherit, pero el coeficient de friccio pot ser diferent a la zona on esta en aquell moment i lliscar en comptes de mantenir-se adherit)]
@@ -177,19 +180,84 @@ Let's cite \cite{seq}
 \section{My Work. TODO: Change name}
 \label{sec:work}
 
+
+\begin{itemize}
+\item {State:}
+\item {Mode:} Basic modes are S, $U_n$ and $D_n$
+\item {Family:}
+\item {Control iteration:}
+\item {Optimization iteration:}
+\end{itemize}
+
+
+\section{Simulation Tool}
+\label{sec:sim}
+
+The simulations of the previous study were mainly designed for an specific choice of modes and a specific trajectory to follow. In this study, we wanted to study general properties of the FOM problem, to generalize the results to more complex pusher-slider systems and trajectories, and to compare our different FOM strategies to solve the MPC problem with other conventional methods as MIQP. In order to satisfy this needs, we decided to implement a general simulation tool. The code is added in appendix \ref{app:code} but the main structure is explained here.
+
+An abstract state interface is implemented to provide the dynamics and cone constraints of the state as well as their linearized versions at a certain objective state space and control input. To define a certain expimental problem, the dynamics function and constraint equations are derived depending on a general state space variable \textbf{x} and controller action \textbf{u} and the necessary state instances are imlemented and a mode is then defined by a vector of state handles. An MPC solver class it's also implemented to get an initial condition and an objective trajectory and return a control input. Each MPC solver implementation can include its own member states or modes (as well as other optimization setup variables) and internally decides how to handle them.
+
+At the same time, an Euler integration simulator is implemented. This simulator uses it's own state classes to describe the dynamics of the pusher slider system. These states are independent from the optimization ones so that discrepancies between model and reality can be simulated (for example the MPC solver can use linearized dynamics or cone constraints while the Euler integrator uses the nonlinearized version, which is more simililar to the real experimental setup than using linearized dynamics in both places). The Euler integration class also holds a member MPC solver that returns the control input to be applied. The integrator then computes the value of the state variable derivative $\dot{x}$ and uses a simple quadrature to approximate the next state variable value.
+
+\subsection{Global Cost Function}
+\label{subsec:costfunc}
+During the previous work at MCubelab, there was no systematic and objective way to evaluate the global trajectory resulting from the FOM control law, the exit or failure of an experiment was mainly determined in a subjective binary way. If the pusher slider didn’t show appreciable divergence (at the naked eye) from the planned trajectory it was considered a success, otherwise it was a failure. In a similar fashion if the system was perturbed (by an external interaction), the success lied in recovering the original trajectory in a “reasonable” time determined subjectively. The main goal of the study was just to demonstrate that FOM could effectively control the pusher slider system to track previously planned trajectories, and that all this process could be done online. Because of this proof-of-concept nature, this approach was sufficient.
+
+In this thesis we want to optimize the performance of the FOM and this requires a certain notion of metric or score for the result obtained. We decided to ignore the cost of the controller and we adopted a quadratic cost on the state variables. To keep consistent with the local problem we used the same cost matrix Q as in the MPC obtaining $S = \sum\limits_{i = 0}^{N}{x_{i}^{T} Q x_i}$.
+
 \subsection{Chameleon Mode}
-\label{subsec:karmachameleon}
-Un dels defectes era el fet que en cada iteracio nomes s'executes el primer pas de la trajectoria obtinguda. Aixo feia que la immensa majoria de families de camins fossin, a efectes practics, inutils. Per mostrar un exemple senzill, es pot considerar el cas en que la familia conte dos camins de tres iteracions, per exemple:
-$$cami1 = {adherencia, lliscar_amunt, adherencia} i cami2 = {adherencia, lliscar_avall, adherencia}$$. Encara que entre els dos camins es tingui en compte la totalitat dels estats possibles, el dit robotic mai lliscara, ja que el primer pas dels dos camins es adherencia, i el controlador nomes executa el primer pas. Vaig estar mirant maneres de solucionar aquest problema i, si es volien mantenir camins estatics (es a dir, executar sempre els mateixos camins en cada iteracio), el nombre de camins necessaris tambe creixia molt rapidament, ja que per cada cami, hauries d'afegir totes les possibles translacions periodiques del cami.
+\label{subsec:chameleon}
 
-Vaig considerar camins dinamics i vaig obtenir dues possibles solucions. La primera era principalment imaginar els camins com a camins periodics i traslladar-los una posicio al final de cada iteracio.
-La segona era afegir un mode camaleo, que en cada iteracio simules la continuacio del cami seleccionat com a solucio de la iteracio anterior.
+In the previous FOM study there was no guarantee of improvement in the obtained trajectory by considering new modes in a previously used family. It needs to be clarified that, even if in the previous study there was no global score function implemented, this effect could be so big that it could be observed with the naked eye. An ilustrative example would be the following. A family containing only the sticking mode $F_1 = S$ would greatly outperform the extended family $F_2 = S \bigcup D_2$. On the other side a further extension $F_3 = F_2 \bigcup D_1$ would outperform the two previous families TODO: ADD PHOTOS OR VIDEOS OF THIS.
 
-\subsection{Simulation Interface}
-\label{subsec:sim}
-De moment he decidit utilitzar mateixos costos que s'utilitzen localment per solucionar els problemes de programacio lineal en l'horitzo reduit per evaluar la solucio total, ja que aixo em permet garantir alguns resultats teorics, com ara que, a part d'errors numerics al solucionar el MIP, la solucio del MIP ha de ser millor que la de la familia de modes.
+The performance decrease experienced in $F_2$ can be explained by the fact that the FOM optimizer can choose optimal trajectories that will never be able to be applied. For example, the optimal control solution at a certain optimization iteration can be to stick for one time step to then slide up for another time step and finally stick for the rest of the finite time horizon prediction. The control law for the controller is to execute the first step of the optimal trajectory, so it the pusher will move without sliding for one time step and then the control law will be recomputed. The problem lies in the fact that no mode starts with a sliding up state, so the trajectory planned in the previous iteration is no longer considered. If the first sliding step of the trajectories obtained from $S$ and $D_2$ are similar there will be no appreciable but the solution of $D_2$ may sometimes rely on the possibility of sliding to follow a more aggressive control trajectory that would have a smaller TODO: FINISH THIS. 
 
-Aquests ultims mesos he estat programant un codi en MATLAB per simular els dos metodes (familia de modes i MIP) basant-me en el codi anterior del meu company de laboratori. Ell tenia un codi prototip per solucionar un cas molt concret: familia de modes amb tres camins de 35 iteracions que segueix una linia recta. Ho he reestructurat tot per tal que es puguin generar camins arbitraris que combinin els estats que jo defineixi i seguir trajectories arbitraries. Aixo ha de permetre, per una banda, extendre el problema a casos mes complexos (trajectories mes complexes, un dit que pugui cambiar la cara del cub que empeny, multiples dits que empenyin diferents cares, etc). 
+The conclusion these experiences led us to was that, using [TODO: Cite] terminology, there was no sequencial improvement property when adding new modes.
+Solving the MPC using the FOM approach has similarities with their study: Each of the modes can be considered a heuristic and the strategy of recomputing the control policy at a certain frequency by using the same heuristics can be viewed as a rollout technique. It's important to note that the concepts of sequencial consistency or optimality cannot be applied to our case without some previous modifications, because of the existance of a receding finite time horizon, but for every FOM problem we can formulate an associated Full Horizon Family of Modes (FFOM) as follows: TODO: Define it.
+
+If we take the family $F_1$ of the previous example and we consider it's associated FFOM problem, we can see that, in an ideal problem (TODO: define it in nomenclature), it's clearly sequencially consistent (and so, sequencially improving): Consider that at a certain control iteration there's a full horizon of N steps to reach the end of the trajectory. Then the $S$ mode will get the optimal path to reach the goal while keeping the sticking contact at all times, obtaining a sequence of position states $\boldsymbol{x(x_0)*} = (x_1^*, x_2^*, ..., x_N^*)$ and control inputs $\boldsymbol{u(x_0)^*} = (u_0^*, u_1^*, ... u_{N-1}^*$ for the optimal path from the initial position to the goal. Then, the controller will execute $u_0$ for one control step and the pusher slider system will be in position $x_1$. The only heuristic it will consider in the next optimization step is to stick until reaching the goal, so the optimal trajectory obtained will be $\boldsymbol{x(x_1)^*} = (x_2^*, x_3^*, ..., x_N^*)$ and $\boldsymbol{u(x_1)^*} = (u_1^*, u_2^*, ... u_{N-1}^*$, being sequencially consistent. In a similar way, it can be shown that no sequencial consistency nor improvement can be guaranteed for family $F_2$: if mode $D_2$ is chosen at a certain time step, giving an optimal trajectory $\boldsymbol{x_0(x_0)^*} \boldsymbol{u_0(x_0)^*}$, a mode $D_1$ is required in the family to consider the continuation of the previous optimal trajectory $\boldsymbol{x_0(x_1)^*}$,  $\boldsymbol{u_0(x_1)^*}$ again. As it is not the case, the new optimal trajectory has no relation with the previous one and consistency and improvent cannot be guaranteed. On the other hand sequencial improvent is guaranteed for family $F_3$ because, following the previous reasonment, including the mode $D_1$ in the rollout allows to continue considering optimal trajectories from a previous step of a $D_2$ mode and the $S$ mode considering the ones obtained from a $D_1$ mode.
+
+We considered important to guarantee sequencial improvement for the FFOM problem even taking into account that our problem is not in the ideal world (modelling errors and different frequencies for the optimization problem and the controller can lead the state obtained when applying $u_0$ to $x_0$ to be different from $x_1$) and that we don't have a full horizon. It was not a sufficient condition to obtain an overall improvent when adding modes to a family, but it was a required one. Another important motivation to try to guarantee it was that the simulation results showed that families that guaranteed improvement in the FFOM problem outperformed the ones that did not.
+
+In order to guarantee it we decided first decided to only use families that would always compare the current possible trajectories to the immediately previous optimal one (in the FFOM problem). The problem with this approach is that for any mode $M = (S_1, ..., S_N)$ you add include in the family you need to include any suffix of it extended to length N $(S_i, ... S_N, S_{N+1}, ... S_{N+i-1})$ and suffixes of the newly added modes would also be required. Given certain mode patterns and adding simple extension tails formed by i - 1 copies of the same mode may keep the number of modes low. For an $S$ mode no extra modes are required and for a $D_n$ one you only need to extend the family with an $S$ mode and all the $D_i$ modes for $i \in (1, n-1)$. Even taking this into account, we considered adopting this strategy constrained the problem of family design more than we wanted to and added more extra nodes that was strictly necessary, so we decided to change from static families to dynamical ones instead.
+
+The dynamical adjustment we added consisted in including a dynamic mode that would force the algorithm into considering the previously chosen path to guarantee sequencial improvement. This mode, that we called chameleon mode, simply includes the maximal suffix [TODO: add definition] of the previously selected mode extended with a single sticking state. TODO: Add something.
+
+The chameleon mode functionality was added in the simulation interface and it's performance was tested in simulation. As we expected, there was a great improvement in families that didn't have a sequencially improving structure without it. TODO: Add figures with comparison and some comment.
+
+With the chameleon mode, an improvement when adding modes could be observed to a certain extent, as will be discussed in \ref{subsec:learningsimple}.
+
+Given the good properties of the chameleon mode, we decided to include it in the FOM formulation. From now on, unless spececified otherwise, we will use FOM to refer to the family of modes with chameleon mode implementation.
+
+\subsection{MIQP and Clustered MIQP}
+\label{subsec:miqp}
+
+We wanted to compare the solutions provided by FOM with traditional MPC solving techniques. In order to do that we decided to implement the MIQP technique using the commercial solver Gurobi. This solver was already used in Hogan's work in a force-based formulation prior to the final velocity-based one (TODO: Cite) and it was able to run in an average of 3Hz. It should be mentioned that the execution time at every control iteration could range between few miliseconds to 10 seconds, because MIP algorithms depend on the geometry of the problem.
+This is not a problem for simulation, but in a real control environment the frequency at which you can update the controller cannot be higher that the frequency at which you can solve the worst case scenarios in the optimization problem. Otherwise the controller may try to update the control input before it is computed by the optimizer. There may be solutions to this effect in other formulations, but for the one used in Hogan's work an MIQP controller could not be run at more than 0.1Hz.
+
+We were expecting a similar behavior in the velocity-based formulation, but it took several orders of magnitude more to solve. In order to simulate 500 control iterations (a trajectory of 5 seconds controlled at 100Hz) with a finite horizon of 7 steps it took around 6 hours of execution time. We were expecting to have an "ideal" MIQP result to compare FOM with and try to get similar results with FOM with less computational effort, but the results obtained with 7 steps of the MIQP were worse than the FOM and we couldn't afford to increase the horizon further.
+
+We looked at techniques to speed up the MIQP execution (TODO: Add where did I find the information) and we found out that our current big-M formulation worked better (both in execution time and in quality of the obtained trajectory) than the indicator constraints formulations as smaller the M parameter was. As explained in \ref{subsec:intro_miqp} each M parameter used in a scalar equality $Ax \leq b + M (1 - z)$ must be greater than $\max\limits_{x \in D}{(Ax - b)}$, for a the x variable domain D, so that the inequality is rendered redundant when z = 0. We implemented a version of MIQP that given a vectorial constraint as the ones used in Hogan's formulation $A\vec{x} \leq \vec{b} + M (1 - z) \cdot (1, ..., 1)^T$ replaces the arbitrary constant M by a vector $\vec{M}$ where each component's value is $M_i = \max\limits_{x_i \in D}{(A_i x_i - b_i)}$
+. We were not able to improve the execution time, but we were able to obtain better results for the MIQP. TODO: add images showing the improvement.
+
+In order to compare FOM to other methods using a longer time horizon, we implemented another MPC solving method based on MIQP that we called Clustered MIQP. Given a standard MPC formulation, this method works in the following way:
+
+\begin{itemize}
+\item Consider a clustering factor c, a finite horizon $ N c$ and a set of h hybrid states $ \{ H_1, ..., H_h \}$.
+\item The finite horizon is then divided into N clusters of c steps: $(C_1, ..., C_N)$.
+\item The state space is extended with 3 binary variables per step $(s_i, d_i, u_i)$ for a total of 3N variables.
+\item Each variable $s_i$ $d_i$ and $u_i$ is associated with the hybrid state of the cluster $C_i$ (sticking, sliding down and sliding up respectively).
+\item The constraint $s_i + d_i + u_i = 1$ is enforced 
+\item The problem constraints are formulated with big M notation or indicator constraints and the problem is fed into an MIQP solver.
+\end{itemize}
+
+This way we can reduce the dimensionality of the optimization problem by keeping the same state during all the steps of the same cluster. The execution time of this new problem is similar to the excution time of a MIQP problem of N steps but the controller inputs can be different at each of the $N c$ steps.
+
+We intended to use this method to approximate MIQP problems with long horizons (around 35 steps) by using few clusters (around 5) and we expected to obtain a better trajectory than the ones obtained with FOM. As will be discussed later, the results of this MIQP approximation were worse than the results obtained in FOM with a good choice of few modes.
+
+\subsection{Simulation Conclusions}
+
+We were able to compare both MIQP and FOM with a small finite horizon of 5 steps and we were able to observe the expected behaviour: Some families gave poor results when compared to MIQP, but the result could be iteratively improved by adding new modes. The obtained trajectories did not strictly follow an increasing sequence, but 
 
 \subsection{Systematic Protocol to Choose the Modes of the Family}
 Initially, a single trajectory tracking learning protocol was devised. A single euler integration step of the controlling policy was executed with a lot of initial conditions homogeneously distributed in a four dimensional ball centered around the expected initial conditions. This guaranteed enough generality to represent any possible situation in a static trajectory (either a line or a circle). The cost for every initial condition and hybrid mode was recorded. The cost was normalized for every experiment across all the hybrid states and then the k modes with highest normalized mean were chosen.
@@ -198,8 +266,22 @@ After testing it, the same procedure was applied to a wide range of circular tra
 
 Finally, at every iteration of the controlling policy, the local curvature is computed and the adequate family is used.
 
+\section{Learning}
+
+\subsection{Simple trajectory learning}
+\label{subsec:learningsimple}
+
+\subsection{Dynamic FOM}
+TODO: Explain that chameleon can keep sequencial optimality even in this situation.
+
 \section{Experiments}
 \label{sec:experiments}
+
+\section{Conclusion and Discussion}
+\label{sec:conclusion}
+\begin{enumerate}
+\item{MIQP} takes too long, it's execution time depends on the geometry of the problem (different time at each iteration). The results may depend on the implementation chosen. If you don't have a software that allows you to tune everything it is too complicated to implement. Clustered MIQP is no better. We should try MIQP with tail (we expect good results but bad time)
+\end{enumerate}
 
 \section{TODO stuff}
 I have to talk about close loops and about manipulation. then first approach to the family of modes. Then sequential consistency, improvement.
@@ -329,7 +411,8 @@ You may include your references by hand using {\tt the bibliography} (see an exa
 
 %______________________________________________________________
 \appendix
-\vfill\newpage \section{Title of the appendix}
+\vfill\newpage \section{Simulation Interface Code}
+\label{app:code}
 You can include here an appendix with details that can not be included in the core of the document. You should reference the sections in this appendix in the core document.
 \vfill\newpage \section{Title of the appendix}
 Second appendix.
