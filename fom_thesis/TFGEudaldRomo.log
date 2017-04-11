@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.4.5)  11 APR 2017 04:37
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.4.5)  11 APR 2017 05:23
 entering extended mode
 **./TFGEudaldRomo.tex
 (TFGEudaldRomo.tex
@@ -587,20 +587,20 @@ Package: cite 2015/02/27  v 5.5
  (TFGEudaldRomo.aux)
 \openout1 = `TFGEudaldRomo.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 63.
-LaTeX Font Info:    ... okay on input line 63.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 63.
-LaTeX Font Info:    ... okay on input line 63.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 63.
-LaTeX Font Info:    ... okay on input line 63.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 63.
-LaTeX Font Info:    ... okay on input line 63.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 63.
-LaTeX Font Info:    ... okay on input line 63.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 63.
-LaTeX Font Info:    ... okay on input line 63.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 63.
-LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 64.
+LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 64.
+LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 64.
+LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 64.
+LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 64.
+LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 64.
+LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 64.
+LaTeX Font Info:    ... okay on input line 64.
 
 ("C:\Program Files\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -629,7 +629,7 @@ G,.JBIG2,.JB2,.eps]
 (grfext)             \AppendGraphicsExtensions on input line 456.
 )
 \AtBeginShipoutBox=\box60
-Package hyperref Info: Link coloring ON on input line 63.
+Package hyperref Info: Link coloring ON on input line 64.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\hyperref\nameref.sty"
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
@@ -639,9 +639,9 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
 \c@section@level=\count146
 )
-LaTeX Info: Redefining \ref on input line 63.
-LaTeX Info: Redefining \pageref on input line 63.
-LaTeX Info: Redefining \nameref on input line 63.
+LaTeX Info: Redefining \ref on input line 64.
+LaTeX Info: Redefining \pageref on input line 64.
+LaTeX Info: Redefining \nameref on input line 64.
 
 (TFGEudaldRomo.out) (TFGEudaldRomo.out)
 \@outlinefile=\write4
@@ -649,7 +649,7 @@ LaTeX Info: Redefining \nameref on input line 63.
 
 Package lastpage Info: Please have a look at the pageslts package at
 (lastpage)             https://www.ctan.org/pkg/pageslts
-(lastpage)             ! on input line 63.
+(lastpage)             ! on input line 64.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -685,39 +685,39 @@ Package lastpage Info: Please have a look at the pageslts package at
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Font Info:    Try loading font information for U+msa on input line 63.
+LaTeX Font Info:    Try loading font information for U+msa on input line 64.
 ("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 63.
+LaTeX Font Info:    Try loading font information for U+msb on input line 64.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Package xypdf Info: Line width: 0.43799pt on input line 63.
+Package xypdf Info: Line width: 0.43799pt on input line 64.
  [1
 
 {C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}] [2] [3] [4]
 
 LaTeX Font Warning: Font shape `OT1/cmss/m/it' in size <10.95> not available
-(Font)              Font shape `OT1/cmss/m/sl' tried instead on input line 66.
+(Font)              Font shape `OT1/cmss/m/sl' tried instead on input line 67.
 
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.66 
+l.67 
       [1
 
 ]
-LaTeX Font Info:    Try loading font information for OMS+cmss on input line 82.
+LaTeX Font Info:    Try loading font information for OMS+cmss on input line 83.
 
-LaTeX Font Info:    No file OMScmss.fd. on input line 82.
+LaTeX Font Info:    No file OMScmss.fd. on input line 83.
 
 
 LaTeX Font Warning: Font shape `OMS/cmss/m/n' undefined
 (Font)              using `OMS/cmsy/m/n' instead
-(Font)              for symbol `textbullet' on input line 82.
+(Font)              for symbol `textbullet' on input line 83.
 
 Missing character: There is no â in font cmss10!
 Missing character: There is no € in font cmss10!
@@ -729,18 +729,18 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.96 
+l.97 
       [2]pdfTeX warning (ext4): destination with the same identifier (name{page
 .3}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.141 T
+l.142 T
        he Complementarity constraint formulation [TODO: INSERT REFERENCES] p...
 [3]pdfTeX warning (ext4): destination with the same identifier (name{page.4}) h
 as been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.158 
+l.159 
        [4] [5]
 Missing character: There is no â in font cmss10!
 Missing character: There is no € in font cmss10!
@@ -758,37 +758,41 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [7]
-[8] [9] [10] [11] [12] <samplefigure.pdf, id=277, 803.0pt x 803.0pt>
-File: samplefigure.pdf Graphic file (type pdf)
+[8] [9]
+Underfull \vbox (badness 1062) has occurred while \output is active []
 
-<use samplefigure.pdf>
-Package pdftex.def Info: samplefigure.pdf used on input line 391.
+ [10]
+[11] [12] <samplefigure.pdf, id=276, 803.0pt x 803.0pt>
+File: samplefigure.pdf Graphic file (type pdf)
+ <use samplefigure.pdf>
+Package pdftex.def Info: samplefigure.pdf used on input line 399.
 (pdftex.def)             Requested size: 170.71652pt x 170.71794pt.
- [13 <./samplefigure.pdf>] (TFGEudaldRomo.bbl
+
+[13 <./samplefigure.pdf>] (TFGEudaldRomo.bbl
 Missing character: There is no Ã in font cmss10!
 Missing character: There is no § in font cmss10!
-) [14]
-[15] 
+) [14] [15]
+
 AED: lastpage setting LastPage
 [16]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 441.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 441.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 449.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 449.
  (TFGEudaldRomo.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 441.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 441.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 449.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 449.
 Package rerunfilecheck Info: File `TFGEudaldRomo.out' has not changed.
 (rerunfilecheck)             Checksum: CAEA133D0D7077B189A040BEE59A4F6A;2776.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 441.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 449.
  ) 
 Here is how much of TeX's memory you used:
- 10892 strings out of 493333
- 146636 string characters out of 3139192
- 307899 words of memory out of 3000000
- 14151 multiletter control sequences out of 15000+200000
+ 10893 strings out of 493333
+ 146640 string characters out of 3139192
+ 307906 words of memory out of 3000000
+ 14152 multiletter control sequences out of 15000+200000
  17298 words of font info for 66 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  35i,17n,49p,3247b,423s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -806,7 +810,7 @@ cm/cmss8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmssbx
 ram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program File
 s/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files/MiKTeX 
 2.9/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on TFGEudaldRomo.pdf (20 pages, 274001 bytes).
+Output written on TFGEudaldRomo.pdf (20 pages, 274802 bytes).
 PDF statistics:
  379 PDF objects out of 1000 (max. 8388607)
  85 named destinations out of 1000 (max. 500000)
