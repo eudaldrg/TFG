@@ -54,22 +54,31 @@
 
 %%%%%%%%%
 \begin{document}
+\subsection{MIQP and Clustered MIQP}
+\label{subsec:miqp}
 
-\section{Simulation Tool}
-\label{sec:sim}
+We wanted to compare the solutions provided by FOM with traditional MPC solving techniques. In order to do that we decided to implement the MIQP technique using the commercial solver Gurobi. This solver was already used in Hogan's work in a force-based formulation prior to the final velocity-based one (TODO: Cite) and it was able to run in an average of 3Hz. It should be mentioned that the execution time at every control iteration could range between few miliseconds to 10 seconds, because MIP algorithms depend on the geometry of the problem.
+This is not a problem for simulation, but in a real control environment the frequency at which you can update the controller cannot be higher that the frequency at which you can solve the worst case scenarios in the optimization problem. Otherwise the controller may try to update the control input before it is computed by the optimizer. There may be solutions to this effect in other formulations, but for the one used in Hogan's work an MIQP controller could not be run at more than 0.1Hz.
 
-The simulations of the previous study were mainly designed for an specific choice of modes and a specific trajectory to follow. In this study, we wanted to study general properties of the FOM problem, to generalize the results to more complex pusher-slider systems and trajectories, and to compare our different FOM strategies to solve the MPC problem with other conventional methods as MIQP. In order to satisfy this needs, we decided to implement a general simulation tool. The code is added in appendix \ref{app:code} but the main structure is explained here.
+We were expecting a similar behavior in the velocity-based formulation, but it took several orders of magnitude more to solve. In order to simulate 500 control iterations (a trajectory of 5 seconds controlled at 100Hz) with a finite horizon of 7 steps it took around 6 hours of execution time. We were expecting to have an "ideal" MIQP result to compare FOM with and try to get similar results with FOM with less computational effort, but the results obtained with 7 steps of the MIQP were worse than the FOM and we couldn't afford to increase the horizon further.
 
-An abstract state interface is implemented to provide the dynamics and cone constraints of the state as well as their linearized versions at a certain objective state space and control input. To define a certain expimental problem, the dynamics function and constraint equations are derived depending on a general state space variable \textbf{x} and controller action \textbf{u} and the necessary state instances are imlemented and a mode is then defined by a vector of state handles. An MPC solver class it's also implemented to get an initial condition and an objective trajectory and return a control input. Each MPC solver implementation can include its own member states or modes (as well as other optimization setup variables) and internally decides how to handle them.
+We looked at techniques to speed up the MIQP execution (TODO: Add where did I find the information) and we found out that our current big-M formulation worked better (both in execution time and in quality of the obtained trajectory) than the indicator constraints formulations as smaller the M parameter was. As explained in \ref{subsec:intro_miqp} each M parameter used in a scalar equality $Ax \leq b + M (1 - z)$ must be greater than $\max\limits_{x \in D}{(Ax - b)}$, for a the x variable domain D, so that the inequality is rendered redundant when z = 0. We implemented a version of MIQP that given a vectorial constraint as the ones used in Hogan's formulation $A\vec{x} \leq \vec{b} + M (1 - z) \cdot (1, ..., 1)^T$ replaces the arbitrary constant M by a vector $\vec{M}$ where each component's value is $M_i = \max\limits_{x_i \in D}{(A_i x_i - b_i)}$
+. We were not able to improve the execution time, but we were able to obtain better results for the MIQP. TODO: add images showing the improvement.
 
-At the same time, an Euler integration simulator is implemented. This simulator uses it's own state classes to describe the dynamics of the pusher slider system. These states are independent from the optimization ones so that discrepancies between model and reality can be simulated (for example the MPC solver can use linearized dynamics or cone constraints while the Euler integrator uses the nonlinearized version, which is more simililar to the real experimental setup than using linearized dynamics in both places). The Euler integration class also holds a member MPC solver that returns the control input to be applied. The integrator then computes the value of the state variable derivative $\dot{x}$ and uses a simple quadrature to approximate the next state variable value.
+In order to compare FOM to other methods using a longer time horizon, we implemented another MPC solving method based on MIQP that we called Clustered MIQP. Given a standard MPC formulation, this method works in the following way:
 
-\subsection{Global Cost Function}
-\label{subsec:costfunc}
-During the previous work at MCubelab, there was no systematic and objective way to evaluate the global trajectory resulting from the FOM control law, the exit or failure of an experiment was mainly determined in a subjective binary way. If the pusher slider didn’t show appreciable divergence (at the naked eye) from the planned trajectory it was considered a success, otherwise it was a failure. In a similar fashion if the system was perturbed (by an external interaction), the success lied in recovering the original trajectory in a “reasonable” time determined subjectively. The main goal of the study was just to demonstrate that FOM could effectively control the pusher slider system to track previously planned trajectories, and that all this process could be done online. Because of this proof-of-concept nature, this approach was sufficient.
+\begin{itemize}
+\item Consider a clustering factor c, a finite horizon $ N c$ and a set of h hybrid states $ \{ H_1, ..., H_h \}$.
+\item The finite horizon is then divided into N clusters of c steps: $(C_1, ..., C_N)$.
+\item The state space is extended with 3 binary variables per step $(s_i, d_i, u_i)$ for a total of 3N variables.
+\item Each variable $s_i$ $d_i$ and $u_i$ is associated with the hybrid state of the cluster $C_i$ (sticking, sliding down and sliding up respectively).
+\item The constraint $s_i + d_i + u_i = 1$ is enforced 
+\item The problem constraints are formulated with big M notation or indicator constraints and the problem is fed into an MIQP solver.
+\end{itemize}
 
-In this thesis we want to optimize the performance of the FOM and this requires a certain notion of metric or score for the result obtained. We decided to ignore the cost of the controller and we adopted a quadratic cost on the state variables. To keep consistent with the local problem we used the same cost matrix Q as in the MPC obtaining $S = \sum\limits_{i = 0}^{N}{x_{i}^{T} Q x_i}$.
+This way we can reduce the dimensionality of the optimization problem by keeping the same state during all the steps of the same cluster. The execution time of this new problem is similar to the excution time of a MIQP problem of N steps but the controller inputs can be different at each of the $N c$ steps.
 
+We intended to use this method to approximate MIQP problems with long horizons (around 35 steps) by using few clusters (around 5) and we expected to obtain a better trajectory than the ones obtained with FOM. As will be discussed later, the results of this MIQP approximation were worse than the results obtained in FOM with a good choice of few modes.
 \end{document}
 
 

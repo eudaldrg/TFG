@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.4.5)  9 APR 2017 23:40
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.4.5)  10 APR 2017 07:44
 entering extended mode
 **./tfgCopyToSendStuff.tex
 (tfgCopyToSendStuff.tex
@@ -696,31 +696,32 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 Package xypdf Info: Line width: 0.43799pt on input line 56.
 
 
-LaTeX Warning: Reference `app:code' on page 1 undefined on input line 61.
+LaTeX Warning: Reference `subsec:intro_miqp' on page 1 undefined on input line 
+65.
 
-Missing character: There is no ‚ in font cmss10!
-Missing character: There is no Ä in font cmss10!
-Missing character: There is no ô in font cmss10!
-Missing character: There is no ‚ in font cmss10!
-Missing character: There is no Ä in font cmss10!
-Missing character: There is no ú in font cmss10!
-Missing character: There is no ‚ in font cmss10!
-Missing character: There is no Ä in font cmss10!
-Missing character: There is no ù in font cmss10!
+LaTeX Font Info:    Try loading font information for OMS+cmss on input line 71.
 
-AED: lastpage setting LastPage
+LaTeX Font Info:    No file OMScmss.fd. on input line 71.
+
+LaTeX Font Warning: Font shape `OMS/cmss/m/n' undefined
+(Font)              using `OMS/cmsy/m/n' instead
+(Font)              for symbol `textbullet' on input line 71.
+
 
 LaTeX Font Warning: Font shape `OT1/cmss/m/it' in size <10.95> not available
-(Font)              Font shape `OT1/cmss/m/sl' tried instead on input line 73.
+(Font)              Font shape `OT1/cmss/m/sl' tried instead on input line 81.
 
 [1
 
 {C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 73.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 73.
+
+AED: lastpage setting LastPage
+[2]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 82.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 82.
  (tfgCopyToSendStuff.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 73.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 73.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 82.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 82.
 
 
 Package rerunfilecheck Warning: File `tfgCopyToSendStuff.out' has changed.
@@ -728,36 +729,44 @@ Package rerunfilecheck Warning: File `tfgCopyToSendStuff.out' has changed.
 (rerunfilecheck)                or use package `bookmark'.
 
 Package rerunfilecheck Info: Checksums for `tfgCopyToSendStuff.out':
-(rerunfilecheck)             Before: 6C706D34D9DB5095207EE4AB7B2FCC5C;55
-(rerunfilecheck)             After:  3EAD8D053A0B1DF9D9EC51DB4D3082E8;121.
+(rerunfilecheck)             Before: 3EAD8D053A0B1DF9D9EC51DB4D3082E8;121
+(rerunfilecheck)             After:  51BD99F301997D1CDD242810C0525CF0;64.
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
 
 LaTeX Warning: There were undefined references.
 
 
 LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 73.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 82.
  ) 
 Here is how much of TeX's memory you used:
- 10696 strings out of 493333
- 144242 string characters out of 3139192
- 301498 words of memory out of 3000000
- 14048 multiletter control sequences out of 15000+200000
- 12595 words of font info for 50 fonts, out of 3000000 for 9000
+ 10695 strings out of 493333
+ 144204 string characters out of 3139192
+ 303546 words of memory out of 3000000
+ 14045 multiletter control sequences out of 15000+200000
+ 11995 words of font info for 48 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 35i,13n,45p,3252b,329s stack positions out of 5000i,500n,10000p,200000b,50000s
-pdfTeX warning (dest): name{subsection.0.1} has been referenced but does not 
+ 35i,14n,45p,3252b,329s stack positions out of 5000i,500n,10000p,200000b,50000s
+pdfTeX warning (dest): name{subsection.1.1} has been referenced but does not 
 exist, replaced by a fixed one
 
-<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Prog
+pdfTeX warning (dest): name{section.1} has been referenced but does not exist, 
+replaced by a fixed one
+
+<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Prog
 ram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmss10.pfb><C:/Program File
 s/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmss8.pfb><C:/Program Files/MiKTeX 
 2.9/fonts/type1/public/amsfonts/cm/cmssbx10.pfb><C:/Program Files/MiKTeX 2.9/fo
 nts/type1/public/amsfonts/cm/cmssi10.pfb><C:/Program Files/MiKTeX 2.9/fonts/typ
-e1/public/amsfonts/cm/cmssi8.pfb>
-Output written on tfgCopyToSendStuff.pdf (1 page, 61301 bytes).
+e1/public/amsfonts/cm/cmssi8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/publi
+c/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfon
+ts/cm/cmsy8.pfb>
+Output written on tfgCopyToSendStuff.pdf (2 pages, 81432 bytes).
 PDF statistics:
- 42 PDF objects out of 1000 (max. 8388607)
- 5 named destinations out of 1000 (max. 500000)
- 9 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 57 PDF objects out of 1000 (max. 8388607)
+ 6 named destinations out of 1000 (max. 500000)
+ 17 words of extra memory for PDF output out of 10000 (max. 10000000)
 

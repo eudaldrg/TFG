@@ -266,10 +266,23 @@ After testing it, the same procedure was applied to a wide range of circular tra
 
 Finally, at every iteration of the controlling policy, the local curvature is computed and the adequate family is used.
 
-\section{Learning}
+\section{Mode Selection Protocol}
+\label{sec:modeselection}
+In the previous sections it is explained how we addressed the sequential properties of the FOM formulation and provided a metric and other MPC solvers to compare FOM to. At this point of our study, we were able to adress our next objective: To optimize the selection of the family modes for the FOM formulation.
+
+We considered multiple optimization criteria and relations to study and we had to adopt a set of assumptions to be able to obtain some initial results. For our first study, we tried to learn the modes to follow a single fixed straight line trajectory. Each optimization problem would be parametrized by a fixed finite time horizon (characterized by a number of steps N) and a fixed number of modes K a family could contain. The initial condition $x_0$ was assumed to be a random variable following a certain probability distribution. The cost of the control trajectory C was thus also a random variable of unknown distribution. We will formally define the optimization problem in \ref{subsec:learningsimple}, but the intuitive goal of our learning approach was to choose the set of modes that would minimize the likelihood of C.
+
+In \ref{sec:todo} we will discuss some of the studies we would conduct and assumptions we would try to proof or modify if we disposed of more time.
+
+\subsection{Structure Study And Systematic Approach}
+\label{subsec:structure}
+Initially we intended to use a machine learning approach to choose the optimal modes 
+
+Importance of knowing the structure of the FOM problem to tackle the learning of the modes. Planned study on sensibilities and systematic strategy to learn complex modes.
 
 \subsection{Simple trajectory learning}
 \label{subsec:learningsimple}
+The initial conditions of the problem would be considered The optimization problem and choose the set of modes that was more likely to 
 
 \subsection{Dynamic FOM}
 TODO: Explain that chameleon can keep sequencial optimality even in this situation.
@@ -282,6 +295,14 @@ TODO: Explain that chameleon can keep sequencial optimality even in this situati
 \begin{enumerate}
 \item{MIQP} takes too long, it's execution time depends on the geometry of the problem (different time at each iteration). The results may depend on the implementation chosen. If you don't have a software that allows you to tune everything it is too complicated to implement. Clustered MIQP is no better. We should try MIQP with tail (we expect good results but bad time)
 \end{enumerate}
+
+\section{Things to do if we had time}
+\label{sec:todo}
+\begin{itemize}
+\item Study modes correlation
+\item Study optimal mode dependency wrt initial condition.
+\item Change the uniformly distributed initial conditions by normally distributed.
+\end{itemize}
 
 \section{TODO stuff}
 I have to talk about close loops and about manipulation. then first approach to the family of modes. Then sequential consistency, improvement.

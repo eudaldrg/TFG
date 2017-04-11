@@ -21,19 +21,21 @@
 \BOOKMARK [2][-]{subsection.4.3}{MIQP and Clustered MIQP}{section.4}% 21
 \BOOKMARK [2][-]{subsection.4.4}{Simulation Conclusions}{section.4}% 22
 \BOOKMARK [2][-]{subsection.4.5}{Systematic Protocol to Choose the Modes of the Family}{section.4}% 23
-\BOOKMARK [1][-]{section.5}{Learning}{}% 24
-\BOOKMARK [2][-]{subsection.5.1}{Simple trajectory learning}{section.5}% 25
-\BOOKMARK [2][-]{subsection.5.2}{Dynamic FOM}{section.5}% 26
-\BOOKMARK [1][-]{section.6}{Experiments}{}% 27
-\BOOKMARK [1][-]{section.7}{Conclusion and Discussion}{}% 28
-\BOOKMARK [1][-]{section.8}{TODO stuff}{}% 29
-\BOOKMARK [1][-]{section.9}{Adding the MAMME cover page to your document}{}% 30
-\BOOKMARK [1][-]{section.10}{Environments}{}% 31
-\BOOKMARK [2][-]{subsection.10.1}{Theorem-like environments}{section.10}% 32
-\BOOKMARK [2][-]{subsection.10.2}{Definition-like environments}{section.10}% 33
-\BOOKMARK [2][-]{subsection.10.3}{Remark-like environments}{section.10}% 34
-\BOOKMARK [1][-]{section.11}{Figures}{}% 35
-\BOOKMARK [1][-]{section.12}{Mathematics and packages}{}% 36
-\BOOKMARK [1][-]{section.13}{Bibliography}{}% 37
-\BOOKMARK [1][-]{appendix.A}{Simulation Interface Code}{}% 38
-\BOOKMARK [1][-]{appendix.B}{Title of the appendix}{}% 39
+\BOOKMARK [1][-]{section.5}{Mode Selection Protocol}{}% 24
+\BOOKMARK [2][-]{subsection.5.1}{Structure Study And Systematic Approach}{section.5}% 25
+\BOOKMARK [2][-]{subsection.5.2}{Simple trajectory learning}{section.5}% 26
+\BOOKMARK [2][-]{subsection.5.3}{Dynamic FOM}{section.5}% 27
+\BOOKMARK [1][-]{section.6}{Experiments}{}% 28
+\BOOKMARK [1][-]{section.7}{Conclusion and Discussion}{}% 29
+\BOOKMARK [1][-]{section.8}{Things to do if we had time}{}% 30
+\BOOKMARK [1][-]{section.9}{TODO stuff}{}% 31
+\BOOKMARK [1][-]{section.10}{Adding the MAMME cover page to your document}{}% 32
+\BOOKMARK [1][-]{section.11}{Environments}{}% 33
+\BOOKMARK [2][-]{subsection.11.1}{Theorem-like environments}{section.11}% 34
+\BOOKMARK [2][-]{subsection.11.2}{Definition-like environments}{section.11}% 35
+\BOOKMARK [2][-]{subsection.11.3}{Remark-like environments}{section.11}% 36
+\BOOKMARK [1][-]{section.12}{Figures}{}% 37
+\BOOKMARK [1][-]{section.13}{Mathematics and packages}{}% 38
+\BOOKMARK [1][-]{section.14}{Bibliography}{}% 39
+\BOOKMARK [1][-]{appendix.A}{Simulation Interface Code}{}% 40
+\BOOKMARK [1][-]{appendix.B}{Title of the appendix}{}% 41
