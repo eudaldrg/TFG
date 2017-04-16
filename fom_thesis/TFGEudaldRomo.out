@@ -1,31 +1,43 @@
-\BOOKMARK [1][-]{section.1}{Introduction. On the mechanics of pushing.}{}% 1
-\BOOKMARK [2][-]{subsection.1.1}{Coulomb Friction}{section.1}% 2
-\BOOKMARK [2][-]{subsection.1.2}{Friction Cone}{section.1}% 3
-\BOOKMARK [2][-]{subsection.1.3}{Maximum Power Inequality, Limit Curve and Limit Surface}{section.1}% 4
-\BOOKMARK [2][-]{subsection.1.4}{Motion Cone and Limit Surfaces}{section.1}% 5
-\BOOKMARK [2][-]{subsection.1.5}{Quasi static formulation}{section.1}% 6
-\BOOKMARK [2][-]{subsection.1.6}{Data driven approach}{section.1}% 7
-\BOOKMARK [2][-]{subsection.1.7}{Hybridness}{section.1}% 8
-\BOOKMARK [1][-]{section.2}{Prior Work}{}% 9
-\BOOKMARK [2][-]{subsection.2.1}{Pushing}{section.2}% 10
-\BOOKMARK [2][-]{subsection.2.2}{Complementarity Constraints}{section.2}% 11
-\BOOKMARK [2][-]{subsection.2.3}{Model Predictive Control}{section.2}% 12
-\BOOKMARK [2][-]{subsection.2.4}{Family of Modes}{section.2}% 13
-\BOOKMARK [2][-]{subsection.2.5}{Nomenclature}{section.2}% 14
-\BOOKMARK [2][-]{subsection.2.6}{Sequential Properties}{section.2}% 15
-\BOOKMARK [1][-]{section.3}{My Work. TODO: Change name}{}% 16
-\BOOKMARK [2][-]{subsection.3.1}{Chameleon Mode}{section.3}% 17
-\BOOKMARK [2][-]{subsection.3.2}{Simulation Interface}{section.3}% 18
-\BOOKMARK [2][-]{subsection.3.3}{Systematic Protocol to Choose the Modes of the Family}{section.3}% 19
-\BOOKMARK [1][-]{section.4}{Experiments}{}% 20
-\BOOKMARK [1][-]{section.5}{TODO stuff}{}% 21
-\BOOKMARK [1][-]{section.6}{Adding the MAMME cover page to your document}{}% 22
-\BOOKMARK [1][-]{section.7}{Environments}{}% 23
-\BOOKMARK [2][-]{subsection.7.1}{Theorem-like environments}{section.7}% 24
-\BOOKMARK [2][-]{subsection.7.2}{Definition-like environments}{section.7}% 25
-\BOOKMARK [2][-]{subsection.7.3}{Remark-like environments}{section.7}% 26
-\BOOKMARK [1][-]{section.8}{Figures}{}% 27
-\BOOKMARK [1][-]{section.9}{Mathematics and packages}{}% 28
-\BOOKMARK [1][-]{section.10}{Bibliography}{}% 29
-\BOOKMARK [1][-]{appendix.A}{Title of the appendix}{}% 30
-\BOOKMARK [1][-]{appendix.B}{Title of the appendix}{}% 31
+\BOOKMARK [1][-]{section.1}{Goal of this study}{}% 1
+\BOOKMARK [1][-]{section.2}{Introduction. On the mechanics of pushing.}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Coulomb Friction}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Friction Cone}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.3}{Maximum Power Inequality, Limit Curve and Limit Surface}{section.2}% 5
+\BOOKMARK [2][-]{subsection.2.4}{Motion Cone and Limit Surfaces}{section.2}% 6
+\BOOKMARK [2][-]{subsection.2.5}{Quasi static formulation}{section.2}% 7
+\BOOKMARK [2][-]{subsection.2.6}{Data driven approach}{section.2}% 8
+\BOOKMARK [2][-]{subsection.2.7}{Hybridness}{section.2}% 9
+\BOOKMARK [1][-]{section.3}{Prior Work}{}% 10
+\BOOKMARK [2][-]{subsection.3.1}{Pushing}{section.3}% 11
+\BOOKMARK [2][-]{subsection.3.2}{Complementarity Constraints}{section.3}% 12
+\BOOKMARK [2][-]{subsection.3.3}{Model Predictive Control}{section.3}% 13
+\BOOKMARK [2][-]{subsection.3.4}{MIP and MIQP}{section.3}% 14
+\BOOKMARK [2][-]{subsection.3.5}{Family of Modes}{section.3}% 15
+\BOOKMARK [2][-]{subsection.3.6}{Nomenclature}{section.3}% 16
+\BOOKMARK [2][-]{subsection.3.7}{Sequential Properties}{section.3}% 17
+\BOOKMARK [1][-]{section.4}{Goal Revisited}{}% 18
+\BOOKMARK [1][-]{section.5}{My Work. TODO: Change name}{}% 19
+\BOOKMARK [1][-]{section.6}{Simulation Tool}{}% 20
+\BOOKMARK [2][-]{subsection.6.1}{Terminal Cost and Riccati Equation}{section.6}% 21
+\BOOKMARK [2][-]{subsection.6.2}{Global Cost Function}{section.6}% 22
+\BOOKMARK [2][-]{subsection.6.3}{Chameleon Mode}{section.6}% 23
+\BOOKMARK [2][-]{subsection.6.4}{MIQP and Clustered MIQP}{section.6}% 24
+\BOOKMARK [2][-]{subsection.6.5}{Simulation Conclusions \(TODO\)}{section.6}% 25
+\BOOKMARK [1][-]{section.7}{Mode Selection Protocol}{}% 26
+\BOOKMARK [2][-]{subsection.7.1}{Structure Study And Systematic Approach}{section.7}% 27
+\BOOKMARK [2][-]{subsection.7.2}{Simple trajectory learning}{section.7}% 28
+\BOOKMARK [2][-]{subsection.7.3}{Dynamic FOM}{section.7}% 29
+\BOOKMARK [1][-]{section.8}{Experiments}{}% 30
+\BOOKMARK [1][-]{section.9}{Conclusion and Discussion}{}% 31
+\BOOKMARK [1][-]{section.10}{Things to do if we had time}{}% 32
+\BOOKMARK [1][-]{section.11}{TODO stuff}{}% 33
+\BOOKMARK [1][-]{section.12}{Adding the MAMME cover page to your document}{}% 34
+\BOOKMARK [1][-]{section.13}{Environments}{}% 35
+\BOOKMARK [2][-]{subsection.13.1}{Theorem-like environments}{section.13}% 36
+\BOOKMARK [2][-]{subsection.13.2}{Definition-like environments}{section.13}% 37
+\BOOKMARK [2][-]{subsection.13.3}{Remark-like environments}{section.13}% 38
+\BOOKMARK [1][-]{section.14}{Figures}{}% 39
+\BOOKMARK [1][-]{section.15}{Mathematics and packages}{}% 40
+\BOOKMARK [1][-]{section.16}{Bibliography}{}% 41
+\BOOKMARK [1][-]{appendix.A}{Simulation Interface Code}{}% 42
+\BOOKMARK [1][-]{appendix.B}{Title of the appendix}{}% 43
