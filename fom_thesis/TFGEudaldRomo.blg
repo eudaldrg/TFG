@@ -1,10 +1,51 @@
-This is BibTeX, Version 0.99dThe top-level auxiliary file: TFGEudaldRomo.aux
+This is BibTeX, Version 0.99d (TeX Live 2013/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: TFGEudaldRomo.aux
 The style file: plain.bst
 Database file #1: fom_bib.bib
-Warning--empty journal in lcc1
-Warning--empty journal in seq
-Warning--empty journal in planar_sliding1
-Warning--empty journal in planar_sliding2
-Warning--empty journal in fom
-Warning--empty journal in pushing4
-(There were 6 warnings)
+Warning--string name "v" is undefined
+--line 41 of file fom_bib.bib
+Warning--to sort, need author or key in gurobi_mip
+Warning--to sort, need author or key in gurobi
+You've used 28 entries,
+            2118 wiz_defined-function locations,
+            643 strings with 8332 characters,
+and the built_in function-call counts, 8050 in all, are:
+= -- 802
+> -- 351
+< -- 3
++ -- 142
+- -- 112
+* -- 510
+:= -- 1374
+add.period$ -- 84
+call.type$ -- 28
+change.case$ -- 140
+chr.to.int$ -- 0
+cite$ -- 30
+duplicate$ -- 309
+empty$ -- 637
+format.name$ -- 112
+if$ -- 1660
+int.to.chr$ -- 0
+int.to.str$ -- 28
+missing$ -- 25
+newline$ -- 143
+num.names$ -- 52
+pop$ -- 144
+preamble$ -- 1
+purify$ -- 112
+quote$ -- 0
+skip$ -- 224
+stack$ -- 0
+substring$ -- 458
+swap$ -- 50
+text.length$ -- 3
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 112
+warning$ -- 2
+while$ -- 79
+width$ -- 30
+write$ -- 293
+(There were 3 warnings)
