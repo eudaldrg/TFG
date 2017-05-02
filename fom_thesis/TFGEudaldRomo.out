@@ -20,15 +20,13 @@
 \BOOKMARK [1][-]{section.6}{Simulation Interface}{}% 20
 \BOOKMARK [2][-]{subsection.6.1}{Local, Global and MPC Costs}{section.6}% 21
 \BOOKMARK [2][-]{subsection.6.2}{Nominal Mode}{section.6}% 22
-\BOOKMARK [2][-]{subsection.6.3}{Chameleon Mode}{section.6}% 23
-\BOOKMARK [2][-]{subsection.6.4}{MIQP and Clustered MIQP}{section.6}% 24
-\BOOKMARK [2][-]{subsection.6.5}{Simulation Conclusions \(TODO\)}{section.6}% 25
+\BOOKMARK [2][-]{subsection.6.3}{MIQP and Clustered MIQP}{section.6}% 23
+\BOOKMARK [2][-]{subsection.6.4}{Chameleon Mode}{section.6}% 24
+\BOOKMARK [2][-]{subsection.6.5}{Simulation Results}{section.6}% 25
 \BOOKMARK [1][-]{section.7}{Mode Selection Protocol}{}% 26
 \BOOKMARK [2][-]{subsection.7.1}{Structure Study And Systematic Approach}{section.7}% 27
 \BOOKMARK [2][-]{subsection.7.2}{Simulation Results. Simple trajectory learning}{section.7}% 28
-\BOOKMARK [2][-]{subsection.7.3}{Dynamic FOM}{section.7}% 29
-\BOOKMARK [1][-]{section.8}{Experiments}{}% 30
-\BOOKMARK [1][-]{section.9}{Conclusion and Discussion}{}% 31
-\BOOKMARK [1][-]{section.10}{Things to do if we had time}{}% 32
-\BOOKMARK [1][-]{section.11}{Adding the MAMME cover page to your document}{}% 33
-\BOOKMARK [1][-]{appendix.A}{Simulation Interface Code}{}% 34
+\BOOKMARK [2][-]{subsection.7.3}{Dynamic FOM. Theory and results}{section.7}% 29
+\BOOKMARK [1][-]{section.8}{Discussion and Conclusion}{}% 30
+\BOOKMARK [1][-]{section.9}{Things to do if we had time}{}% 31
+\BOOKMARK [1][-]{appendix.A}{Simulation Interface Code}{}% 32

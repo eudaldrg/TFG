@@ -11,7 +11,7 @@
 %\usepackage{fancyhdr}
 
 %%%%%Author packages if necessary
-
+\usepackage{caption}
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode}
 
@@ -868,6 +868,31 @@ In section \ref{subsec:motion_equations} we noted that, as opposed to the previo
 
 The possibility of the hybrid states associated the nominal trajectory to be different from the ones associated with the real trajectory has another important implication. The perturbation state motion equation \ref{eq:condensed_motion_linear} has the nominal trajectory as an equilibrium point only when $i = i'$. Otherwise, if we consider $\textbf{x} = \textbf{x}^*$ and $\textbf{u} = \textbf{u}^*$, we obtain $\diff{\textbf{x}} = \textbf{A}_i \cdot \textbf{0} + \textbf{B}_i \cdot \textbf{0} + f_i(\textbf{x}^*, \textbf{u}^*) - \dot{\textbf{x}}^* = f_i(\textbf{x}^*, \textbf{u}^*) - f_{i'}(\textbf{x}^*, \textbf{u}^*)$. If none of the MPC modes is the one that the nominal trajectory follows, the solution $\diff{\textbf{x}}_j = \diff{\textbf{u}}_j = \textbf{0}$ will never be feasible, and we will never be able to stabilize the planned trajectory on the nominal one, even if the initial state is on the nominal trajectory ($\textbf{x}_0 = \textbf{0}$). In order to force the MPC to consider the nominal mode, we can simply compute it at every MPC step (it can be easily determined applying the friction constraints to each pair $\textbf{x}_j^*$, $\textbf{u}_j^*$) and add it as one of the modes of the family.
 
+\subsection{MIQP and Clustered MIQP}
+\label{subsec:miqp}
+
+We wanted to compare the solutions provided by FOM with traditional MPC solving techniques. In order to do that we decided to implement the MIQP technique using the commercial solver Gurobi. This solver was already used in Hogan's work in a force-based formulation prior to the final velocity-based one. This formulation was not presented in the final paper, but it allowed to formulate an MIQP problem that was able to run in an average of 3Hz. It should be mentioned that the execution time at every control iteration could range between few milliseconds to 10 seconds depending on the initial condition of the MPC.
+This is not a problem for simulation, but in a real control environment the frequency at which you can update the controller is not bounded by the average frequency at which you can solve the MPC, but by the worst case scenario one. Otherwise the controller may try to update the control input before it is computed by the optimizer. There may be solutions to this effect in other formulations, but for the one used in Hogan's work the MIQP controller could run at more than 0.1Hz.
+
+We were expecting a similar behaviour in the velocity-based formulation, but it took several orders of magnitude more time to solve each iteration. In order to simulate 500 simulation steps with a finite horizon of 7 steps it took an average of 6 hours of execution time, which implies that the maximum control frequency we could apply would probably not surpass 0.02Hz. We were expecting to have an "ideal" MIQP result to compare FOM with but, as will be shown in section \ref{subsec:simresults}, the results obtained with a small finite horizon for the MIQP did not track properly many of the non-trivial nominal trajectories and initial perturbations we fed into it.
+
+We looked at techniques to speed up the MIQP execution in the Gurobi website and we found out that our current big-M formulation worked better (both in execution time and in quality of the obtained trajectory) as smaller the M parameter was. As explained in \ref{subsec:mpc_formulation} each M parameter used in a scalar inequality $Ax \leq b + M (1 - z)$ must be greater than $\max\limits_{x \in D}{(Ax - b)}$ (where D is the domain of possible values of the x) so that the inequality is rendered redundant when z = 0. We implemented a version of MIQP that given a vectorial constraint as the ones used in Hogan's formulation $A\vec{x} \leq \vec{b} + M (1 - z) \cdot (1, ..., 1)^T$ replaces the arbitrary constant M by a vector $\vec{M}$ where each component's value is $M_i = \max\limits_{x_i \in D}{(A_i x_i - b_i)}$. We were not able to improve the execution time, but we were able to obtain better results for the MIQP. The results showed in the next section for the MIQP will use this optimized big-M formulation.
+
+In order to compare FOM to other methods using a longer time horizon, we implemented another MPC solving method based on MIQP that we called Clustered MIQP. Given a standard MPC formulation, this method works in the following way:
+
+\begin{itemize}
+\item Consider a clustering factor $c$, a finite horizon $ N \cdot c$ and a set of h hybrid states $ \{ H_1, ..., H_h \}$.
+\item The finite horizon is then divided into N clusters of c steps: $(C_1, ..., C_N)$.
+\item The state space is extended in a similar way as in section \ref{subsec:mpc_formulation} with 3 binary variables per cluster for a total of $3N$ variables.
+\item Each variable $z_{1i}$ $z_{2i}$, and $z_{3i}$ is then associated with the hybrid state of the cluster $C_i$ (sticking, sliding down and sliding up respectively).
+\item The constraint $z_{1i} + z_{2i} + z_{3i} = 1$ is enforced for all $i$.
+\item The problem constraints are formulated with big M notation as in section \ref{subsec:mpc_formulation} and the problem is fed into a Gurobi MIQP solver.
+\end{itemize}
+
+As we exposed in section \ref{subsec:MPC}, the MIQP formulation doesn't escalate well with the number of binary variables added and clustered MIQP allows us to reduce the binary variable dimensionality of the optimization problem by keeping the same state during all the steps of the same cluster. The execution time of this new problem is similar to the execution time of a MIQP problem of $N$ steps but the controller inputs can be different at each of the $N c$ steps, providing a more flexible trajectory than the one given by the MIQP problem of $N$ steps.
+
+We intended to use this method to approximate MIQP problems with long horizons by using few clusters and we expected to obtain a better trajectory than the ones obtained with FOM. As will be discussed later, the results of this MIQP approximation were usually worse than the ones obtained in the FOM with the original modes from Hogan's study. In section \ref{subsec:simresults} we provide a possible explanation for this behaviour.
+
 \subsection{Chameleon Mode}
 \label{subsec:chameleon}
 
@@ -934,7 +959,7 @@ This definition allows us to announce the following corollary from lemma \ref{le
 
 \begin{corollary} \label{cor:seq_imp} {A family $F$ closed by a suffix operation is sequentially improving in the FFOM problem:}
 
-At any step $i$ of the approximated MPC, a certain mode $M$ will provide the optimal trajectory. As $suff(M) \in F$ we can use lemma \ref{lem:seq_imp} to guarantee that the trajectory provided by $suff(M)$ in step $i + 1$is as good as the one currently provided by $M$. As the approximated MPC considers the optimal trajectory between all the considered modes, the computed trajectory at $i + 1$ will be at least as good as the one computed in $i$.
+At any step $i$ of the approximated MPC, a certain mode $M$ will provide the optimal trajectory. As $suff(M) \in F$ we can use lemma \ref{lem:seq_imp} to guarantee that the trajectory provided by $suff(M)$ in step $i + 1$ is as good as the one currently provided by $M$. As the approximated MPC considers the optimal trajectory between all the considered modes, the computed trajectory at $i + 1$ will be at least as good as the one computed in $i$.
 \end{corollary}
 
 \begin{example} \textbf{On the same conditions, $\boldsymbol{F_3}$ is sequentially improving:}
@@ -954,33 +979,17 @@ The chameleon mode functionality was added in the simulation interface and it's 
 
 Given the good properties of the chameleon mode, we decided to include it in the FOM formulation so, from now on,we will use FOM to refer to the family of modes with chameleon mode implementation, unless specified otherwise.
 
-\subsection{MIQP and Clustered MIQP}
-\label{subsec:miqp}
-
-We wanted to compare the solutions provided by FOM with traditional MPC solving techniques. In order to do that we decided to implement the MIQP technique using the commercial solver Gurobi. This solver was already used in Hogan's work in a force-based formulation prior to the final velocity-based one. This formulation was not presented in the final paper, but it allowed to formulate an MIQP problem that was able to run in an average of 3Hz. It should be mentioned that the execution time at every control iteration could range between few milliseconds to 10 seconds depending on the initial condition of the MPC.
-This is not a problem for simulation, but in a real control environment the frequency at which you can update the controller is not bounded by the average frequency at which you can solve the MPC, but by the worst case scenario one. Otherwise the controller may try to update the control input before it is computed by the optimizer. There may be solutions to this effect in other formulations, but for the one used in Hogan's work the MIQP controller could run at more than 0.1Hz.
-
-We were expecting a similar behaviour in the velocity-based formulation, but it took several orders of magnitude more time to solve each iteration. In order to simulate 500 simulation steps with a finite horizon of 7 steps it took an average of 6 hours of execution time, which implies that the maximum control frequency we could apply would probably not surpass 0.02Hz, a clearly insufficient frequency. We were expecting to have an "ideal" MIQP result to compare FOM with and try to get similar results with FOM with less computational effort, but the results obtained with 7 steps of the MIQP were worse than the FOM and we couldn't afford to increase the horizon further.
-
-We looked at techniques to speed up the MIQP execution in the Gurobi website and we found out that our current big-M formulation worked better (both in execution time and in quality of the obtained trajectory) than the indicator constraints formulations as smaller the M parameter was. As explained in \ref{subsec:mpc_formulation} each M parameter used in a scalar inequality $Ax \leq b + M (1 - z)$ must be greater than $\max\limits_{x \in D}{(Ax - b)}$ (where D is the domain of possible values of the x) so that the inequality is rendered redundant when z = 0. We implemented a version of MIQP that given a vectorial constraint as the ones used in Hogan's formulation $A\vec{x} \leq \vec{b} + M (1 - z) \cdot (1, ..., 1)^T$ replaces the arbitrary constant M by a vector $\vec{M}$ where each component's value is $M_i = \max\limits_{x_i \in D}{(A_i x_i - b_i)}$. We were not able to improve the execution time, but we were able to obtain better results for the MIQP. The results showed in the next section for the MIQP will use this optimized big-M formulation.
-
-In order to compare FOM to other methods using a longer time horizon, we implemented another MPC solving method based on MIQP that we called Clustered MIQP. Given a standard MPC formulation, this method works in the following way:
-
-\begin{itemize}
-\item Consider a clustering factor $c$, a finite horizon $ N \cdot c$ and a set of h hybrid states $ \{ H_1, ..., H_h \}$.
-\item The finite horizon is then divided into N clusters of c steps: $(C_1, ..., C_N)$.
-\item The state space is extended with 3 binary variables per step $(s_i, d_i, u_i)$ for a total of 3N variables.
-\item Each variable $s_i$ $d_i$ and $u_i$ is associated with the hybrid state of the cluster $C_i$ (sticking, sliding down and sliding up respectively).
-\item The constraint $s_i + d_i + u_i = 1$ is enforced 
-\item The problem constraints are formulated with big M notation or indicator constraints and the problem is fed into an MIQP solver.
-\end{itemize}
-
-This way we can reduce the dimensionality of the optimization problem by keeping the same state during all the steps of the same cluster. The execution time of this new problem is similar to the execution time of a MIQP problem of N steps but the controller inputs can be different at each of the $N c$ steps.
-
-We intended to use this method to approximate MIQP problems with long horizons (around 35 steps) by using few clusters (around 5) and we expected to obtain a better trajectory than the ones obtained with FOM. As will be discussed later, the results of this MIQP approximation were worse than the results obtained in FOM with a good choice of few modes.
-
-\subsection{Simulation Conclusions (TODO)}
+\subsection{Simulation Results}
 \label{subsec:simresults}
+
+In order to compare FOM and MIQP we considered necessary to use the same finite horizon length in both formulations to have a fair comparison. As explained in section \ref{subsec:miqp}, the computational cost was much higher than we expected. The maximum finite horizon length we could afford to run simulations in a reasonable time was 5. This value of the finite horizon was too short to control most of the non-trivial trajectories properly. Figure \ref{fig:MIQP_trajectory} shows the trajectory obtained from MIQP while trying to follow a circular trajectory and it can be seen that it clearly diverges.
+
+\begin{figure}[htb!]
+\begin{center}
+\includegraphics[width=13cm]{MIQP_trajectory.jpg}
+\end{center}
+\caption{\label{fig:MIQP_trajectory} \small Trajectory obtained when tracking circular trajectory defined by pushing perpendicularly to the slider with $p_y = 0.0249$. Initial position $\textbf{x}_0 = (0.0, -0.05, -0.1, p_y)^T$.}
+\end{figure}
 
 We tested our chameleon mode implementation by comparing the performance of families of modes that are not sequentially consistent in their full horizon formulation with and without the chameleon mode with satisfactory results. In Figure \ref{fig:chameleon} we show the example presented in section \ref{subsec:chameleon}. All the simulation parameters are kept the same except for the usage or non usage of the chameleon mode. As can be observed, the results correspond with our expectations: for the family $F_2$ the chameleon mode implementation successfully tracks the trajectory while the implementation without it failed to do it, as we showed previously.
 
@@ -991,28 +1000,43 @@ We tested our chameleon mode implementation by comparing the performance of fami
 \caption{\label{fig:chameleon} \small Local cost over time for families $F_1$, $F_2$, and $F_3$ obtained following a straight line on the x axis and using an initial condition $\textbf{x}_0 = (0, 0.05, - \dfrac{\pi}{6}, 0)^T$.}
 \end{figure}
 
-We were able to compare both MIQP and FOM with a small finite horizon of 5 steps and we were able to observe the expected behaviour: Some families gave poor results when compared to MIQP, but the result could be iteratively improved by adding new modes. The obtained trajectories did not strictly follow an increasing sequence, but 
+TODO: Talk about the zoomed in figure, to talk about the glory of roll-out.
+
+\begin{minipage}{\linewidth}
+\makebox[\linewidth]{\includegraphics[width=0.7\textwidth] {general_trajectory_frank_modes_long_horizon.jpg}} \label{fig:general_trajectory_frank_modes_long_horizon}
+\captionof{figure}{General trajectory followed by using the original modes from Hogan's study. Finite horizon of 35 steps.}
+\end{minipage}
+\begin{minipage}{\textwidth}
+\makebox[\linewidth]{\includegraphics[width=0.7\textwidth]{original_general_trajectory_short_horizon.jpg}}
+\label{fig:original_general_trajectory_short_horizon}        
+\captionof{figure}{General trajectory followed by using the original modes from Hogan's study. Finite horizon of 15 steps.}
+\end{minipage}
 
 Finally, we compared clustered MIQP with five clusters of 7 steps with a FOM approach using three modes family formed by the S, $U_1$, and $D_1$ modes. 
 
+
+\newpage
+
 \section{Mode Selection Protocol}
 \label{sec:modeselection}
-In the previous sections it is explained how we addressed the sequential properties of the FOM formulation and provided a metric and other MPC solvers to compare FOM to. At this point of our study, we were able to adress our next objective: To optimize the selection of the family modes for the FOM formulation.
+In the previous sections it is explained how we addressed the sequential properties of the FOM formulation and provided a metric and other MPC solvers to compare FOM to. At this point of our study, we were able to adress our next objective: to optimize the selection of the family modes for the FOM formulation.
 
-We considered multiple optimization criteria and relations to study and we had to adopt a set of assumptions to be able to obtain some initial results. For our first study, we tried to learn the modes to follow a single fixed straight line trajectory. Each optimization problem would be parametrized by a fixed finite time horizon (characterized by a number of steps N) and a fixed number of modes K a family could contain. The initial condition $\diff{x_0}$ was assumed to be a random variable following a certain probability distribution. The cost of the control trajectory C was thus also a random variable of unknown distribution parametrized by the optimization problem parameters. Specifically given a set of K modes $\{m_1, ..., m_k\}$, $C \sim D(m_1, ..., m_k)$ for a given distribution law D. Ideally, we would like to choose the the set of modes that minimizes $\mean{C}$.
+We considered multiple optimization criteria and relations to study and we had to adopt a set of assumptions to be able to obtain some initial results. For our first study, we tried to learn the modes to follow a single fixed straight line trajectory. Each optimization problem would be parametrized by a fixed finite time horizon (characterized by a number of steps $N$) and a fixed number of modes $K$ a family could contain. The initial condition $\diff{x_0}$ was assumed to be a random variable following a certain probability distribution. The cost of the control trajectory C was thus also a random variable of unknown distribution parametrized by the optimization problem parameters. Specifically given a set of $K$ modes $\{m_1, ..., m_k\}$, $C \sim D(m_1, ..., m_k)$ for a given distribution law $D$. Ideally, we would like to choose the the set of modes that minimizes $\mean{C}$.
 
 We made three main assumptions:
 \begin{assumption} \label{ass:localcost}
 \textbf{Local Cost Sufficiency:} Optimizing the modes to reduce the local costs obtained while solving each MPC iteration would be sufficient to obtain a low global cost.
 \end{assumption}
 \begin{assumption} \label{ass:localinv}
-\textbf{Locally Invariant Trajectories (TODO: Check it's a good name:)} Given a local inertial frame F centered on the slider center of mass moving and rotating with it and given an infinite objective trajectory $C(t)$ for $t \in (-\infty, \infty)$, then the $C(t)$ would be time invariant in frame F (for example an infinite circle loop or an infinite straight line).
+\textbf{Locally Invariant Trajectories:} Given a local inertial frame F centered on the slider center of mass moving and rotating with it and given an infinite objective trajectory $C(t)$ for $t \in (-\infty, \infty)$, then the $C(t)$ would be time invariant in frame F (for example an infinite circle loop or an infinite straight line).
 \end{assumption}
 \begin{assumption} \label{ass:singlestep}
 \textbf{Single Step Sufficiency:} A single control iteration of the trajectory tracking problem was sufficient to learn which modes where optimal, if the appropriate distribution for $\diff{x_0}$ was chosen.
 \end{assumption} 
 
 The motivation and justification for these assumptions will be explained in \ref{subsec:structure}, as well as some other implicit assumptions contained in it. In \ref{sec:todo} we will discuss some of the studies we would have conducted and how we would have modified these assumptions if we disposed of more time.
+
+(TODO: Make sure I discuss them)
 
 \subsection{Structure Study And Systematic Approach}
 \label{subsec:structure}
@@ -1141,28 +1165,52 @@ Finally, we tested the robustness of the method by tracking circular trajectorie
 
 TODO: Circle with circle modes
 
-\subsection{Dynamic FOM}
+\subsection{Dynamic FOM. Theory and results}
 \label{subsec:dynfom}
-The assumption of local invariance for the objective trajectories limited the range of application of the FOM approach as presented until now. In the previous section we could show a certain degree of robustness when using the modes learned on a simple straight line to track other trajectories, but the number of modes per family had to be increased while tracking circular trajectories in order to achieve the same results than while tracking straight lines.
+The assumption of local invariance for the objective trajectories limited the range of application of the FOM approach as presented until now. In the previous section we could show a certain degree of robustness when using the modes learned on a simple straight line to track other trajectories, but the number of modes per family had to be increased while tracking circular trajectories in order to achieve the same results than while tracking straight lines. TODO: Check that it is true
 
-As we mentioned in section \ref{subsec:structure}, we already had a motivation to use locally invariant trajectories before obtaining the simulation results from the previous section. Our goal was to train the FOM method on several base locally invariant trajectories that could describe most of the situations the tracking problem would face (For the simple contact pusher-slider system this consisted in a straight line and several circular trajectories of different curvatures). Then we wanted to learn the best k modes for every base trajectory. To track complex trajectories, we would approximate them as a piece-wise composition of base ones and at each controller step we would use the best modes for each base trajectory depending on the base trajectory approximation of the current step.
+In section \ref{subsec:structure} we mentioned that we had a motivation to use locally invariant trajectories before obtaining the simulation results from the previous section. This motivation was to train the FOM method on several base locally invariant trajectories that could describe most of the situations the tracking problem would face (For the simple contact pusher-slider system this consisted in a straight line and several circular trajectories of different curvatures). Then we wanted to learn the best k modes for every base trajectory. To track complex trajectories, we would approximate them as a piece-wise composition of base ones and at each controller step we would use the best modes for each base trajectory depending on the base trajectory approximation of the current step.
 
 \begin{remark}
 We will use the common mathematical notation for the curvature sign. That is, a positive curvature means that the unit tangent vector rotates counter-clockwise as a function of the parameter along the curve.
 \end{remark}
 
-The simulation results from  the previous section showed that the initial part of the modes generally held more importance than the last part. This motivated us to simplify the approximation of the general trajectory with a simple local approximation. We expected that a sufficient control frequency would allow the system to properly track the general trajectory even if its local properties undertook steep temporal changes. For the pusher-slider system mentioned before, the base trajectory was chosen by numerically computing the curvature of the objective trajectory at every control step and using the base trajectory with the most similar curvature value.
+For simplicity, we decided to approximate the motion of the finite horizon by the local geometry of the instantaneous position in the nominal trajectory. We expected that a sufficient control frequency would allow the system to properly track the general trajectory even if its local properties undertook steep temporal changes. For the pusher-slider system mentioned before, the base trajectory was chosen by numerically computing the curvature of the objective trajectory at every control step and using the base trajectory with the most similar curvature value.
 
-The chameleon mode brought the idea of having dynamic modes in a family and, in a similar way, the dynamic FOM brought the concept of having dynamic families in an MPC problem. At each control step, the best base trajectory to describe the local geometry of the objective trajectory was chosen. Then, the best k modes for that base trajectory were used (together with the chameleon mode) to solve the MPC problem on that instant. The chameleon mode was shared between the dynamical families to ensure that the sequential consistency property was not lost.
+We would then introduce dynamic families to the FOM problem. At each control step, the family used to track the trajectory would consist on the k best modes for the base trajectory that approximates the local geometry of the objective trajectory (together with the chameleon mode) to solve the MPC problem on that instant. The chameleon mode was shared between the dynamical families to ensure that the sequential consistency property was not lost.
 
-The main motivation for this method was to reduce the online cost of the FOM approach at the expense of more offline computations. We expected that choosing the best family dynamically would reduce the number of modes per family required to obtain good results in a broad range of trajectories. Having n modes in a family implies solving n convex optimization problems at every control step. The cost of solving each optimization problem may vary, so we cannot directly assume that the overall execution time of the algorithm is proportional to the number of modes in the family, but experimental results show so for our specific problem (TODO: add graph). Even without these experimental results, we still consider important for the control problems to reduce the online computational cost of the algorithm.
+The main motivation for this method was to reduce the online cost of the FOM approach at the expense of more offline computations. We expected that choosing the best family dynamically would reduce the number of modes per family required to obtain good results in a broad range of trajectories. Having n modes in a family implies solving \textbf{n} convex optimization problems at every control step, so we wanted to keep it as low as possible.
 
-In the next section we will present the simulation results obtained while tracking a complex trajectory by using the dynamic FOM and a static FOM learned to track a straight line.
+The learning algorithm was run on 10 pairs of curvatures (for each curvature $k$, we considered the complementary curvature $-k$) generated by setting the $p_x$ parameter uniformly from $-\dfrac{3b}{4}$ to  $\dfrac{3b}{4}$, where b is the length of the side of the slider. Using equation (TODO: add equation in previous section), the associated curvatures were obtained.
 
-\section{Experiments}
-\label{sec:experiments}
+Generating general feasible trajectories for the controller to stabilize is a complex problem in itself. We could use MPC to compute an optimal path to a certain destination using the distance to the destination as the cost function but this would have two important drawbacks. The first is that it would probably follow straight lines whenever possible, providing simple trajectories to stabilize. The second is that with MPC we can only obtain a discrete trajectory. We could approximate the obtained trajectory using splines, but we would not be able to guarantee feasibility of the trajectory defined by the state variable and the controller in the interpolated regions between control points.
 
-\section{Conclusion and Discussion}
+The planning problem escaped the scope of this study and, in order to both simplify it and to check the robustness of the controller, we decided to create trajectories by simple concatenation of linear and circular trajectories. This simplified the planning problem and created punctual discontinuities in the position of the pusher (for the straight lines the pusher was constantly at the center of the slider side, and for the circular trajectories the pusher was constantly at the distance $p_y$ associated to the circle and there were discontinuities at the changes between trajectories). We considered important to study whether the controller was capable to react to these temporally localized points of uncertainty were there was no feasible trajectory to immediately change from one trajectory to the next.
+
+With this formulation we were able to successfully track the general trajectory and we were able to reduce the required finite horizon to track properly the trajectory to 15 steps, as can be seen in Figure \ref{fig:dfom_trajectory_short_horizon}.
+
+TODO: Wrap-up
+
+\begin{remark}
+The circular trajectories used in the simulations of the DFOM had curvatures different than the ones used for the learning protocol, so the DFOM algorithm had to determine the base circle which was more similar to the nominal trajectory one.
+\end{remark}
+
+\begin{figure}
+    \centering
+    \begin{minipage}{0.7\textwidth}
+        \centering
+        \includegraphics[width=1\textwidth] {dfom_trajectory_long_horizon.jpg} \label{fig:dfom_trajectory_long_horizon}% first figure itself
+        \caption{DFOM with 20 curvatures using the 4 best modes for each base trajectory. Finite horizon of 35 steps.}
+    \end{minipage}
+    \begin{minipage}{0.7\textwidth}
+        \centering
+        \includegraphics[width=1\textwidth]{dfom_trajectory_short_horizon_15_steps.jpg} % second figure itself
+        \label{fig:dfom_trajectory_short_horizon}
+        \caption{DFOM with 20 curvatures using the 4 best modes for each base trajectory. Finite horizon of 15 steps.}
+    \end{minipage}
+\end{figure}
+
+\section{Discussion and Conclusion}
 \label{sec:conclusion}
 \begin{enumerate}
 \item{MIQP} takes too long, it's execution time depends on the geometry of the problem (different time at each iteration). The results may depend on the implementation chosen. If you don't have a software that allows you to tune everything it is too complicated to implement. Clustered MIQP is no better. We should try MIQP with tail (we expect good results but bad time)
@@ -1174,16 +1222,6 @@ In the next section we will present the simulation results obtained while tracki
 \item Study modes correlation
 \item Study optimal mode dependency wrt initial condition.
 \item Change the uniformly distributed initial conditions by normally distributed.
-\end{itemize}
-
-\section{Adding the MAMME cover page to your document}
-\label{sec:coverPage}
-  
-Regardless of the structure of the document of your TFG, you have to use the template \texttt{coverTFG-GM.doc} for the cover page. You can follow the fowolling steps:
-\begin{itemize}
-	\item Generate a pdf file with the document of your TFG, following or not this template
-	\item Modify the document \texttt{coverTFG-GM.doc} with the data of your thesis and generate a pdf with two pages (cover and blank page)
-	\item Use Adobe or other sofware to join (combine or merge) the two pdf files in one pdf file. 
 \end{itemize}
  
 \newpage

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2017.1.30)  1 MAY 2017 17:27
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2017.1.30)  2 MAY 2017 03:32
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -588,13 +588,30 @@ LaTeX Info: Redefining \cite on input line 302.
 LaTeX Info: Redefining \nocite on input line 373.
 Package: cite 2010/09/10  v 5.3
 )
+(/usr/share/texlive/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2013/05/02 v3.3-89 Customizing captions (AR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2013/05/02 v1.6-88 caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 57.
+\captionmargin=\dimen189
+\captionmargin@=\dimen190
+\captionwidth=\dimen191
+\caption@tempdima=\dimen192
+\caption@indent=\dimen193
+\caption@parindent=\dimen194
+\caption@hangindent=\dimen195
+)
+\c@ContinuedFloat=\count140
+Package caption Info: hyperref package is loaded.
+)
 (/usr/share/texlive/texmf-dist/tex/latex/algorithms/algorithm.sty
 Package: algorithm 2009/08/24 v0.1 Document Style `algorithm' - floating enviro
 nment
 
 (/usr/share/texlive/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count140
+\c@float@type=\count141
 \float@exts=\toks37
 \float@box=\box59
 \@float@everytoks=\toks38
@@ -604,7 +621,7 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 Package: ifthen 2001/05/26 v1.1c Standard LaTeX ifthen package (DPC)
 )
 \@float@every@algorithm=\toks39
-\c@algorithm=\count141
+\c@algorithm=\count142
 )
 (/usr/share/texlive/texmf-dist/tex/latex/algorithmicx/algpseudocode.sty
 Package: algpseudocode 
@@ -613,20 +630,20 @@ Package: algpseudocode
 Package: algorithmicx 2005/04/27 v1.2 Algorithmicx
 
 Document Style algorithmicx 1.2 - a greatly improved `algorithmic' style
-\c@ALG@line=\count142
-\c@ALG@rem=\count143
-\c@ALG@nested=\count144
+\c@ALG@line=\count143
+\c@ALG@rem=\count144
+\c@ALG@nested=\count145
 \ALG@tlm=\skip63
 \ALG@thistlm=\skip64
-\c@ALG@Lnr=\count145
-\c@ALG@blocknr=\count146
-\c@ALG@storecount=\count147
-\c@ALG@tmpcounter=\count148
+\c@ALG@Lnr=\count146
+\c@ALG@blocknr=\count147
+\c@ALG@storecount=\count148
+\c@ALG@tmpcounter=\count149
 \ALG@tmplength=\skip65
 )
 Document Style - pseudocode environments for use with the `algorithmicx' style
 )
-\c@theorem=\count149
+\c@theorem=\count150
  (./TFGEudaldRomo.aux
 
 LaTeX Warning: Label `fig:book' multiply defined.
@@ -653,16 +670,16 @@ LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 67.
 LaTeX Font Info:    ... okay on input line 67.
  (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count150
-\scratchdimen=\dimen189
+\scratchcounter=\count151
+\scratchdimen=\dimen196
 \scratchbox=\box61
-\nofMPsegments=\count151
-\nofMParguments=\count152
+\nofMPsegments=\count152
+\nofMParguments=\count153
 \everyMPshowfont=\toks40
-\MPscratchCnt=\count153
-\MPscratchDim=\dimen190
-\MPnumerator=\count154
-\makeMPintoPDFobject=\count155
+\MPscratchCnt=\count154
+\MPscratchDim=\dimen197
+\MPnumerator=\count155
+\makeMPintoPDFobject=\count156
 \everyMPtoPDFconversion=\toks41
 ) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
@@ -688,7 +705,7 @@ Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
 (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
-\c@section@level=\count156
+\c@section@level=\count157
 )
 LaTeX Info: Redefining \ref on input line 67.
 LaTeX Info: Redefining \pageref on input line 67.
@@ -750,6 +767,9 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 67.
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 Package xypdf Info: Line width: 0.43799pt on input line 67.
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: float package is loaded.
+Package caption Info: End \AtBeginDocument code.
  [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] [3] [4]
@@ -786,7 +806,7 @@ LaTeX Font Warning: Font shape `OMS/cmss/m/n' undefined
 (Font)              using `OMS/cmsy/m/n' instead
 (Font)              for symbol `textbullet' on input line 97.
 
-<ManipulationBook.pdf, id=184, 361.35pt x 122.11723pt>
+<ManipulationBook.pdf, id=176, 361.35pt x 122.11723pt>
 File: ManipulationBook.pdf Graphic file (type pdf)
 
 <use ManipulationBook.pdf>
@@ -816,100 +836,54 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.4}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.151 T
-       he contact between the slider and the support surface is inherently c...
-[4pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) 
-has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.151 T
-       he contact between the slider and the support surface is inherently c...
- <./ManipulationBook.pdf>] [5]
-<isotropic_lc.png, id=258, 463.7325pt x 418.56375pt>
+l.152 
+       [4 <./ManipulationBook.pdf>] [5]
+<isotropic_lc.png, id=251, 463.7325pt x 418.56375pt>
 File: isotropic_lc.png Graphic file (type png)
  <use isotropic_lc.png>
 Package pdftex.def Info: isotropic_lc.png used on input line 198.
 (pdftex.def)             Requested size: 284.52756pt x 256.81801pt.
 
-[6pdfTeX warning (ext4): destination with the same identifier (name{figure.2}) 
-has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.209 \item F
-             or all \textbf{f(r)} in a same flat region of the LC, a common ...
- <./isotropic_lc.png>] <general_lc.png, id=272, 714.67pt x 611.28375pt>
+[6 <./isotropic_lc.png>] <general_lc.png, id=265, 714.67pt x 611.28375pt>
 File: general_lc.png Graphic file (type png)
 
 <use general_lc.png>
 Package pdftex.def Info: general_lc.png used on input line 214.
 (pdftex.def)             Requested size: 284.52756pt x 243.3619pt.
- [7pdfTeX warning (ext4): destination with the same identifier (name{figure.3})
- has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.253 \item W
-             ith isotropic friction, flat regions appear on the limit surfac...
- <./general_lc.png>] <friction_cone.png, id=289, 628.3475pt x 644.4075pt>
+ [7 <./general_lc.png>]
+<friction_cone.png, id=282, 628.3475pt x 644.4075pt>
 File: friction_cone.png Graphic file (type png)
-
-<use friction_cone.png>
+ <use friction_cone.png>
 Package pdftex.def Info: friction_cone.png used on input line 275.
 (pdftex.def)             Requested size: 284.52756pt x 291.79977pt.
- [8]
+
+[8]
 Underfull \hbox (badness 10000) in paragraph at lines 289--290
 
  []
 
-[9pdfTeX warning (ext4): destination with the same identifier (name{figure.4}) 
-has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.292 \end{definition}
-                       <./friction_cone.png>] [10]
-<underactuation.jpg, id=313, 1059.96pt x 794.97pt>
+[9 <./friction_cone.png>] [10]
+<underactuation.jpg, id=306, 1059.96pt x 794.97pt>
 File: underactuation.jpg Graphic file (type jpg)
  <use underactuation.jpg>
 Package pdftex.def Info: underactuation.jpg used on input line 318.
 (pdftex.def)             Requested size: 426.79134pt x 320.09303pt.
 
-[11pdfTeX warning (ext4): destination with the same identifier (name{figure.5})
- has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.330 \item {
-             \textbf{Convergence:}} <./underactuation.jpg>]
-<lcp.png, id=325, 460.72125pt x 571.13374pt>
+[11 <./underactuation.jpg>] <lcp.png, id=318, 460.72125pt x 571.13374pt>
 File: lcp.png Graphic file (type png)
- <use lcp.png>
+
+<use lcp.png>
 Package pdftex.def Info: lcp.png used on input line 352.
 (pdftex.def)             Requested size: 284.52756pt x 352.71361pt.
- [12] [13pdfTeX warning (ext4): destination with the same identifier (name{figu
-re.6}) has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.373 \begin{definition} \label
-                               {def:mode} A \textbf{hybrid mode} is a ordere...
- <./lcp.png>]
-<MPC_Tree-eps-converted-to.pdf, id=354, 591.20876pt x 166.6225pt>
+ [12] [13 <./lcp.png>]
+<MPC_Tree-eps-converted-to.pdf, id=346, 591.20876pt x 166.6225pt>
 File: MPC_Tree-eps-converted-to.pdf Graphic file (type pdf)
 
 <use MPC_Tree-eps-converted-to.pdf>
 Package pdftex.def Info: MPC_Tree-eps-converted-to.pdf used on input line 394.
 (pdftex.def)             Requested size: 284.52756pt x 80.19145pt.
- [14] [15pdfTeX warning (ext4): destination with the same identifier (name{figu
-re.7}) has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.415 
-       <./MPC_Tree-eps-converted-to.pdf>] [16]
-<seq_cons.png, id=404, 897.3525pt x 626.34pt>
+ [14] [15 <./MPC_Tree-eps-converted-to.pdf>] [16] <seq_cons.png, id=397, 897.35
+25pt x 626.34pt>
 File: seq_cons.png Graphic file (type png)
  <use seq_cons.png>
 Package pdftex.def Info: seq_cons.png used on input line 467.
@@ -917,68 +891,32 @@ Package pdftex.def Info: seq_cons.png used on input line 467.
  [17]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [18pdfTeX warning (ext4): destination with the same identifier (name{figure.8}
-) has been already used, duplicate ignored
+ [18 <./seq_cons.png>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.499 \item
-            {\textbf{Improving the properties of FOM:}} In section \ref{subs...
- <./seq_cons.png>] [19pdfTeX warning (ext4): destination with the same identifi
-er (name{table.1}) has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.550 
-      ] <inertial_frame.png, id=448, 657.45625pt x 554.07pt>
+ [19]
+<inertial_frame.png, id=440, 657.45625pt x 554.07pt>
 File: inertial_frame.png Graphic file (type png)
-
-<use inertial_frame.png>
+ <use inertial_frame.png>
 Package pdftex.def Info: inertial_frame.png used on input line 574.
 (pdftex.def)             Requested size: 284.52756pt x 239.78416pt.
- [20pdfTeX warning (ext4): destination with the same identifier (name{table.2})
- has been already used, duplicate ignored
 
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.594 
-      pdfTeX warning (ext4): destination with the same identifier (name{table.3
-}) has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.594 
-      ] [21pdfTeX warning (ext4): destination with the same identifier (name{fi
-gure.9}) has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.599 
-       <./inertial_frame.png>]
-<ell_limit_surfaces.png, id=470, 557.08125pt x 611.28375pt>
+[20] [21 <./inertial_frame.png>]
+<ell_limit_surfaces.png, id=461, 557.08125pt x 611.28375pt>
 File: ell_limit_surfaces.png Graphic file (type png)
 
 <use ell_limit_surfaces.png>
 Package pdftex.def Info: ell_limit_surfaces.png used on input line 616.
 (pdftex.def)             Requested size: 284.52756pt x 312.21695pt.
 
-<MotionCone-eps-converted-to.pdf, id=475, 210.7875pt x 219.82124pt>
+<MotionCone-eps-converted-to.pdf, id=466, 210.7875pt x 219.82124pt>
 File: MotionCone-eps-converted-to.pdf Graphic file (type pdf)
 
 <use MotionCone-eps-converted-to.pdf>
 Package pdftex.def Info: MotionCone-eps-converted-to.pdf used on input line 636
 .
 (pdftex.def)             Requested size: 199.16928pt x 207.70868pt.
- [22]
-Underfull \vbox (badness 1406) has occurred while \output is active []
-
- [23pdfTeX warning (ext4): destination with the same identifier (name{figure.10
-}) has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.674 \end{equation}
-                     <./ell_limit_surfaces.png>]
+ [22] [23 <./ell_limit_surfaces.png>]
 Underfull \hbox (badness 10000) in paragraph at lines 682--712
 
  []
@@ -1008,14 +946,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 682--712
 
  []
 
-[24pdfTeX warning (ext4): destination with the same identifier (name{figure.11}
-) has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.716 \begin{equation}
-                       \label{eq:condensed_motion_linear} <./MotionCone-eps-con
-verted-to.pdf>]
+[24 <./MotionCone-eps-converted-to.pdf>]
 Underfull \hbox (badness 10000) in paragraph at lines 718--721
 
  []
@@ -1040,7 +971,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 749--766
 
  []
 
-[25] [26]
+[25] [26] [27]
 Missing character: There is no ‚ in font cmss10!
 Missing character: There is no Ä in font cmss10!
 Missing character: There is no ô in font cmss10!
@@ -1050,11 +981,8 @@ Missing character: There is no ú in font cmss10!
 Missing character: There is no ‚ in font cmss10!
 Missing character: There is no Ä in font cmss10!
 Missing character: There is no ù in font cmss10!
-
-Underfull \vbox (badness 8094) has occurred while \output is active []
-
- [27]
-[28] <without_nominal_trajectory.jpg, id=583, 1059.96pt x 794.97pt>
+ [28]
+<without_nominal_trajectory.jpg, id=575, 1059.96pt x 794.97pt>
 File: without_nominal_trajectory.jpg Graphic file (type jpg)
 
 <use without_nominal_trajectory.jpg>
@@ -1062,219 +990,206 @@ Package pdftex.def Info: without_nominal_trajectory.jpg used on input line 857.
 
 (pdftex.def)             Requested size: 455.24408pt x 341.43015pt.
 
-<without_nominal_local_cost.jpg, id=586, 1861.95625pt x 1004.75375pt>
+<without_nominal_local_cost.jpg, id=578, 1861.95625pt x 1004.75375pt>
 File: without_nominal_local_cost.jpg Graphic file (type jpg)
 
 <use without_nominal_local_cost.jpg>
 Package pdftex.def Info: without_nominal_local_cost.jpg used on input line 864.
 
 (pdftex.def)             Requested size: 455.24408pt x 245.65323pt.
- [29pdfTeX warning (ext4): destination with the same identifier (name{figure.12
-}) has been already used, duplicate ignored
+ [29]
+Underfull \vbox (badness 4634) has occurred while \output is active []
 
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.870 
-       <./without_nominal_trajectory.jpg>]
-<non_chameleon.jpg, id=595, 1861.95625pt x 1004.75375pt>
+ [30 <./without_nominal_trajectory.jpg>] [31 <./without_nominal_local_cost.jpg>
+]
+<non_chameleon.jpg, id=605, 1861.95625pt x 1004.75375pt>
 File: non_chameleon.jpg Graphic file (type jpg)
 
 <use non_chameleon.jpg>
-Package pdftex.def Info: non_chameleon.jpg used on input line 878.
+Package pdftex.def Info: non_chameleon.jpg used on input line 903.
 (pdftex.def)             Requested size: 455.24408pt x 245.65323pt.
- [30pdfTeX warning (ext4): destination with the same identifier (name{figure.13
-}) has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.887 S
-       olving the MPC using the FOM approach has similarities with the roll-...
- <./without_nominal_local_cost.jpg>] [31pdfTeX warning (ext4): destination with
- the same identifier (name{figure.14}) has been already used, duplicate ignored
-
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.897 \item R
-             eplace $F$ by  $F^{(1)} = \{M_1^{(1)}, ..., M_k^{(1)}\}$, $J$ b...
- <./non_chameleon.jpg>] [32]
-Overfull \hbox (2.5598pt too wide) in paragraph at lines 923--924
+ [32 <./non_chameleon.jpg>] [33]
+Overfull \hbox (2.5598pt too wide) in paragraph at lines 948--949
 \OT1/cmss/m/sl/10.95 and we can con-clude that $J[]\OT1/cmss/m/n/10.95 ([][], [
 ][]) \OML/cmm/m/it/10.95 < [][][][][] \OT1/cmss/m/n/10.95 + [][][][][] + \OT1/c
 mss/m/sl/10.95 J[]\OT1/cmss/m/n/10.95 ([][]([][]), [][]([][])) = \OT1/cmss/m/sl
 /10.95 J[]\OT1/cmss/m/n/10.95 ([][]([][]), [][]([][]))$\OT1/cmss/m/sl/10.95 ,
  []
 
-[33] [34] <chameleon.jpg, id=639, 1861.95625pt x 1004.75375pt>
+[34] <MIQP_trajectory.jpg, id=640, 1059.96pt x 794.97pt>
+File: MIQP_trajectory.jpg Graphic file (type jpg)
+
+<use MIQP_trajectory.jpg>
+Package pdftex.def Info: MIQP_trajectory.jpg used on input line 989.
+(pdftex.def)             Requested size: 369.88582pt x 277.41881pt.
+ [35]
+<chameleon.jpg, id=649, 1861.95625pt x 1004.75375pt>
 File: chameleon.jpg Graphic file (type jpg)
-
-<use chameleon.jpg>
-Package pdftex.def Info: chameleon.jpg used on input line 989.
+ <use chameleon.jpg>
+Package pdftex.def Info: chameleon.jpg used on input line 998.
 (pdftex.def)             Requested size: 455.24408pt x 245.65323pt.
- [35] [36pdfTeX warning (ext4): destination with the same identifier (name{figu
-re.15}) has been already used, duplicate ignored
 
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.1020 
-        <./chameleon.jpg>] [37]
-<hist_pre_std.jpg, id=666, 1861.95625pt x 1004.75375pt>
+<general_trajectory_frank_modes_long_horizon.jpg, id=650, 1059.96pt x 794.97pt>
+File: general_trajectory_frank_modes_long_horizon.jpg Graphic file (type jpg)
+<use general_trajectory_frank_modes_long_horizon.jpg>
+Package pdftex.def Info: general_trajectory_frank_modes_long_horizon.jpg used o
+n input line 1006.
+(pdftex.def)             Requested size: 338.58632pt x 253.93465pt.
+
+
+Package caption Warning: The option `hypcap=true' will be ignored for this
+(caption)                particular \caption on input line 1007.
+See the caption package documentation for explanation.
+
+<original_general_trajectory_short_horizon.jpg, id=651, 1059.96pt x 794.97pt>
+File: original_general_trajectory_short_horizon.jpg Graphic file (type jpg)
+
+<use original_general_trajectory_short_horizon.jpg>
+Package pdftex.def Info: original_general_trajectory_short_horizon.jpg used on 
+input line 1010.
+(pdftex.def)             Requested size: 338.58632pt x 253.93465pt.
+
+
+Package caption Warning: The option `hypcap=true' will be ignored for this
+(caption)                particular \caption on input line 1012.
+See the caption package documentation for explanation.
+
+
+Overfull \hbox (17.0pt too wide) in paragraph at lines 1005--1014
+[]$[]$
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [36 <./MIQP_trajectory.jpg>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [37 <./chameleon.jpg> <./general_trajectory_frank_modes_long_horizon.jpg>] [38
+ <./original_general_trajectory_short_horizon.jpg>] [39] [40]
+<hist_pre_std.jpg, id=688, 1861.95625pt x 1004.75375pt>
 File: hist_pre_std.jpg Graphic file (type jpg)
  <use hist_pre_std.jpg>
-Package pdftex.def Info: hist_pre_std.jpg used on input line 1057.
+Package pdftex.def Info: hist_pre_std.jpg used on input line 1081.
 (pdftex.def)             Requested size: 455.24408pt x 245.65323pt.
 
-<hist_after_std.jpg, id=667, 1861.95625pt x 1004.75375pt>
+<hist_after_std.jpg, id=689, 1861.95625pt x 1004.75375pt>
 File: hist_after_std.jpg Graphic file (type jpg)
 
 <use hist_after_std.jpg>
-Package pdftex.def Info: hist_after_std.jpg used on input line 1066.
+Package pdftex.def Info: hist_after_std.jpg used on input line 1090.
 (pdftex.def)             Requested size: 455.24408pt x 245.65323pt.
- [38]
+ [41]
 
-LaTeX Warning: Text page 39 contains only floats.
+LaTeX Warning: Text page 42 contains only floats.
 
-[39pdfTeX warning (ext4): destination with the same identifier (name{figure.16}
-) has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.1072 
-       pdfTeX warning (ext4): destination with the same identifier (name{figure
-.17}) has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.1072 
-        <./hist_pre_std.jpg> <./hist_after_std.jpg>]
-<cost_over_modes.jpg, id=684, 1861.95625pt x 1004.75375pt>
+[42 <./hist_pre_std.jpg> <./hist_after_std.jpg>]
+<cost_over_modes.jpg, id=708, 1861.95625pt x 1004.75375pt>
 File: cost_over_modes.jpg Graphic file (type jpg)
 
 <use cost_over_modes.jpg>
-Package pdftex.def Info: cost_over_modes.jpg used on input line 1083.
+Package pdftex.def Info: cost_over_modes.jpg used on input line 1107.
 (pdftex.def)             Requested size: 455.24408pt x 245.65323pt.
 
-<learning_straight.jpg, id=685, 1861.95625pt x 1004.75375pt>
+<learning_straight.jpg, id=709, 1861.95625pt x 1004.75375pt>
 File: learning_straight.jpg Graphic file (type jpg)
 
 <use learning_straight.jpg>
-Package pdftex.def Info: learning_straight.jpg used on input line 1094.
+Package pdftex.def Info: learning_straight.jpg used on input line 1118.
 (pdftex.def)             Requested size: 455.24408pt x 245.65323pt.
 
-<learning_straight_original.jpg, id=686, 1059.96pt x 794.97pt>
+<learning_straight_original.jpg, id=710, 1059.96pt x 794.97pt>
 File: learning_straight_original.jpg Graphic file (type jpg)
 
 <use learning_straight_original.jpg>
-Package pdftex.def Info: learning_straight_original.jpg used on input line 1103
+Package pdftex.def Info: learning_straight_original.jpg used on input line 1127
 .
 (pdftex.def)             Requested size: 217.66211pt x 163.23677pt.
 
-<learning_straight_3_modes.jpg, id=687, 1059.96pt x 794.97pt>
+<learning_straight_3_modes.jpg, id=711, 1059.96pt x 794.97pt>
 File: learning_straight_3_modes.jpg Graphic file (type jpg)
 
 <use learning_straight_3_modes.jpg>
-Package pdftex.def Info: learning_straight_3_modes.jpg used on input line 1108.
+Package pdftex.def Info: learning_straight_3_modes.jpg used on input line 1132.
 
 (pdftex.def)             Requested size: 241.84843pt x 181.38362pt.
+ [43 <./cost_over_modes.jpg>]
 
+LaTeX Warning: Reference `cost_over_modes' on page 44 undefined on input line 1
+141.
 
-LaTeX Warning: Reference `cost_over_modes' on page 40 undefined on input line 1
-117.
-
-<old_vs_new_circle_interior.jpg, id=688, 1861.95625pt x 1004.75375pt>
+<old_vs_new_circle_interior.jpg, id=717, 1861.95625pt x 1004.75375pt>
 File: old_vs_new_circle_interior.jpg Graphic file (type jpg)
 
 <use old_vs_new_circle_interior.jpg>
-Package pdftex.def Info: old_vs_new_circle_interior.jpg used on input line 1123
+Package pdftex.def Info: old_vs_new_circle_interior.jpg used on input line 1147
 .
 (pdftex.def)             Requested size: 455.24408pt x 245.65323pt.
 
-<frank_modes_circle_internal.jpg, id=691, 1059.96pt x 794.97pt>
+<frank_modes_circle_internal.jpg, id=720, 1059.96pt x 794.97pt>
 File: frank_modes_circle_internal.jpg Graphic file (type jpg)
 
 <use frank_modes_circle_internal.jpg>
-Package pdftex.def Info: frank_modes_circle_internal.jpg used on input line 113
-2.
+Package pdftex.def Info: frank_modes_circle_internal.jpg used on input line 115
+6.
 (pdftex.def)             Requested size: 241.84843pt x 181.38362pt.
 
-<best_3_modes_circle_interior.jpg, id=692, 1059.96pt x 794.97pt>
+<best_3_modes_circle_interior.jpg, id=721, 1059.96pt x 794.97pt>
 File: best_3_modes_circle_interior.jpg Graphic file (type jpg)
 
 <use best_3_modes_circle_interior.jpg>
 Package pdftex.def Info: best_3_modes_circle_interior.jpg used on input line 11
-37.
+61.
 (pdftex.def)             Requested size: 241.84843pt x 181.38362pt.
- [40] [41pdfTeX warning (ext4): destination with the same identifier (name{figu
-re.18}) has been already used, duplicate ignored
+ [44 <./learning_straight.jpg>]
+Underfull \vbox (badness 1253) has occurred while \output is active []
 
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.1155 
-        <./cost_over_modes.jpg>]
-Underfull \vbox (badness 2644) has occurred while \output is active []
+ [45 <./learning_straight_original.jpg> <./learning_straight_3_modes.jpg> <./ol
+d_vs_new_circle_interior.jpg>] [46 <./frank_modes_circle_internal.jpg> <./best_
+3_modes_circle_interior.jpg>]
 
- [42pdfTeX warning (ext4): destination with the same identifier (name{figure.19
-}) has been already used, duplicate ignored
+Package caption Warning: \label without proper \caption on input line 1208.
+See the caption package documentation for explanation.
 
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.1165 \section{Conclusion and Discussion}
-                                           <./learning_straight.jpg>]
-Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [43pdfTeX warning (ext4): destination with the same identifier (name{figure.20
-}) has been already used, duplicate ignored
+LaTeX Warning: Reference `fig:dfom_trajectory_short_horizon' on page 47 undefin
+ed on input line 1190.
 
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.1169 \end{enumerate}
-                      pdfTeX warning (ext4): destination with the same identifi
-er (name{figure.21}) has been already used, duplicate ignored
+<dfom_trajectory_long_horizon.jpg, id=742, 1059.96pt x 794.97pt>
+File: dfom_trajectory_long_horizon.jpg Graphic file (type jpg)
 
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.1169 \end{enumerate}
-                      pdfTeX warning (ext4): destination with the same identifi
-er (name{figure.22}) has been already used, duplicate ignored
+<use dfom_trajectory_long_horizon.jpg>
+Package pdftex.def Info: dfom_trajectory_long_horizon.jpg used on input line 12
+02.
+(pdftex.def)             Requested size: 338.58632pt x 253.93465pt.
 
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.1169 \end{enumerate}
-                       <./learning_straight_original.jpg> <./learning_straight_
-3_modes.jpg> <./old_vs_new_circle_interior.jpg>] [44pdfTeX warning (ext4): dest
-ination with the same identifier (name{figure.23}) has been already used, dupli
-cate ignored
+<dfom_trajectory_short_horizon_15_steps.jpg, id=743, 1059.96pt x 794.97pt>
+File: dfom_trajectory_short_horizon_15_steps.jpg Graphic file (type jpg)
 
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.1186 	\item U
-               se Adobe or other sofware to join (combine or merge) the two ...
-pdfTeX warning (ext4): destination with the same identifier (name{figure.24}) h
-as been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.1186 	\item U
-               se Adobe or other sofware to join (combine or merge) the two ...
- <./frank_modes_circle_internal.jpg> <./best_3_modes_circle_interior.jpg>]
-[45] (./TFGEudaldRomo.bbl
+<use dfom_trajectory_short_horizon_15_steps.jpg>
+Package pdftex.def Info: dfom_trajectory_short_horizon_15_steps.jpg used on inp
+ut line 1207.
+(pdftex.def)             Requested size: 338.58632pt x 253.93465pt.
+ [47] [48 <./dfom_trajectory_long_horizon.jpg> <./dfom_trajectory_short_horizon
+_15_steps.jpg>]
+(./TFGEudaldRomo.bbl
 Missing character: There is no ‚ in font cmssi10!
 Missing character: There is no Ä in font cmssi10!
 Missing character: There is no ô in font cmssi10!
 Missing character: There is no ‚ in font cmssi10!
 Missing character: There is no Ä in font cmssi10!
 Missing character: There is no ô in font cmssi10!
- [46]) [47] 
+ [49]) [50] 
 AED: lastpage setting LastPage
-[48]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1200.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1200.
+[51]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1238.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1238.
  (./TFGEudaldRomo.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1200.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1200.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1238.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1238.
 
 Package rerunfilecheck Info: File `TFGEudaldRomo.out' has not changed.
-(rerunfilecheck)             Checksum: 70D79049741EEBD9CD95D9B789A939A6;2366.
+(rerunfilecheck)             Checksum: 8B7F322CCAE7E37E479A792473A356B0;2244.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
@@ -1285,16 +1200,16 @@ LaTeX Warning: There were undefined references.
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1200.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1238.
  ) 
 Here is how much of TeX's memory you used:
- 11859 strings out of 494985
- 161372 string characters out of 6180356
- 323238 words of memory out of 5000000
- 14614 multiletter control sequences out of 15000+600000
+ 12889 strings out of 494985
+ 181134 string characters out of 6180356
+ 344223 words of memory out of 5000000
+ 15629 multiletter control sequences out of 15000+600000
  21537 words of font info for 82 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 36i,15n,49p,3245b,497s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 36i,15n,45p,3245b,493s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex8.pfb></usr/
 share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/
@@ -1314,10 +1229,10 @@ cmss8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx1
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf
 -dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/
 fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on TFGEudaldRomo.pdf (52 pages, 2025560 bytes).
+Output written on TFGEudaldRomo.pdf (55 pages, 2256672 bytes).
 PDF statistics:
- 854 PDF objects out of 1000 (max. 8388607)
- 720 compressed objects within 8 object streams
- 228 named destinations out of 1000 (max. 500000)
- 393 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 880 PDF objects out of 1000 (max. 8388607)
+ 734 compressed objects within 8 object streams
+ 232 named destinations out of 1000 (max. 500000)
+ 402 words of extra memory for PDF output out of 10000 (max. 10000000)
 
