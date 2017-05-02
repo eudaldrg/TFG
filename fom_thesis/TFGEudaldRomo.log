@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2017.1.30)  2 MAY 2017 03:32
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2017.1.30)  2 MAY 2017 06:36
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1016,159 +1016,175 @@ mss/m/sl/10.95 J[]\OT1/cmss/m/n/10.95 ([][]([][]), [][]([][])) = \OT1/cmss/m/sl
 /10.95 J[]\OT1/cmss/m/n/10.95 ([][]([][]), [][]([][]))$\OT1/cmss/m/sl/10.95 ,
  []
 
-[34] <MIQP_trajectory.jpg, id=640, 1059.96pt x 794.97pt>
+[34] [35] <MIQP_trajectory.jpg, id=645, 1059.96pt x 794.97pt>
 File: MIQP_trajectory.jpg Graphic file (type jpg)
 
 <use MIQP_trajectory.jpg>
-Package pdftex.def Info: MIQP_trajectory.jpg used on input line 989.
-(pdftex.def)             Requested size: 369.88582pt x 277.41881pt.
- [35]
-<chameleon.jpg, id=649, 1861.95625pt x 1004.75375pt>
-File: chameleon.jpg Graphic file (type jpg)
- <use chameleon.jpg>
-Package pdftex.def Info: chameleon.jpg used on input line 998.
-(pdftex.def)             Requested size: 455.24408pt x 245.65323pt.
+Package pdftex.def Info: MIQP_trajectory.jpg used on input line 991.
+(pdftex.def)             Requested size: 241.84843pt x 181.38362pt.
+ <clustered_miqp.jpg, id=646, 1059.96pt x 794.97pt>
+File: clustered_miqp.jpg Graphic file (type jpg)
 
-<general_trajectory_frank_modes_long_horizon.jpg, id=650, 1059.96pt x 794.97pt>
-File: general_trajectory_frank_modes_long_horizon.jpg Graphic file (type jpg)
-<use general_trajectory_frank_modes_long_horizon.jpg>
-Package pdftex.def Info: general_trajectory_frank_modes_long_horizon.jpg used o
-n input line 1006.
-(pdftex.def)             Requested size: 338.58632pt x 253.93465pt.
+<use clustered_miqp.jpg>
+Package pdftex.def Info: clustered_miqp.jpg used on input line 997.
+(pdftex.def)             Requested size: 241.84843pt x 181.38362pt.
+
+
+Package caption Warning: The option `hypcap=true' will be ignored for this
+(caption)                particular \caption on input line 998.
+See the caption package documentation for explanation.
+
+<original_vs_clustered_trajectory.jpg, id=651, 1059.96pt x 794.97pt>
+File: original_vs_clustered_trajectory.jpg Graphic file (type jpg)
+
+<use original_vs_clustered_trajectory.jpg>
+Package pdftex.def Info: original_vs_clustered_trajectory.jpg used on input lin
+e 1006.
+(pdftex.def)             Requested size: 241.84843pt x 181.38362pt.
 
 
 Package caption Warning: The option `hypcap=true' will be ignored for this
 (caption)                particular \caption on input line 1007.
 See the caption package documentation for explanation.
 
-<original_general_trajectory_short_horizon.jpg, id=651, 1059.96pt x 794.97pt>
-File: original_general_trajectory_short_horizon.jpg Graphic file (type jpg)
 
-<use original_general_trajectory_short_horizon.jpg>
-Package pdftex.def Info: original_general_trajectory_short_horizon.jpg used on 
-input line 1010.
-(pdftex.def)             Requested size: 338.58632pt x 253.93465pt.
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [36 <./MIQP_trajectory.jpg> <./clustered_miqp.jpg>]
+<original_vs_clustered_costs.jpg, id=660, 1861.95625pt x 1004.75375pt>
+File: original_vs_clustered_costs.jpg Graphic file (type jpg)
+
+<use original_vs_clustered_costs.jpg>
+Package pdftex.def Info: original_vs_clustered_costs.jpg used on input line 101
+0.
+(pdftex.def)             Requested size: 338.58632pt x 182.70296pt.
 
 
 Package caption Warning: The option `hypcap=true' will be ignored for this
-(caption)                particular \caption on input line 1012.
+(caption)                particular \caption on input line 1011.
 See the caption package documentation for explanation.
 
-
-Overfull \hbox (17.0pt too wide) in paragraph at lines 1005--1014
-[]$[]$
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [36 <./MIQP_trajectory.jpg>]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [37 <./chameleon.jpg> <./general_trajectory_frank_modes_long_horizon.jpg>] [38
- <./original_general_trajectory_short_horizon.jpg>] [39] [40]
-<hist_pre_std.jpg, id=688, 1861.95625pt x 1004.75375pt>
-File: hist_pre_std.jpg Graphic file (type jpg)
- <use hist_pre_std.jpg>
-Package pdftex.def Info: hist_pre_std.jpg used on input line 1081.
+<chameleon.jpg, id=667, 1861.95625pt x 1004.75375pt>
+File: chameleon.jpg Graphic file (type jpg)
+ <use chameleon.jpg>
+Package pdftex.def Info: chameleon.jpg used on input line 1019.
 (pdftex.def)             Requested size: 455.24408pt x 245.65323pt.
 
-<hist_after_std.jpg, id=689, 1861.95625pt x 1004.75375pt>
+[37 <./original_vs_clustered_trajectory.jpg> <./original_vs_clustered_costs.jpg
+>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [38 <./chameleon.jpg>] [39] <hist_pre_std.jpg, id=693, 1861.95625pt x 1004.753
+75pt>
+File: hist_pre_std.jpg Graphic file (type jpg)
+
+<use hist_pre_std.jpg>
+Package pdftex.def Info: hist_pre_std.jpg used on input line 1072.
+(pdftex.def)             Requested size: 455.24408pt x 245.65323pt.
+
+<hist_after_std.jpg, id=694, 1861.95625pt x 1004.75375pt>
 File: hist_after_std.jpg Graphic file (type jpg)
 
 <use hist_after_std.jpg>
-Package pdftex.def Info: hist_after_std.jpg used on input line 1090.
+Package pdftex.def Info: hist_after_std.jpg used on input line 1079.
 (pdftex.def)             Requested size: 455.24408pt x 245.65323pt.
- [41]
 
-LaTeX Warning: Text page 42 contains only floats.
+<costs_over_mode_straight_line.jpg, id=700, 1861.95625pt x 1004.75375pt>
+File: costs_over_mode_straight_line.jpg Graphic file (type jpg)
 
-[42 <./hist_pre_std.jpg> <./hist_after_std.jpg>]
-<cost_over_modes.jpg, id=708, 1861.95625pt x 1004.75375pt>
+<use costs_over_mode_straight_line.jpg>
+Package pdftex.def Info: costs_over_mode_straight_line.jpg used on input line 1
+091.
+(pdftex.def)             Requested size: 455.24408pt x 245.65323pt.
+ [40]
+
+LaTeX Warning: Text page 41 contains only floats.
+
+[41 <./hist_pre_std.jpg> <./hist_after_std.jpg>] [42 <./costs_over_mode_straigh
+t_line.jpg>] <cost_over_modes.jpg, id=722, 1861.95625pt x 1004.75375pt>
 File: cost_over_modes.jpg Graphic file (type jpg)
 
 <use cost_over_modes.jpg>
-Package pdftex.def Info: cost_over_modes.jpg used on input line 1107.
+Package pdftex.def Info: cost_over_modes.jpg used on input line 1117.
 (pdftex.def)             Requested size: 455.24408pt x 245.65323pt.
 
-<learning_straight.jpg, id=709, 1861.95625pt x 1004.75375pt>
+<learning_straight.jpg, id=723, 1861.95625pt x 1004.75375pt>
 File: learning_straight.jpg Graphic file (type jpg)
 
 <use learning_straight.jpg>
-Package pdftex.def Info: learning_straight.jpg used on input line 1118.
+Package pdftex.def Info: learning_straight.jpg used on input line 1128.
 (pdftex.def)             Requested size: 455.24408pt x 245.65323pt.
 
-<learning_straight_original.jpg, id=710, 1059.96pt x 794.97pt>
+<learning_straight_original.jpg, id=724, 1059.96pt x 794.97pt>
 File: learning_straight_original.jpg Graphic file (type jpg)
 
 <use learning_straight_original.jpg>
-Package pdftex.def Info: learning_straight_original.jpg used on input line 1127
+Package pdftex.def Info: learning_straight_original.jpg used on input line 1137
 .
 (pdftex.def)             Requested size: 217.66211pt x 163.23677pt.
 
-<learning_straight_3_modes.jpg, id=711, 1059.96pt x 794.97pt>
+<learning_straight_3_modes.jpg, id=725, 1059.96pt x 794.97pt>
 File: learning_straight_3_modes.jpg Graphic file (type jpg)
 
 <use learning_straight_3_modes.jpg>
-Package pdftex.def Info: learning_straight_3_modes.jpg used on input line 1132.
+Package pdftex.def Info: learning_straight_3_modes.jpg used on input line 1142.
 
 (pdftex.def)             Requested size: 241.84843pt x 181.38362pt.
  [43 <./cost_over_modes.jpg>]
 
 LaTeX Warning: Reference `cost_over_modes' on page 44 undefined on input line 1
-141.
+151.
 
-<old_vs_new_circle_interior.jpg, id=717, 1861.95625pt x 1004.75375pt>
+<old_vs_new_circle_interior.jpg, id=732, 1861.95625pt x 1004.75375pt>
 File: old_vs_new_circle_interior.jpg Graphic file (type jpg)
 
 <use old_vs_new_circle_interior.jpg>
-Package pdftex.def Info: old_vs_new_circle_interior.jpg used on input line 1147
+Package pdftex.def Info: old_vs_new_circle_interior.jpg used on input line 1157
 .
 (pdftex.def)             Requested size: 455.24408pt x 245.65323pt.
 
-<frank_modes_circle_internal.jpg, id=720, 1059.96pt x 794.97pt>
+<frank_modes_circle_internal.jpg, id=735, 1059.96pt x 794.97pt>
 File: frank_modes_circle_internal.jpg Graphic file (type jpg)
 
 <use frank_modes_circle_internal.jpg>
-Package pdftex.def Info: frank_modes_circle_internal.jpg used on input line 115
+Package pdftex.def Info: frank_modes_circle_internal.jpg used on input line 116
 6.
 (pdftex.def)             Requested size: 241.84843pt x 181.38362pt.
 
-<best_3_modes_circle_interior.jpg, id=721, 1059.96pt x 794.97pt>
+<best_3_modes_circle_interior.jpg, id=736, 1059.96pt x 794.97pt>
 File: best_3_modes_circle_interior.jpg Graphic file (type jpg)
 
 <use best_3_modes_circle_interior.jpg>
 Package pdftex.def Info: best_3_modes_circle_interior.jpg used on input line 11
-61.
+71.
 (pdftex.def)             Requested size: 241.84843pt x 181.38362pt.
- [44 <./learning_straight.jpg>]
-Underfull \vbox (badness 1253) has occurred while \output is active []
+ [44 <./learning_straight.jpg>] [45 <./learning_straight_original.jpg> <./learn
+ing_straight_3_modes.jpg> <./old_vs_new_circle_interior.jpg>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [45 <./learning_straight_original.jpg> <./learning_straight_3_modes.jpg> <./ol
-d_vs_new_circle_interior.jpg>] [46 <./frank_modes_circle_internal.jpg> <./best_
-3_modes_circle_interior.jpg>]
+ [46 <./frank_modes_circle_internal.jpg> <./best_3_modes_circle_interior.jpg>]
 
-Package caption Warning: \label without proper \caption on input line 1208.
+Package caption Warning: \label without proper \caption on input line 1216.
 See the caption package documentation for explanation.
 
 
 LaTeX Warning: Reference `fig:dfom_trajectory_short_horizon' on page 47 undefin
-ed on input line 1190.
+ed on input line 1198.
 
-<dfom_trajectory_long_horizon.jpg, id=742, 1059.96pt x 794.97pt>
+<dfom_trajectory_long_horizon.jpg, id=757, 1059.96pt x 794.97pt>
 File: dfom_trajectory_long_horizon.jpg Graphic file (type jpg)
 
 <use dfom_trajectory_long_horizon.jpg>
 Package pdftex.def Info: dfom_trajectory_long_horizon.jpg used on input line 12
-02.
+10.
 (pdftex.def)             Requested size: 338.58632pt x 253.93465pt.
 
-<dfom_trajectory_short_horizon_15_steps.jpg, id=743, 1059.96pt x 794.97pt>
+<dfom_trajectory_short_horizon_15_steps.jpg, id=758, 1059.96pt x 794.97pt>
 File: dfom_trajectory_short_horizon_15_steps.jpg Graphic file (type jpg)
 
 <use dfom_trajectory_short_horizon_15_steps.jpg>
 Package pdftex.def Info: dfom_trajectory_short_horizon_15_steps.jpg used on inp
-ut line 1207.
+ut line 1215.
 (pdftex.def)             Requested size: 338.58632pt x 253.93465pt.
  [47] [48 <./dfom_trajectory_long_horizon.jpg> <./dfom_trajectory_short_horizon
 _15_steps.jpg>]
@@ -1182,11 +1198,11 @@ Missing character: There is no ™ in font cmssi10!
  [49]) [50] 
 AED: lastpage setting LastPage
 [51]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1238.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1238.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1248.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1248.
  (./TFGEudaldRomo.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1238.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1238.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1248.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1248.
 
 Package rerunfilecheck Info: File `TFGEudaldRomo.out' has not changed.
 (rerunfilecheck)             Checksum: 8B7F322CCAE7E37E479A792473A356B0;2244.
@@ -1200,13 +1216,13 @@ LaTeX Warning: There were undefined references.
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1238.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1248.
  ) 
 Here is how much of TeX's memory you used:
- 12889 strings out of 494985
- 181134 string characters out of 6180356
- 344223 words of memory out of 5000000
- 15629 multiletter control sequences out of 15000+600000
+ 12903 strings out of 494985
+ 181358 string characters out of 6180356
+ 344965 words of memory out of 5000000
+ 15639 multiletter control sequences out of 15000+600000
  21537 words of font info for 82 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
  36i,15n,45p,3245b,493s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1229,10 +1245,10 @@ cmss8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx1
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf
 -dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/
 fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on TFGEudaldRomo.pdf (55 pages, 2256672 bytes).
+Output written on TFGEudaldRomo.pdf (55 pages, 2396378 bytes).
 PDF statistics:
- 880 PDF objects out of 1000 (max. 8388607)
- 734 compressed objects within 8 object streams
- 232 named destinations out of 1000 (max. 500000)
- 402 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 896 PDF objects out of 1000 (max. 8388607)
+ 744 compressed objects within 8 object streams
+ 234 named destinations out of 1000 (max. 500000)
+ 412 words of extra memory for PDF output out of 10000 (max. 10000000)
 

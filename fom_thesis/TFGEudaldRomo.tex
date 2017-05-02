@@ -891,7 +891,7 @@ In order to compare FOM to other methods using a longer time horizon, we impleme
 
 As we exposed in section \ref{subsec:MPC}, the MIQP formulation doesn't escalate well with the number of binary variables added and clustered MIQP allows us to reduce the binary variable dimensionality of the optimization problem by keeping the same state during all the steps of the same cluster. The execution time of this new problem is similar to the execution time of a MIQP problem of $N$ steps but the controller inputs can be different at each of the $N c$ steps, providing a more flexible trajectory than the one given by the MIQP problem of $N$ steps.
 
-We intended to use this method to approximate MIQP problems with long horizons by using few clusters and we expected to obtain a better trajectory than the ones obtained with FOM. As will be discussed later, the results of this MIQP approximation were usually worse than the ones obtained in the FOM with the original modes from Hogan's study. In section \ref{subsec:simresults} we provide a possible explanation for this behaviour.
+We intended to use this method to approximate MIQP problems with long horizons by using few clusters and we expected to obtain a better trajectory than the ones obtained with FOM. As will be discussed later, the results of this MIQP approximation were usually worse than the ones obtained in the FOM with the original modes from Hogan's study. In section \ref{subsec:simresults} we discuss the implications of these results.
 
 \subsection{Chameleon Mode}
 \label{subsec:chameleon}
@@ -911,7 +911,7 @@ The conclusion these experiences led us to was that, using Bersekas' terminology
 
 Solving the MPC using the FOM approach has similarities with the roll-out algorithm presented in their study: Each of the modes can be considered a heuristic and the strategy of recomputing the control policy at a certain frequency by using the same heuristics can be viewed as a roll-out-like technique. In fact, we could easily reformulate any family of our FOM approach to behave as their roll-out by increasing the finite horizon by one step and substitute each of the original modes by a triplet of copies preceded with an S, L, and R state respectively. We decided not to use an exact roll-out because, as we will show in this section, we were able to find a strategy to guarantee a sense of improvement without having to increase the number of MPC sub-problems to solve by a multiples of the number of possible states.
 
-It's important to note that the concepts of sequential consistency or optimality cannot be applied to our case without some previous modifications, because of the existence of a receding finite time horizon, but for every FOM problem we can formulate an associated Full Horizon Family of Modes (FFOM) problem as follows: (TODO: Define it).
+It's important to note that the concepts of sequential consistency or optimality cannot be applied to our case without some previous modifications, because of the existence of a receding finite time horizon, but for every FOM problem we can formulate an associated Full Horizon Family of Modes (FFOM) problem as follows:
 
 \begin{definition} {\textbf{FFOM:}}\\
 Given a FOM problem defined by a finite horizon of $N$ steps, a set $H$ of possible hybrid states, a cost function J, and a family $F^{(0)} = \{M_1^{(0)}, ..., M_k^{(0)}\}$ containing k modes, where $M_i^{(0)}$ is a general mode described as $M_i^{(0)} = (s_{i,1}, s_{i,2}, ..., s_{i,N})$, with $s_{ij} \in H$. Furthermore, consider a cost function $J_k = \sum\limits_{i = k}^{N} \left( \diff{\textbf{x}}_i^T \textbf{Q} \diff{\textbf{x}}_i^{} + \diff{\textbf{u}}_{i}^T \textbf{R} \diff{\textbf{u}}_{i}^{} \right)$ (defined using the $\textbf{Q}$ and $\textbf{R}$ matrices from the FOM cost function J) and the prefixes of each of the modes of the family $M_i^{(j)} = (s_{i,1}, ..., s_{i,N-j})$. Then the associated FFOM problem is defined iteratively as follows:
@@ -984,14 +984,35 @@ Given the good properties of the chameleon mode, we decided to include it in the
 
 In order to compare FOM and MIQP we considered necessary to use the same finite horizon length in both formulations to have a fair comparison. As explained in section \ref{subsec:miqp}, the computational cost was much higher than we expected. The maximum finite horizon length we could afford to run simulations in a reasonable time was 5. This value of the finite horizon was too short to control most of the non-trivial trajectories properly. Figure \ref{fig:MIQP_trajectory} shows the trajectory obtained from MIQP while trying to follow a circular trajectory and it can be seen that it clearly diverges.
 
-\begin{figure}[htb!]
+\newpage
+
+\begin{figure}
 \begin{center}
-\includegraphics[width=13cm]{MIQP_trajectory.jpg}
+\includegraphics[width=0.5\textwidth]{MIQP_trajectory.jpg}
 \end{center}
 \caption{\label{fig:MIQP_trajectory} \small Trajectory obtained when tracking circular trajectory defined by pushing perpendicularly to the slider with $p_y = 0.0249$. Initial position $\textbf{x}_0 = (0.0, -0.05, -0.1, p_y)^T$.}
 \end{figure}
 
-We tested our chameleon mode implementation by comparing the performance of families of modes that are not sequentially consistent in their full horizon formulation with and without the chameleon mode with satisfactory results. In Figure \ref{fig:chameleon} we show the example presented in section \ref{subsec:chameleon}. All the simulation parameters are kept the same except for the usage or non usage of the chameleon mode. As can be observed, the results correspond with our expectations: for the family $F_2$ the chameleon mode implementation successfully tracks the trajectory while the implementation without it failed to do it, as we showed previously.
+
+\begin{center}\includegraphics[width=0.5\textwidth] {clustered_miqp.jpg} 
+\captionof{figure}{Trajectory obtained while tracking the same nominal trajectory as Figure \ref{fig:MIQP_trajectory} starting at the same initial condition and using a clustered MIQP solver consisting in 5 clusters of 7 steps.}\label{fig:clustered_miqp}
+\end{center}
+
+We tried to track the same trajectories using our implementation of MIQP with 5 clusters of 7 steps. This allowed us to compare it with a FOM problem of 35 steps. Using the original family from Hogan's work (formed bye the modes $\textbf{S}$, $\textbf{R}_1$, and $\textbf{L}_1$) we can observe that, for non-trivial trajectories, the FOM approach outperforms the clustered MIQP one. As can be seen in Figure \ref{fig:original_vs_clustered_costs} the clustered MIQP does not even converge to the nominal trajectory.
+
+The results obtained with MIQP and clustered MIQP imply that we will not be able to compare the FOM solvers with an ideal solution. As will be seen in future sections, the original modes from Hogan's study are specially versatile and can track a wide range of trajectories. Because of that, in chapter \ref{sec:modeselection} we will use them as a comparison model to strive for.
+ 
+\begin{center}
+\includegraphics[width=0.5\textwidth]{original_vs_clustered_trajectory.jpg}        
+\captionof{figure}{Trajectory obtained while tracking the same nominal trajectory as Figure \ref{fig:MIQP_trajectory} starting at the same initial condition and using a FOM solver with a finite horizon of 35 steps and the original modes from Hogan's study.}
+\label{fig:original_vs_clustered_trajectory}
+
+\includegraphics[width=0.7\textwidth]{original_vs_clustered_costs.jpg}        
+\captionof{figure}{Local cost over time for the trajectories shown in Figures \ref{fig:clustered_miqp} and \ref{fig:original_vs_clustered_trajectory}.}
+\label{fig:original_vs_clustered_costs}
+\end{center}
+
+Finally, we tested our chameleon mode implementation by comparing the performance of families of modes that are not sequentially consistent in their full horizon formulation with and without the chameleon mode with satisfactory results. In Figure \ref{fig:chameleon} we show the example presented in section \ref{subsec:chameleon}. All the simulation parameters are kept the same except for the usage of the chameleon mode. As can be observed, the results correspond with our expectations: for the family $F_2$ the chameleon mode implementation successfully tracks the trajectory while the implementation without it failed to do it, as we showed previously.
 
 \begin{figure}[htb!]
 \begin{center}
@@ -1000,28 +1021,15 @@ We tested our chameleon mode implementation by comparing the performance of fami
 \caption{\label{fig:chameleon} \small Local cost over time for families $F_1$, $F_2$, and $F_3$ obtained following a straight line on the x axis and using an initial condition $\textbf{x}_0 = (0, 0.05, - \dfrac{\pi}{6}, 0)^T$.}
 \end{figure}
 
-TODO: Talk about the zoomed in figure, to talk about the glory of roll-out.
-
-\begin{minipage}{\linewidth}
-\makebox[\linewidth]{\includegraphics[width=0.7\textwidth] {general_trajectory_frank_modes_long_horizon.jpg}} \label{fig:general_trajectory_frank_modes_long_horizon}
-\captionof{figure}{General trajectory followed by using the original modes from Hogan's study. Finite horizon of 35 steps.}
-\end{minipage}
-\begin{minipage}{\textwidth}
-\makebox[\linewidth]{\includegraphics[width=0.7\textwidth]{original_general_trajectory_short_horizon.jpg}}
-\label{fig:original_general_trajectory_short_horizon}        
-\captionof{figure}{General trajectory followed by using the original modes from Hogan's study. Finite horizon of 15 steps.}
-\end{minipage}
-
-Finally, we compared clustered MIQP with five clusters of 7 steps with a FOM approach using three modes family formed by the S, $U_1$, and $D_1$ modes. 
-
-
 \newpage
 
 \section{Mode Selection Protocol}
 \label{sec:modeselection}
-In the previous sections it is explained how we addressed the sequential properties of the FOM formulation and provided a metric and other MPC solvers to compare FOM to. At this point of our study, we were able to adress our next objective: to optimize the selection of the family modes for the FOM formulation.
+In the previous sections we explained how we addressed some of the limitations or mistakes in the FOM formulation. We also tried to provide an ideal solution to strive for and we concluded that it was computationally intractable. At this point of our study, focused on adressing our next objective: to provide a selection protocol for the modes used in the FOM formulation.
 
-We considered multiple optimization criteria and relations to study and we had to adopt a set of assumptions to be able to obtain some initial results. For our first study, we tried to learn the modes to follow a single fixed straight line trajectory. Each optimization problem would be parametrized by a fixed finite time horizon (characterized by a number of steps $N$) and a fixed number of modes $K$ a family could contain. The initial condition $\diff{x_0}$ was assumed to be a random variable following a certain probability distribution. The cost of the control trajectory C was thus also a random variable of unknown distribution parametrized by the optimization problem parameters. Specifically given a set of $K$ modes $\{m_1, ..., m_k\}$, $C \sim D(m_1, ..., m_k)$ for a given distribution law $D$. Ideally, we would like to choose the the set of modes that minimizes $\mean{C}$.
+Our main goal was to obtain a simple and general procedure to select modes that would track a wide variety of trajectories. We were specially interested in keeping the protocol simple because our ultimate goal was to expand the FOM usage into the research community, so we needed an out-of-the-box general method that would not require much extra set-up steps depending on the particular manipulation system studied. In order to formalize the mode selection, we decided to represent it as an optimization problem.
+
+We considered multiple optimization criteria and relations to study and we had to adopt a set of assumptions to be able to obtain some initial results. We first tried to learn the modes to follow a single fixed trajectory. Each optimization problem was parametrized by a fixed finite time horizon (characterized by a number of steps $N$) and each family had a fixed number of modes $K$. The initial condition $\diff{x_0}$ was assumed to be a random variable following a certain probability distribution. The cost of the control trajectory C was thus also a random variable of unknown distribution parametrized by the optimization problem parameters. Specifically, given a set of $K$ modes $\{m_1, ..., m_k\}$, $C \sim D(m_1, ..., m_k)$ for a given distribution law $D$. Ideally, we would like to choose the the set of modes that minimizes $\mean{C}$. We considered that this stochastic approach would provide us versatile modes that would work under a wide variety of initial conditions, rather than over-fitting a specific set of them.
 
 We made three main assumptions:
 \begin{assumption} \label{ass:localcost}
@@ -1036,45 +1044,28 @@ We made three main assumptions:
 
 The motivation and justification for these assumptions will be explained in \ref{subsec:structure}, as well as some other implicit assumptions contained in it. In \ref{sec:todo} we will discuss some of the studies we would have conducted and how we would have modified these assumptions if we disposed of more time.
 
-(TODO: Make sure I discuss them)
-
 \subsection{Structure Study And Systematic Approach}
 \label{subsec:structure}
-Given a finite horizon of N steps and H states and considering M the set of possible modes obtained by concatenating N of these hybrid states, then $|M| = H^N$. Let the set of possible families containing K of these modes be F. Then $|F| = \binom {|M|}{K} = \frac{H^{N}!}{K!(H^N-K)!}$. Even with a low number of states this number grows quickly as N and K increase.
+Given a finite horizon of $N$ steps and $H$ states and considering $M$ the set of possible modes obtained by concatenating $N$ of these hybrid states, then $|M| = H^N$. Let the set of possible families containing $K$ of these modes be $F$. Then $|F| = \binom {|M|}{K} = \frac{H^{N}!}{K!(H^N-K)!}$. Even with a low number of states this number grows quickly as N and K increase.
 
-If we tried to directly tackle the optimization problem without any assumption or knowledge of its structure, we would need to solve several trajectory tracking problems for each of these possible families, because the families could be correlated between themselves. A simple example that will probably clarify this effect is that a $D_1$ or $U_1$ family will probably perform poorly alone because if the pusher slides away from the center of the slider face it will never be able to go back to it and control near the edges of the face is less versatile than on the middle (for example, while steeper turns can be taken in the edges of the face, changing rotation direction is much more difficult, at some point not even possible without sliding to the other side).
+A brute force approach to the optimization problem would prove to be computationally intractable and, without any further assumption or knowledge of the structure of the problem, we would have to take this brute force approach. There were some correlation effects between modes that we wanted to capture. For example, a mode $L_1$ usually needs some other mode in the family that allows to slide right, as $R_1$. Otherwise if the slider slides to the left at a certain time step, the pusher will never be able to recover its initial position. In section \ref{subsec:simresults} we will show that, as expected, once a pusher-slider system reaches a configuration with the pusher near one of the slider edges it is very difficult that the controller moves the pusher the other side of the slider as a result of the FOM optimization. This configuration allows to track steep turns in one direction, but will probably fail to control at all trajectories that turn in the other direction. As we will explain below, the combination of the assumptions mentioned in the previous section provided a way to capture this correlations considering the modes individually.
 
-Solving many different initial conditions for all possible mode combinations with a long enough finite horizon would take too much time even to learn the optimal modes to track a single trajectory. We didn't want to use any simplification that would be specific to our pusher-slider system, because we wanted to provide systematic tools to use the FOM approach in general problems the control community may face. This led us to use a set of general assumptions to simplify the problem and devise a systematic protocol to study the structure of each problem and use different optimization/learning techniques depending on the structure.
+The local cost sufficiency assumption was listed as a new assumption, but it was already implicitly taken when deciding to use a finite horizon MPC formulation to control the pusher-slider system. The mode selection will determine the performance of our local FOM solver and the relation between local MPC performance and overall performance and the validity of this assumption was already discussed in \ref{subsec:costfunc}.
 
-We mentioned the local cost sufficiency assumption again here, but this assumption was already taken when deciding to use a finite horizon MPC formulation to control the pusher-slider system. The mode selection will determine the performance of our local FOM solver and the relation between local MPC performance and overall performance and the validity of this assumption were already discussed in \ref{subsec:costfunc} and \ref{subsec:simresults}.
+The locally invariant trajectories assumption motivation will be used in combination with section \ref{subsec:dynfom}, where we will use them to approximate general trajectories. It should be noted that for a trajectory to be locally invariant, it has to be defined by the same hybrid state at every instant. Furthermore, the only state which allows infinite locally invariant trajectories is the sticking state (in the other two the pusher would keep slipping until losing contact with the slider). So, the only trajectories we will consider are the ones which keep the sticking state at every instant. In the next section we will characterize the considered trajectories.
 
-The locally invariant trajectories assumption motivation will be explained later in \ref{subsec:dynfom} (TODO: Make sure I don't forget to explain it)
+The main motivation for the single step sufficiency assumption has to be understood in combination with the previous assumption. The locally invariant property implies that the only difference between an MPC step and another is their initial condition random variable $\diff{\textbf{x}}_i$. Consider a distribution law $\textbf{X}$ that focusses more on covering a wide range of possible values of any $\diff{\textbf{x}}_i$ rather than on their frequency as, for example an appropriate uniform distribution. We can then optimize the modes to reduce the expected value of $C(\diff{\textbf{x}_0})$ of a single controlling step tracking problem, where $\diff{\textbf{x}}_0 \sim \textbf{X}$. Optimizing the mode selection this will simultaneously reduce the local costs expected value for all $\diff{\textbf{x}_i}$ implicitly assuming that each of these values are equally distributed.
 
-The main motivation for the single step sufficiency assumption has to be understood under the previous assumption. The locally invariant property implies that the only difference between an MPC step and another is their initial condition random variable $\diff{x_i}$. Consider a distribution law X that focusses more on covering a wide range of possible values of any $\diff{x_i}$ rather than on their frequency as, for example an appropriate uniform distribution. We can then optimize the modes to reduce the expected value of $C(\diff{x_0})$ of a single controlling step tracking problem, where $\diff{x_0} \sim X$. Optimizing the mode selection this will simultaneously reduce the local costs expected value for all $\diff{x_i}$ implicitly assuming that each of these values are equally distributed.
+This implicit assumption is clearly false. The fact that some trajectories converge is already a counterexample of it. We consider assuming a uniform to describe all $\diff{\textbf{x}}_i$ is a conservative approach, as will consider rare big disturbances (that can usually only happen with an external perturbation or a bad initial position) to be equally likely to appear at any time step as small disturbances characteristic of proper control around the objective trajectory. We expected this approach would be sufficient to provide a mode selection robust enough to track a wide range of trajectories and initial conditions.
 
-This implicit assumption is clearly false. The fact that some trajectories converge is already a counterexample of it. We consider assuming a uniform to describe all $\diff{x_i}$ is a conservative approach, as will consider rare big disturbances (that can usually only happen with an external perturbation or a bad initial position) to be equally likely to appear at any time step as small disturbances characteristic of proper control around the objective trajectory. We expected this approach would be sufficient to provide a mode selections that would be robust enough to track a wide range of trajectories and initial conditions, but that could fail to capture some feedback relations between modes. This will be further discussed in \ref{sec:todo}.
-
-These assumptions result in a great cost reduction and simplification of the learning algorithm because the optimization problem can be now be easily written as a function of $\diff{x_0}$:
+These assumptions result in a great cost reduction and simplification of the learning algorithm because the optimization problem can be now be easily written as a function of $\diff{\textbf{x}}_0$:
 \begin{corollary} \textbf{The optimization problem to select the FOM modes can be expressed as:} \label{cor:costfunction} 
- $$\min\limits_{m_1, ..., m_K \in M}\mathbb{E}(C(\diff{x_0}; m_1, ..., m_K)) = \min\limits_{m_1, ..., m_K \in M}\mathbb{E}(\min\limits_{i = 0}^{K}{C_i(\diff{x_0})})$$
+ $$\min\limits_{m_1, ..., m_K \in M}\mathbb{E}(C(\diff{\textbf{x}_0}; m_1, ..., m_K)) = \min\limits_{m_1, ..., m_K \in M}\mathbb{E}(\min\limits_{i = 0}^{K}{C_i(\diff{\textbf{x}}_0)})$$
  
 \end{corollary}
-Where $C_i$ is the cost associated to mode $m_i$ in the MPC optimization. This further implies that solving the MPC problem for all the possible sets of K modes is no longer necessary. If $C_i(\diff{x_0})$ is computed for every mode $m_i \in M$, then $C(\diff{x_0}; m_1, ..., m_K)$ is defined for any set of K modes by corollary \ref{cor:costfunction}.
+Where $C_i$ is the cost associated to mode $m_i$ in the MPC optimization. This further implies that solving the MPC problem for all the possible sets of $K$ modes is no longer necessary, as we announced at the beginning of this section because, if $C_i(\diff{\textbf{x}}_0)$ is computed for every mode $m_i \in M$, then $C(\diff{\textbf{x}}_0; m_1, ..., m_K)$ is defined for any set of $K$ modes by corollary \ref{cor:costfunction}.
 
-This algorithmic cost reduction was not enough to face the full learning problem. We no longer had to study the full space of families F, but we still had no alternative to explore the full space of modes M, even if we just try to obtain a local minimum. Many local optimization techniques can avoid considering the full space it by relying on the structure of the optimization problem. For example, when the parameters are on a continuous metric space, the concept of gradient arises and methods as gradient descent can be used. Some structures can also be used to guarantee stronger properties as in convex problems, were local solutions are also global.
-
-Considering all these aspects, we devised a systematic approach to study the structure of a general MPC problem and optimization techniques. We then provided a set of optimization techniques to be applied to obtain an approximate solution for the optimization problem. It has to be noted that the studies and techniques we will present are not proofs of a certain structure and thus, the techniques do not guarantee any kind of optimal solution. We considered proving any of these properties in an specific problem to be an object of research study in itself and it escaped the goal of this thesis, as we wanted to provide general simple tools to expand the FOM usage in the manipulation community.
-
-TODO: Maybe get rid of all this last part, never been a fan of it.
-\begin{itemize}
-\item {Finite horizon increase sensibility:}
-\item {Mode metric study:} In section (TODO:reference it) we provide and discuss a mode metric. We wanted to study if there was a continuity-like property (if we bound the bound distance between modes we can bound to some extend the distance of their costs). Having this property would allow to 
-\item {Cost distribution study:} If all have the same distribution, fewer samples would be required, or at least we could have boundaries on the error.
-\end{itemize}
-
-\subsection{Simulation Results. Simple trajectory learning}
-\label{subsec:learningsimple}
-For our initial study, we tried to learn the best modes for single locally invariant trajectories. As proposed in the previous section, we started by obtaining 1000 samples of $\diff{x}$ from a uniform distribution in a cube in $\mathbb{R}^4$ the $\diff{x}$ and $\diff{y}$ disturbances on the x and y position of the slider center of mass were bounded between 0.5 and 0.5 meters. The slider angle disturbance $\diff{\theta}$ was bound between -$\dfrac{\pi}{4}$ and $\dfrac{\pi}{4}$ and the value of $p_y$ could lay in any point on the slider surface. For each initial condition the tracking problem was solved for all the possible modes with a small finite horizon of 5 steps. This implied 243 possible modes to be solved for each of the 1000 initial conditions, for a total of 243.000 single step tracking problems. The cost functions $C_i(\diff{x_j})$ were computed for each mode-initial condition pair. In Figure \ref{fig:hist_pre} 
+In Figure \ref{fig:hist_pre} 
 
 \begin{figure}[htb!]
 \begin{center}
@@ -1083,8 +1074,6 @@ For our initial study, we tried to learn the best modes for single locally invar
 \caption{\label{fig:hist_pre} \small Example histogram of $C_i(\diff{x_j})$ of the local costs obtained while tracking a horizontal line for 1000 initial conditions. The costs are clearly non-comparable}
 \end{figure}
 
-% trajectory described by $\textbf{x}(t) = (0.05 t, 0, 0, 0)^T$, $\textbf{u}(t) = (0.05, 0)$ with a finite horizon of 5 steps. The initial conditions were of the form $\textbf{x}_0 = (0, -0.5 + (i-1) \cdot 0.001, 0, 0)^T$, and a line as objective trajectory.
-
 \begin{figure}[htb!]
 \begin{center}
 \includegraphics[width=16cm]{hist_after_std.jpg}
@@ -1092,7 +1081,28 @@ For our initial study, we tried to learn the best modes for single locally invar
 \end{center}
 \end{figure}
 
-We were concerned that the initial condition had a lot of effect in the overall cost of the mode-condition pair, because higher or smaller disturbances would lead to higher or smaller overall cost respectively, independently of the mode chosen, and the simulation results confirmed it, as can be seen in Figure \ref{fig:hist_pre}. We wanted to reduce the impact of the initial condition in the range of possible values of the local costs to  obtain comparable experiments, so we decided to standardize the results obtained within each experiment. That is, given $C_i(\diff{x_j})$ we computed $\mean{C_i} = \dfrac{\sum\limits_{j = 0}^{243}{C_i(\diff{x_j})}}{243}$ and $\sigma_i = \sqrt{\sum\limits_{j=0}^{243}{\dfrac{(C_i(\diff{x_j}) - \diff{C_i})^2} {242}}}$ and we used them to compute $\hat{C_i}(\diff{x_j}) = \dfrac{C_i(\diff{x_j} - \diff{C_i})}{\sigma_i}$. The resulting standardized costs can be observed in Figure \ref{fig:hist_post}.
+We were concerned that the initial condition would probably have a lot of effect in the overall cost of the mode-condition pair, because higher or smaller disturbances would lead to higher or smaller overall cost (independently of the mode chosen) and the simulation results from section \ref{subsec:simresults} confirmed it, as can be seen in Figure \ref{fig:hist_pre}. We wanted to reduce the impact of the initial condition in the range of possible values of the local costs to obtain comparable experiments, so we decided to standardize the results obtained within each experiment. Consider a specific sample $\diff{\textbf{x}}^{(j)}$ of the random variable $\diff{\textbf{x}}_0$, then we can compute the statistical mean of the local costs over all the modes $\mean{C}^{(j)} = \dfrac{\sum\limits_{i = 0}^{K}{C_i(\diff{x_j})}}{K}$ and $\sigma^{(j)} = \sqrt{\sum\limits_{i=0}^{K}{\dfrac{(C_i(\diff{x_j}) - \diff{C}^{(j)})^2} {K - 1}}}$ and we can use them to compute the normalize costs $\hat{C_i}(\diff{\textbf{x}}_j) = \dfrac{C_i(\diff{\textbf{x}}^{j}) - \diff{C}^{(j)}}{\sigma_i}$. Figure \ref{fig:hist_post} shows the distribution of the local costs over modes after the normalization. As this values were more comparable, we minimized the normalized costs instead of the original ones.
+
+The algorithmic cost reduction obtained from corollary \ref{cor:costfunction} was not enough to face the full learning problem. We no longer had to study the full space of families F, but we still had no alternative to explore the full space of modes M, even if we just try to obtain a local minimum. Many local optimization techniques can avoid considering the full space it by relying on the structure of the optimization problem. For example, when the parameters are on a continuous metric space, the concept of gradient arises and methods as gradient descent can be used. Some structures can also be used to guarantee stronger properties as in convex problems, were local solutions are also global.
+
+
+\begin{figure}[htb!]
+\begin{center}
+\includegraphics[width=16cm]{costs_over_mode_straight_line.jpg}
+\end{center}
+\caption{\label{fig:costs_over_mode_straight_line} \small Example histogram of $C_i(\diff{x_j})$ of the local costs obtained while tracking a horizontal line for 1000 initial conditions. The costs are clearly non-comparable}
+\end{figure}
+
+Considering all these aspects, we devised a systematic approach to study the structure of a general MPC problem and optimization techniques. We then provided a set of optimization techniques to be applied to obtain an approximate solution for the optimization problem. It has to be noted that the studies and techniques we will present are not proofs of a certain structure and thus, the techniques do not guarantee any kind of optimal solution. We considered proving any of these properties in an specific problem to be an object of research study in itself and it escaped the goal of this thesis, as we wanted to provide general simple tools to expand the FOM usage in the manipulation community.
+
+\subsection{Simulation Results. Simple trajectory learning}
+\label{subsec:learningsimple}
+For our initial study, we tried to learn the best modes for single locally invariant trajectories. As proposed in the previous section, we started by obtaining 1000 samples of $\diff{x}$ from a uniform distribution in a cube in $\mathbb{R}^4$ the $\diff{x}$ and $\diff{y}$ disturbances on the x and y position of the slider center of mass were bounded between 0.5 and 0.5 meters. The slider angle disturbance $\diff{\theta}$ was bound between -$\dfrac{\pi}{4}$ and $\dfrac{\pi}{4}$ and the value of $p_y$ could lay in any point on the slider surface. For each initial condition the tracking problem was solved for all the possible modes with a small finite horizon of 5 steps. This implied 243 possible modes to be solved for each of the 1000 initial conditions, for a total of 243.000 single step tracking problems. The cost functions $C_i(\diff{x_j})$ were computed for each mode-initial condition pair.
+
+% trajectory described by $\textbf{x}(t) = (0.05 t, 0, 0, 0)^T$, $\textbf{u}(t) = (0.05, 0)$ with a finite horizon of 5 steps. The initial conditions were of the form $\textbf{x}_0 = (0, -0.5 + (i-1) \cdot 0.001, 0, 0)^T$, and a line as objective trajectory.
+
+
+TODO: FIX That is, given $C_i(\diff{x_j})$ we computed. The resulting standardized costs can be observed in Figure \ref{fig:hist_post}.
 
 We were not able to determine a clear probabilistic distribution for $\hat{C_i}(\diff{x_j})$ so we decided to minimize the statistical mean for each distribution $ \bar{C}(\diff{x}; m_1, ..., m_K) = \frac{\sum\limits_{j=0}^{N}{\min\limits_{i = 0}^{K}{C_i(\diff{x_j})}}}{N}$.
 
@@ -1140,7 +1150,7 @@ The results obtained showed that adding a simple sticking tail to the best K mod
 
 Experimental results also showed that the improvement obtained by adding new modes decreased exponentially (TODO: check the proper name for this) before reaching the optimal value, as can be seen in Figure \ref{cost_over_modes}. After a few modes, the results are highly stable and the changes in the cost function are small.
 
-Finally, we tested the robustness of the method by tracking circular trajectories with the best modes obtained for a straight line. The behaviour was completely different if the initial condition was outside or inside of the tracking circle. As can be seen in (TODO) few modes were sufficient to properly track trajectories with high external disturbances. On the other hand, small internal disturbances could lead to solutions with a steady state error that ended tracking a circle internal to the one determined by the objective trajectory if few modes were used. Progressively adding modes steadily reduced the effect.
+
 
 \begin{figure}[htb!]
 \begin{center}
@@ -1162,8 +1172,6 @@ Finally, we tested the robustness of the method by tracking circular trajectorie
         \caption{Trajectory obtained with the best combination of three modes computed using our learning procedure. Overall cost: 79.2438}
     \end{minipage}
 \end{figure}
-
-TODO: Circle with circle modes
 
 \subsection{Dynamic FOM. Theory and results}
 \label{subsec:dynfom}
@@ -1224,6 +1232,8 @@ The circular trajectories used in the simulations of the DFOM had curvatures dif
 \item Change the uniformly distributed initial conditions by normally distributed.
 \end{itemize}
  
+ but that could fail to capture some feedback relations between modes. This will be further discussed in \ref{sec:todo}. (Correlation)
+(TODO: Make sure I discuss learning studies we would have done)
 \newpage
 
 \bibliography{fom_bib}{}
