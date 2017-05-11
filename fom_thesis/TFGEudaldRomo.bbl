@@ -28,7 +28,7 @@ Dimitri~P. Bertsekas, John~N. Tsitsiklis, and Cynara. Wu.
 \newblock {\em Journal of Heuristics}, 3(3):245--262, 1997.
 
 \bibitem{nik1}
-Nikhil Chavan-Dafle and Alberto Rodriguez.
+N~Chavan-Dafle and A~Rodriguez.
 \newblock Prehensile pushing: In-hand manipulation with push-primitives.
 \newblock {\em 2015 IEEE/RSJ International Conference on Intelligent Robots and
   Systems (IROS)}, 2015.
@@ -73,6 +73,17 @@ Suresh Goyal, Andy Ruina, and Jim Papadopoulos.
 \newblock Planar sliding with dry friction part 2. dynamics of motion.
 \newblock {\em Wear}, 143(2):331--352, 1991.
 
+\bibitem{gt1}
+F.~R. Hogan and J.~R. Forbes.
+\newblock Trajectory tracking, estimation, and control of a pendulum-driven
+  spherical robot.
+\newblock {\em Journal of Guidance}, 39(5):1118--1124, 2016.
+
+\bibitem{gt2}
+F.~R. Hogan, J.~R. Forbes, and T.~D. Barfoot.
+\newblock Rolling stability of a power-generating tumbleweed rover.
+\newblock {\em Journal of Spacecraft and Rockets}, 51(67):1895--1906, 2014.
+
 \bibitem{fom}
 Fran\c{c}ois Hogan and Alberto Rodriguez.
 \newblock Feedback control of the pusher-slider system: A story of hybrid and
@@ -86,11 +97,6 @@ R.D. Howe, I.~Kao, and M.R. Cutkosky.
 \newblock {\em International Conference on Robotics and Automation (ICRA)},
   1988.
 
-\bibitem{nik2}
-Roman Kolvert, Nikhil Chavan-Dafle, and Alberto Rodriguez.
-\newblock Experimental validation of contact dynamics for in-hand manipulation.
-\newblock {\em International Symposium on Experimental Robotics (ISER)}, 2015.
-
 \bibitem{ellipsoidal_ls}
 Soo~Hong Lee and M~R Cutkosky.
 \newblock Fixture planning with friction.
@@ -101,6 +107,13 @@ K.M. Lynch, H.~Maekawa, and K.~Tanie.
 \newblock Manipulation and active sensing by pushing using tactile feedback.
 \newblock {\em Proceedings of the IEEE/RSJ International Conference on
   Intelligent Robots and Systems}, 1:416--421, 1992.
+
+\bibitem{mason_talk}
+M~T Mason.
+\newblock Haptic perception, grasping and manipulation with simple robotic
+  grippers, 2 2016.
+\newblock Remarks by Mathew T Mason at the CITRIS People and Robots Seminar
+  Series, UC Berkeley [Accessed: 2017 04 20].
 
 \bibitem{compliant_control}
 Matthew~T Mason.
@@ -113,13 +126,6 @@ Matthew~T Mason.
 \newblock Mechanics and planning of manipulator pushing operations.
 \newblock {\em The International Journal of Robotics Research}, 5(3):53--71,
   1986.
-
-\bibitem{mason_talk}
-Matthew~T Mason.
-\newblock Haptic perception, grasping and manipulation with simple robotic
-  grippers, 2 2016.
-\newblock Remarks by Mathew T Mason at the CITRIS People and Robots Seminar
-  Series, UC Berkeley [Accessed: 2017 04 20].
 
 \bibitem{euler}
 E.~Meyer.
@@ -149,6 +155,13 @@ D.~Stewart and J.C. Trinkle.
   inelastic collisions and coulomb friction.
 \newblock {\em International Journal for Numerical Methods in Engineering},
   39(15):2673--2691, 1996.
+
+\bibitem{tedrake_talk}
+R~Tedrake.
+\newblock Open problems session, 12 2016.
+\newblock Remarks by R Tedrake during the Open Problems Session of the 12th
+  International Workshop on the Algorithmic Foundations of Robotics, San
+  Francisco, California.
 
 \bibitem{da_vinci}
 C.~Truesdell.

@@ -45,7 +45,12 @@
 \newcommand{\N}{\ensuremath{\mathbb{N}}}
 \newcommand*\mean[1]{\bar{#1}}
 \newcommand*\diff[1]{\bar{#1}}
-
+\DeclareMathAlphabet{\mbf}{OT1}{ptm}{b}{n}
+\newcommand{\mbs}[1]{{\boldsymbol{#1}}}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\bma}[1]{\left[\begin{array}{#1}}
+\newcommand{\ema}{\end{array}\right]}
 % Body of document
 
 \titol{A Learning Approach\\[3mm] To The FOM Problem}
@@ -56,12 +61,12 @@
 
 %\msc[2010]{Primary  	55M25, 57P10, Secondary 55P15, 57R19, 57N15.}
 
-\paraulesclau{Manipulation, Online Control, MPC, FOM, Underactuation, Hybridness}
+\paraulesclau{Optimal Manipulation, Online Control, MPC, FOM, Simulation, MIQP, Underactuation, Hybridness}
 \agraiments{
 Thanks to Alberto Rodriguez for tutoring my research, for providing me with the required tools and financial support to undertake this project and for hosting me in his laboratory; to Maria Alberich for supervising and tutoring this thesis; to Fran\textbf{c}ois Hogan for sharing his ideas on family of modes trajectory control and for introducing me to his previous work, to Maria Bauza for sharing with me her insights in machine learning techniques; to Nikhil Chavan-Daffle for sharing with me his insights in complementarity constraint problems; to all the members of the MCube Lab for sharing their thoughts on my research, to Centre de Formacio Interdisciplinaria Superior for offering me the possibility and the financial support to take part in this project, to Massachusetts Institute of Technology for providing the required facilities required to develop this project and to Generalitat de Catalunya for their financial support.}
 
 
-\abstracteng{The family of modes (FOM) approach to solving model predictive control (MPC) problems is a novel heuristic technique developed at MIT to solve the time complexity of traditional MPC solving techniques. This study addresses some of the issues associated with the previous formulations of this technique by increasing the sequential robustness of the FOM and providing methodologies to choose the parameters required for the heuristic. A general simulation interface is developed together with techniques to score and compare the obtained trajectories. Then an statistics and machine learning based methodology to tune the parameters is proposed and the results are compared with the original ones. Finally, experimental procedures are developed to validate the results.}
+\abstracteng{The family of modes (FOM) approach to solving model predictive control (MPC) problems is a novel heuristic technique developed at MIT to reduce the exponential time complexity of traditional MPC solving techniques. This study strives to bring this method closer to the manipulation research community by addressing some of the weaknesses of FOM, by comparing its results to traditional MPC solving techniques and by providing methodologies to choose the parameters required for the heuristic, that will ultimately lead to a FOM-based algorithm capable of tracking complex trajectories.}
 
 %%%%%%%%%
 \begin{document}
@@ -69,19 +74,31 @@ Thanks to Alberto Rodriguez for tutoring my research, for providing me with the 
 \maketitle
 
                                                                       
-\section{Goal of this study}
+\section{Introduction}
 \label{briefgoal}
-Hogan \cite{fom} recently provided an heuristic technique called family of modes (FOM) to solve model predictive control (MPC) problems under hybrid constraints and underactuation. The goal of this study, that will be revisited and expanded in section \ref{sec:goal_revisited}, is to further develop this new method and to expand its usage in the robotics manipulation community.
+Hogan recently provided an heuristic technique called family of modes (FOM) \cite{fom} to respond to the current need for the robotics manipulation community to solve model predictive control (MPC) problems under hybrid constraints and underactuation fast enough to be introduced into control loops. The goal of our study is to bring the FOM technique closer to the manipulation research community.
 
-In order to do that, we reinforce the method by fixing some of it's weaknesses -as it's sequential properties-, we provide comparison tools to test the method against traditional hybrid MPC solving techniques -as mixed integer quadratic programming (MIQP)-, and to provide simple and systematic techniques to optimize a general MPC problem.
+In order to do that, we reinforce the FOM method by fixing some of its weaknesses -as its sequential properties-, we provide comparison tools to test the method against traditional hybrid MPC solving techniques -as mixed integer quadratic programming (MIQP)-, and we provide simple and systematic techniques to set-up the method's parameters that will ultimately leat to a new variation of the FOM approach that can properly track complex trajectories.
 
-To proof the scalability of this method we increase the complexity of the systems beyond the problem used in Hogan's work -tracking straight lines with of a single point pusher and a square slider.
+We also discuss the new lines of research we plan on exploring before presenting this study to 2017's International Symposium on Robotics Research (ISRR). They can be summarized as:
+\begin{itemize}
 
-Some simple control policies as proportional–integral–derivative (PID) controllers are able to control systems that scape the model they were designed for. Inspired by this fact, we check the robustness of the FOM method by using it in models that are different from those it is designed for.
+\item To proof the scalability of this method by increasing the complexity of the considered systems beyond the one used in Hogan's work, that tracked straight lines with a single point pusher and a square slider.
 
-In section (TODO: add conclusion/discussion section) we discuss the new lines of research we plan on exploring before presenting this study to 2017's International Symposium on Robotics Research (ISRR). We hope that the results from our studies will increase the performance and simplify the implementation of FOM and will bring it closer to the robotics manipulation research community by both providing systematic set-up tools and showing it's robustness and scalability.
+\item To check the robustness of the FOM method by using it in models different from those it was designed for.
+\end{itemize}
 
-In the following sections we introduce the concepts of manipulation problems under hybridness required to explain the FOM method and show its motivation.
+We hope that the results from our studies will increase the performance and simplify the implementation of FOM and will bring it closer to the robotics manipulation research community by both providing systematic set-up tools and showing its robustness and scalability.
+
+To present our studies and results, we start by providing in chapter \ref{sec:intro} all the required theoretical background in planar pushing manipulation, that will allow ultimately lead to the concept of hybridness, a concept fundamental to understand the behaviour, the difficulty and the motivation of the FOM controller. Chapter \ref{sec:hybridness} is completely dedicated to familiarize the reader with hybrid control.
+
+Once the theoretical background is presented, the goal of this study is revisited in chapter \ref{sec:goal_revisited} emphasizing the implications on the manipulation research community of being able to solve trajectory-control MPC problems fast.
+
+The necessary formulation is derived afterwards in chapter \ref{sec:formulation} and any theoretic concept that still needs further clarification will be re-discussed here.
+
+Having presented the background, objectives and formulation of our study, we present the core of our research. We separate it into two main groups. In chapter \ref{sec:sim} we study the properties of the FOM method and we test them in a simulation interface we developed. In chapter \ref{sec:modeselection} we provide a procedure to select the modes of the FOM and we test it in the simulation interface of the previous chapter. The mode selection procedure will ultimately lead to the concept of Dynamic Family of Modes (DFOM), a trajectory optimization method based on FOM that is capable to track complex trajectories.
+
+To conclude the study, all the results we obtained are discussed in chapter \ref{sec:conclusion} together with their implications. This discussion ultimately leads to chapter \ref{sec:todo}, that presents the future lines of research we already mentioned at the beginning of this section.
 
 \section{Planar Pushing}
 \label{sec:intro}
@@ -131,15 +148,15 @@ This laws are usually condensed by defining the static ($\mu_s$) and kinetic ($\
 \begin{theorem} \textbf{Coulomb's Law:}
 \[
   f_t\begin{cases}
-               < \mu_s \cdot f_n   \text{ (for static contact)}\\
-               = \mu_k \cdot f_n   \text{ (for kinetic contact)}\\
+               < \mu_s  f_n \,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,  \text{ (for static contact)}\\
+               = \mu_k  f_n \,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,  \text{ (for kinetic contact)}\\
             \end{cases}
 \]
 Where $f_t$ is determined in the first situation by force balancing.
 \end{theorem}
 
 \begin{remark}
-Through the rest of this thesis we use the common assumption taken in robotics manipulation of assuming a single coefficient of friction. Thus the previous theorem is simplified to $f_t \leq \mu \cdot f_n$
+Through the rest of this thesis we use the common assumption taken in robotics manipulation of assuming a single coefficient of friction. Thus the previous theorem is simplified to $f_t \leq \mu f_n$
 \end{remark}
 
 Mason cites prior statements by Da Vinci (from Truesdell's notes \cite{da_vinci}) and experimental verification by Truesdell and Guillmor \cite{gillmor} and I would like to add the work of Euler \cite{euler}, who first distinguished between static and kinetic friction.
@@ -150,7 +167,7 @@ In planar pushing, there are two different contacts to be considered: the contac
 
 The contact between the slider and the support surface is inherently complex. If the slider is supported by more than three contact points the distribution of support normal forces is indeterminate and, if Coulomb contact is assumed, this indetermination is propagated to the friction forces. The results in this section are based on the previous assumption that the pressure distribution is known (for our study we will consider a homogeneous distribution).
 
-Assuming a known pressure distribution and considering \textbf{r} the position vector of a point of the slider, \textbf{v(r)} it's velocity vector, and p(\textbf{r}) the pressure at that point, then the total force and moment due to friction can be expressed as:
+Assuming a known pressure distribution and considering \textbf{r} the position vector of a point of the slider, \textbf{v(r)} its velocity vector, and p(\textbf{r}) the pressure at that point, then the total force and moment due to friction can be expressed as:
 \begin{definition} \textbf{Total force due to friction:} 
 \begin{equation}
 \textbf{f}_f = - \mu \int_A \dfrac{\textbf{v(r)}}{|\textbf{v(r)}|} p(\textbf{r}) dA
@@ -159,7 +176,7 @@ Assuming a known pressure distribution and considering \textbf{r} the position v
 \begin{definition} \textbf{Total moment due to friction:}
 
 \begin{equation}
-n_f = - \mu \int_A \textbf{r} \times \dfrac{\textbf{v(r)}}{|\textbf{v(r)}|} p(\textbf{r}) dA
+\textbf{n}_f = - \mu \int_A \textbf{r} \times \dfrac{\textbf{v(r)}}{|\textbf{v(r)}|} p(\textbf{r}) dA
 \end{equation}
 \end{definition}
 
@@ -171,7 +188,7 @@ If the slider trajectory is assumed to be a rotation over a instantaneous center
 \end{definition}
 \begin{definition} \label{def:} \textbf{Total moment due to friction:}
 \begin{equation} \label{eq:momentum_cor}
-n_f = - \mu  \, sign(\dot{\theta}) \int_A \textbf{r} \cdot \dfrac{\textbf{r} - \textbf{r}_{IC}}{|\textbf{r} - \textbf{r}_{IC}|} p(\textbf{r}) dA
+n_{fz} = - \mu  \, sign(\dot{\theta}) \int_A \textbf{r}  \dfrac{\textbf{r} - \textbf{r}_{IC}}{|\textbf{r} - \textbf{r}_{IC}|} p(\textbf{r}) dA
 \end{equation}
 \end{definition}
 
@@ -187,7 +204,7 @@ Consider a rigid body sliding over a surface with a known or pressure distributi
 \begin{enumerate}
 \item {\textbf{Limit Curve:}} The set of possible point differential friction forces is contained inside a circle of radius $\mu  p(\textbf{r})$ centred at the origin of the force space. We will call this circle the limit curve (LC) of each contact point.
 \item {\textbf{Maximum Power Inequality. }} The following relation is held at every contact point:
-$$ \forall \textbf{f(r)}^* \in LC: \,\, (\textbf{f(r)} - \textbf{f(r)}^*)\cdot \textbf{v(r)} \geq 0 $$
+$$ \forall \textbf{f(r)}^* \in LC: \,\, (\textbf{f(r)} - \textbf{f(r)}^*)\, \textbf{v(r)} \geq 0 $$
 Where \textbf{v(r)} is the point velocity at each contact point and $\textbf{f(r)}^*$ is an arbitrary force that can take any possible value inside the LC.
 \end{enumerate}
 
@@ -243,7 +260,7 @@ then Goyal's study generalizes the concept of single point Limit Curves for forc
 \item The set of possible load wrenches \textbf{p} is contained inside a LS.
 \item The following relation is held at every contact point:
 \begin{equation}
- \forall \textbf{p}^* \in LS: \,\, (\textbf{p} - \textbf{p}^*)\cdot \textbf{q} \geq 0 
+ \forall \textbf{p}^* \in LS: \,\, (\textbf{p} - \textbf{p}^*)\, \textbf{q} \geq 0 
 \end{equation}
 \end{enumerate}
 \end{theorem}
@@ -262,7 +279,7 @@ When smooth enough, the limit surface allows to compute the frictional wrench fr
 \label{subsec:frictioncone}
 The contact between the pusher fingers and the slider sides could be described as in the previous section (by considering the finger a slider and the slider side a support surface) but the nature of the problem allows some simplifications. The fingers we consider never rotate with respect to the slider side, so all the motion is pure translation. Furthermore, we only consider planar pushing (we do not consider operations as tilting the slider), so we are only interested in moving the pusher along one dimension of the slider face (for most purposes we consider the slider to be flat).
 
-A common and useful geometric interpretation of Coulomb's law called the friction cone (according to Mason first constructed by Moseley \cite{moseley}) is widely used in the robotics community for one dimensional single point contacts. Given a point on a surface interacting with it with total contact force \textbf{f}, we decompose it into its normal $f_n$ and tangential $f_t$ components with respect to the contact surface. Coulomb friction compact formulation states that $f_t \leq \mu f_n$, where $\mu$ is the proportionality factor usually called friction coefficient, where the equality holds on dynamic friction. Letting $\alpha$ be the angle between \textbf{f} and $f_n$ (or, alternatively, the normal of the surface on the point of contact), Coulomb's law is equivalent to: %TODO: Change slide Up/Down to right/left
+A common and useful geometric interpretation of Coulomb's law called the friction cone (according to Mason first constructed by Moseley \cite{moseley}) is widely used in the robotics community for one dimensional single point contacts. Given a point on a surface interacting with it with total contact force \textbf{f}, we decompose it into its normal $f_n$ and tangential $f_t$ components with respect to the contact surface. Coulomb friction compact formulation states that $f_t \leq \mu f_n$, where $\mu$ is the proportionality factor usually called friction coefficient, where the equality holds on dynamic friction. Letting $\alpha$ be the angle between \textbf{f} and $f_n$ (or, alternatively, the normal of the surface on the point of contact), Coulomb's law is equivalent to:
 
 \begin{theorem} \label{th:friction_cone} \textbf{The set of feasible forces in dry Coulomb contact must satisfy:}
 $$\alpha := tan^{-1} \frac{f_t}{f_n} \leq \mu$$
@@ -295,14 +312,12 @@ Simulation problems consist on accurately reproducing the real physics of a mani
 
 Planning problems consist on finding a trajectory in the configuration state to go from state $\textbf{x}_0$ to $\textbf{x}_f$. Most simple planning problems have a state variable that defines the configuration of the object we need to manipulate and a actuator state variable that describes the configuration of the gripper or other tool used to move the object. As opposed to simulation problems, planning problems don't have full information about the state of the object and actuator state variables for each step of the trajectory, and they are usually variables of the problem. Because of this difference, the equations that describe the evolution of the same actuator-object system can have different properties in planning or simulation problems. As an example, the motion equations we derive in section \ref{subsec:motion_equations} are generally non-linear (they are linear with respect to the object state variables but not with respect to the actuator state variables), but they can be expressed as linear equations on the actuator state variables for the first step of the problem, where we know the initial state of the object.
 
-Traditional control designs as PID controllers can successfully control a system by solving only local manipulation problem, in a similar way as simulation. PID only use the notion of the current and past differences between the configuration of the object \textbf{x} and it's objective value $\textbf{x}^*$ to devise a control response to stabilize the realized trajectory around the objective one. Such control cannot be used for pushing because of a phenomenon called underactuation.
-
-TODO: Add the concept of WHY Should we care about hybridness here
+Traditional control designs as PID controllers can successfully control a system by solving only local manipulation problem, in a similar way as simulation. PID only use the notion of the current and past differences between the configuration of the object \textbf{x} and its objective value $\textbf{x}^*$ to devise a control response to stabilize the realized trajectory around the objective one. Such control cannot be used for pushing because of a phenomenon called underactuation.
 
 \label{sec:hybridness}
 \subsection{Underactuation. Trajectory Optimization}
 
-A control problem with first order motion constraints $\dot{\textbf{x}}$ = f({\textbf{x}, \textbf{u}}) for some control input \textbf{u} is underactuated when f is non-exhaustive in the configuration velocities space. In most problems, $\dot{\textbf{x}}$ is the result of converting a second order Newtonian equation $\ddot{\textbf{x}} = m\sum F$ to a system of first order ordinary differential equations (ODEs) and underactuation is usually caused by the controller being able to transmit only a limited set of forces and moments to the object.
+A control problem with first order motion constraints $\dot{\textbf{x}}$ = f({\textbf{x}, \textbf{u}}) for some control input \textbf{u} is underactuated when f is non-exhaustive in the configuration velocities space. In most problems, $\dot{\textbf{x}}$ is the result of converting a second order Newtonian equation $\ddot{\textbf{x}} = m\sum \textbf{F}$ to a system of first order ordinary differential equations (ODEs) and underactuation is usually caused by the controller being able to transmit only a limited set of forces and moments to the object.
  
 In stable grasping, the system is fully activated (see remark \ref{rem:underactuation}) at all times. On the other hand, for a single simple point finger pushing the system is highly underactuated, as the normal force the pusher applies to the slider is non-negative (there cannot be no pulling forces) and the overall contact force lies in the friction cone. As such, the controller must reason only among the forces that can physically be realized at every instant.
 
@@ -320,26 +335,26 @@ Stable grasping has some some sources of underactuation, but they are linked wit
 \caption[test caption]{\label{fig:underactuation} \small{Control trajectory obtained when trying to bring the slider to a configuration behind the current position of the pusher. The red slider describes the objective configuration, the blue line describes the trajectory of the slider center of mass during the control trajectory and the blue sliders represent some of the configurations of the system during the tracking trajectory. The position of the slider when we stopped the simulation is highlighted with thicker and more opaque lines.}}
 \end{figure}
 
-A common method to consider future paths in control problems is to solve simplified planning problems at high frequency. The planning problems can usually be expressed as trajectory optimization problems, where the values of the state and control variables are chosen to minimize a cost function along the trajectory, while fulfilling the required motion constraints that represent the kinematics of the real world problem. These optimization problems are usually linearized around the nominal trajectory computed by a planning problem beforehand. This linearization reduces the computational cost of the control problem while ensuring that, in a certain region of attraction, the controlled trajectory converges to the nominal one. It's also common to only consider the control path until a certain finite time horizon (as opposed to planning problems, that usually consider the trajectory until reaching a certain goal).
+A common method to consider future paths in control problems is to solve simplified planning problems at high frequency. The planning problems can usually be expressed as trajectory optimization problems, where the values of the state and control variables are chosen to minimize a cost function along the trajectory, while fulfilling the required motion constraints that represent the kinematics of the real world problem. These optimization problems are usually linearized around the nominal trajectory computed by a planning problem beforehand. This linearization reduces the computational cost of the control problem while ensuring that, in a certain region of attraction, the controlled trajectory converges to the nominal one. It is also common to only consider the control path until a certain finite time horizon (as opposed to planning problems, that usually consider the trajectory until reaching a certain goal).
 
 Once stated the need to consider trajectories in pushing control problems we will now justify the need to consider hybridness in the control problems. This justification is threefold:
 
 \begin{itemize}
-\item {\textbf{Optimality:}}
-\item {\textbf{Robustness:}}
-\item {\textbf{Convergence:}}
+\item {\textbf{Optimality:}} If we consider all the possible modes in a trajectory optimization problem, there's a wider set of possible feasible states and control laws, so we may be able to obtain a better solution.
+\item {\textbf{Robustness:}} We need to consider the possible hybrid states and their dynamics so that we can react to execution errors or model uncertainties. We need to understand the mechanics of slipping to be able to return to our optimal pushing point after an accidental slip.
+\item {\textbf{Stability:}} In section \ref{subsec:nominal_mode} we will show that when controlling a hybrid system through its perturbation motion equations, if the nominal trajectory is not feasible in our formulation we will not be able to stabilize our control trajectory around it, because the nominal trajectory will not even be an equilibrium point of our motion equations.
 \end{itemize}
 
 In the next sections we will introduce formulation techniques to add the hybridness concept into manipulation problems. In particular, we will discuss the limitations of some of the formulations to solve control problems at enough frequency. This will ultimately lead to Hogan's FOM formulation as an approximate method to solve the finite horizon trajectory optimization problem.
 
 \subsection{Complementarity Problems}
 \label{subsec:comp_prob}
-Given a variable \textbf{z} and a function on it \textbf{g(z)}, a general complementarity problem consists on finding a value for \textbf{z} that satisfies:
-$$ \textbf{z} \geq 0 \,\,\,\,\,\,\,\,\,\, \textbf{g(z)} \geq 0 \,\,\,\,\,\,\,\,\,\, \textbf{g(z)} \cdot \textbf{z} = 0$$
+Given a variable $\textbf{z}$ and a function on it $\textbf{g(z)}$, a general complementarity problem consists on finding a value for $\textbf{z}$ that satisfies:
+$$ \textbf{z} \geq \textbf{0} \,\,\,\,\,\,\,\,\,\, \textbf{g(z)} \geq \textbf{0} \,\,\,\,\,\,\,\,\,\, \textbf{g(z)} \, \textbf{z} = 0$$
 
 This formulation derives from traditional linear programming techniques to encode two mutually exclusive constraints on \textbf{z} ($\textbf{z} \geq 0$ and $\textbf{g(z)} \geq 0$). The linear complementarity problem (LCP) \cite{compconst} assumes a linear g function and takes the following form:
 $$\boldsymbol{\omega} = \textbf{R} \textbf{z} + \textbf{u} $$
-$$	\boldsymbol{\omega} \geq 0 \,\,\,\,\,\,\,\,\,\, \textbf{z} \geq 0 \,\,\,\,\,\,\,\,\,\, \boldsymbol{\omega}^{T} \cdot \textbf{z} = 0$$
+$$	\boldsymbol{\omega} \geq \textbf{0} \,\,\,\,\,\,\,\,\,\, \textbf{z} \geq \textbf{0} \,\,\,\,\,\,\,\,\,\, \boldsymbol{\omega}^{T} \, \textbf{z} = 0$$
 It was first introduced to predict instantaneous acceleration of rigid bodies in 1996 by Pang and Trinkle \cite{lcpi} and Anitescu and Potra \cite{lcc1}, that guaranteed a solution for this formulation on multi-rigid-body Coulomb friction contact and impact problems. This provided a systematic way to formulate hybrid constraints for simulation purposes. Soon after the instantaneous formulation introduction, Steward and Trinkle \cite{lcpd} proposed a time-stepping formulation in the space of impulses and velocities which increased the stability performance of LCP based forward simulation techniques.
 
 \begin{remark}
@@ -354,11 +369,9 @@ There are fast algorithms to solve LCP problems that allow the manipulation comm
 \caption[test caption]{\label{fig:lcp} \small{Figure from \protect\cite{lcpd} with the simulation results obtained when emulating a falling and spinning rod. The simulation step was h = 0.0025 and the simulation time at each time instant is shown in seconds on one of the bar ends.}}
 \end{figure}
 
-In instantaneous Coulomb contact problems the contact dynamics can be expressed in linear discrete form through Steward and Trinkle's formulation,
+In instantaneous Coulomb contact problems the contact dynamics can be expressed in linear discrete form through Steward and Trinkle's formulation, but many Newtonian motion equations take a non-linear form in trajectory optimization problems. Then problem becomes non-linear (NCP) and Lemke's algorithm, the key idea used to provide the LCP solution, cannot be used. The complementarity constraints are usually non-convex and can only be solved in a fast way by using the previously mentioned algorithm. In the case of NCP, it has to be solved with a commercial optimizer and the problem usually cannot be solved fast enough for neither planning nor control.
 
-TODO: talk with nikhil more about it but a key property of their formulation is that they know the value of the velocity and forces prior to contact.  but this cannot be applied to contact-driven trajectories. The problem becomes nonlinear (NCP) and an instance of the NCP has to be used to compute the contact state at each point in the discretization of the trajectory.
-
-LCP can not be used as is to solve problems which also contain non-complementarity subject variables that must hold linear constraints. Luckily, these problems, called mixed LCP (MLCP) can also be solved with a generalization of Lemke's algorithm, the key idea used to provide the LCP solution. Nikhil's work on extrinsic dexterity \cite{nik1} is an example of MLCP usage in planning. 
+Certain trajectory optimization techniques, as Rapidly expanding Random Trees (RRT) can function solely considering instantaneous dynamics. In these cases LCP can not be generally used as is to solve the trajectory optimization problems, because they also contain non-complementarity subject variables that must hold linear constraints and LCP does not suppor them. Luckily, these problems, called mixed LCP (MLCP) can also be solved with a generalization of Lemke's algorithm. Nikhil's work on extrinsic dexterity \cite{nik1} is an example of MLCP usage in planning. Unfortunately these trajectory optimization techniques used in combination with MLCP are too slow to use in most control problems. 
 
 \subsection{MPC and MIQP}
 \label{subsec:MPC}
@@ -380,14 +393,14 @@ In MPC, an N-length mode completely fixes the hybrid states the system is in alo
 We use the $\diff{(.)}$ notation because, as will be explained in sections \ref{subsec:motion_equations} and \ref{subsec:mpc_formulation}, we will use the perturbation of the state and control variables with respect to a nominal trajectory and control inputs as the MPC variables.
 \end{remark}
 \begin{remark}
-MPC problems are based in the linear quadratic regulators (LQR) controllers. These controllers are used for unconstrained non-hybrid problems described by the motion equation $\dot{\textbf{x}} = \textbf{A} \cdot \textbf{x} + \textbf{B} \cdot \textbf{u}$ and use the same cost functions as MPC. LQR are able to give an analytical control law to minimize the cost function provided for infinite horizon problems. Their term $\textbf{Q}_f$ can be set-up to account for the integral of the cost function from the last point considered until reaching the destination (if the trajectory is finite) or until infinite. If the $\textbf{Q}_f$ term is chosen to follow the Riccati equation $\textbf{Q}_f = \textbf{A}^T \cdot \textbf{Q}_f \cdot \textbf{A} - \textbf{A}^T\cdot \textbf{Q}_f\cdot \textbf{B}\cdot(\textbf{B}^T\cdot \textbf{Q}_f \cdot\textbf{B} + \textbf{R})^{-1}\cdot \textbf{B}^T \cdot\textbf{Q}_f \textbf{A} + \textbf{Q}$, the finite horizon LQR controllers will behave as the infinite horizon ones. In MPC problems there's no closed expression for this term but there are certain techniques to choose a good value to maximize the final region of attraction as the one exposed in Ya-Feng's et al. study \cite{riccati}, but it is generally based on the LQR technique of solving the Riccati equation . In our model we use a simplification of Ya-Feng's approach which simply computes the solution of the Riccati equation presented above using the motion equation of the last MPC step, that can be expressed as $\dot{\textbf{x}} = \textbf{A}_N \cdot \textbf{x} + \textbf{B}_N \cdot \textbf{u}$.
+MPC problems are based in the linear quadratic regulators (LQR) controllers. These controllers are used for unconstrained non-hybrid problems described by the motion equation $\dot{\textbf{x}} = \textbf{A} \, \textbf{x} + \textbf{B} \, \textbf{u}$ and use the same cost functions as MPC. LQR are able to give an analytical control law to minimize the cost function provided for infinite horizon problems. Their term $\textbf{Q}_f$ can be set-up to account for the integral of the cost function from the last point considered until reaching the destination (if the trajectory is finite) or until infinite. If the $\textbf{Q}_f$ term is chosen to follow the Riccati equation: $$\textbf{Q}_f = \textbf{A}^T \, \textbf{Q}_f \, \textbf{A} - \textbf{A}^T \, \textbf{Q}_f \, \textbf{B} \,(\textbf{B}^T\, \textbf{Q}_f \,\textbf{B} + \textbf{R})^{-1} \, \textbf{B}^T \, \textbf{Q}_f \textbf{A} + \textbf{Q}$$ then the finite horizon LQR controllers will behave as the infinite horizon ones. In MPC problems there's no closed expression for this term but there are certain techniques to choose a good value to maximize the final region of attraction as the one exposed in Ya-Feng's et al. study \cite{riccati}, but it is generally based on the LQR technique of solving the Riccati equation . In our model we use a simplification of Ya-Feng's approach which simply computes the solution of the Riccati equation presented above using the motion equation of the last MPC step, that can be expressed as $\dot{\textbf{x}} = \textbf{A}_N \, \textbf{x} + \textbf{B}_N \, \textbf{u}$.
 \end{remark}
 
 If we consider a manipulation problem with convex dynamics, constraints, and cost function, the overall optimization problem is convex if a hybrid mode that describes the finite horizon is provided. Thus, the global problem consists in selecting the optimal solution from the finite set of optimal solutions for each of the fixed-mode sub-problems.
 
-The number of possible modes of length N is $h^N$, where h is the number of possible hybrid states. This exponential growth generally makes a naive exploration of all the possible sub-problems too computationally expensive. In order to reduce the algorithmic strain, a mixed integer programming (MIP) strategy is usually adopted. This will be further explained in chapter \ref{sec:formulation}, but the main idea is that the state space is expanded by adding h binary variables per MPC step that define whether the step i of the MPC is in a hybrid state s. The commercial optimizers provide tools to express state the state related constraints with respect to each of this binary variables so that they only apply when their correspondent variable is activated. Then, if possible, the optimizer will use internal MIP techniques as branch and bound and cutting planes \cite{gurobi_mip} to avoid exploring all the possible modes. In our particular case, we will be able to express all the motion and friction constraints as linear inequalities and the objective cost is a quadratic function on the variables. This kind of mixed integer problems are called mixed integer quadratic problems (MIQP) and they have very fast commercial optimizers (as the one we will use, called Gurobi). 
+The number of possible modes of length $N$ is $h^N$, where $h$ is the number of possible hybrid states. This exponential growth generally makes a naive exploration of all the possible sub-problems too computationally expensive. In order to reduce the algorithmic strain, a mixed integer programming (MIP) strategy is usually adopted. This will be further explained in chapter \ref{sec:formulation}, but the main idea is that the state space is expanded by adding h binary variables per MPC step that define whether the step $i$ of the MPC is in a hybrid state $s$. The commercial optimizers provide tools to express state the state related constraints with respect to each of this binary variables so that they only apply when their correspondent variable is activated. Then, if possible, the optimizer will use internal MIP techniques as branch and bound and cutting planes \cite{gurobi_mip} to avoid exploring all the possible modes. In our particular case, we will be able to express all the motion and friction constraints as linear inequalities and the objective cost is a quadratic function on the variables. This kind of mixed integer problems are called mixed integer quadratic problems (MIQP) and they have very fast commercial optimizers (as the one we will use, called Gurobi). 
 
-The drawback of MIQP is that it doesn't escalate well with the number of possible hybrid states and, even with a small number of states, the optimizers aren't generally fast enough to solve the problem online, as required in control problems. Furthermore, the performance of MIQP depends on the geometry of the problem and it's execution time can change by orders of magnitude at every control iteration, as will be further explained in section \ref{subsec:miqp}.
+The drawback of MIQP is that it doesn't escalate well with the number of possible hybrid states and, even with a small number of states, the optimizers aren't generally fast enough to solve the problem online, as required in control problems. Furthermore, the performance of MIQP depends on the geometry of the problem and its execution time can change by orders of magnitude at every control iteration, as will be further explained in section \ref{subsec:miqp}.
 
 \begin{figure}[htb!]
 \begin{center}
@@ -396,7 +409,7 @@ The drawback of MIQP is that it doesn't escalate well with the number of possibl
 \caption[test caption]{\label{fig:mode_tree} \small{Figure from \protect\cite{fom} that represents the exponential growth of the possible modes tree for a single point finger pusher-slider system. The root is a dummy node and, for every other tree level i, each node represents a possible hybrid state for the $i_th$ state transition. Each possible mode can be represented by a path from the root to one of the tree leaves}}
 \end{figure}
 
-Using fast iterations of MPC problems to control a hybrid system is a technique used in other robotics fields, as locomotion, and being able to solve them at a frequency high enough to allow direct implementation into a feedback controller design is currently a problem of interest for the robotics community. A proof of this is that in 2016's Workshop on the Algorithmic Foundations of Robotics (WAFR), held in San Francisco last December, Tedrake presented it as one of the current algorithmic open problems in robotics control problems. TODO: Cite
+Using fast iterations of MPC problems to control a hybrid system is a technique used in other robotics fields, as locomotion, and being able to solve them at a frequency high enough to allow direct implementation into a feedback controller design is currently a problem of interest for the robotics community. A proof of this is that in 2016's Workshop on the Algorithmic Foundations of Robotics (WAFR), held in San Francisco last December, Tedrake presented it as one of the current algorithmic open problems in robotics control problems \cite{tedrake_talk}.
 
 \subsection{Family of Modes} 
 \label{subsec:fom}
@@ -409,7 +422,7 @@ In his study, Hogan applied FOM to a system consisting on a single finger point 
 
 In this simple case it is possible to derive a good set of modes intuitively, but for more complex and higher dimensional problems, this may not be possible. Furthermore, adding more modes to consider into this heuristic doesn't generally translate into better results and, in some cases, it may lead to results far worse than the original one. For some cases, adding new modes to a family that was able to track a line providing asymptotic convergence could even translate into losing this convergence.
 
-We believe the FOM approach shows promising results and may be able to partially address the current needs of manipulation research to solve the MPC based hybrid control problem. At the same time, we consider necessary to show it's generality and robustness as well as address some of its limitations for it to be adopted in the robotics community.
+We believe the FOM approach shows promising results and may be able to partially address the current needs of manipulation research to solve the MPC based hybrid control problem. At the same time, we consider necessary to show its generality and robustness as well as address some of its limitations for it to be adopted in the robotics community.
 
 In the next section we introduce key concepts on sequential properties of heuristic based methods, that will be useful to describe some of the FOM limitations described above. In chapter \ref{sec:goal_revisited} we will revisit the main objectives of our study using the concepts presented in previous sections.
 
@@ -434,7 +447,7 @@ $$ H(i) = g(\diff{i}) $$
 Implicit in this assumption is that for every non-destination node, there exists at least one path starting at that node and ending at some destination node.
 \end{remark}
 
-Having introduced this definition of heuristic in this search problem, the concept of roll-out algorithm, first used by Tesauro and Galperin (TODO: Citation) in 1996, is introduced. The formal definition of roll-out algorithm escapes the scope of this study, but an intuitive definition would be:
+Having introduced this definition of heuristic in this search problem, the concept of roll-out algorithm is introduced. The formal definition of roll-out algorithm escapes the scope of this study, but an intuitive definition would be:
 \begin{definition} \textbf{Roll-out Algorithm:}
 
 Given a starting node s and a heuristic $H$, we define the roll-out algorithm based on $H$ (called $RH$) as following: 
@@ -487,7 +500,7 @@ Consider the set-up of example \ref{one_d_walk_cons}, and let $H_2$ be defined a
 
 Using these definitions, Bertsekas et al. derive some relations between the base heuristics and their associate roll-out procedure. In section \ref{subsec:chameleon} we propose a method to guarantee the sequential improvement of the FOM method when used with a full horizon instead of a finite one. Our method was inspired in a modification of the traditional roll-out technique proposed by Bertsekas called optimal roll-out.
 
-Consider that at a given roll-out step, the heuristic $H$ generates the optimal path $(i_0, i_1,..., i_m, \diff{i})$. Then the fortified roll-out algorithm stores the maximal suffix $S_0 = (i_1, ..., i_m, \diff{i}$ and, in the next roll-out iteration, it will consider the paths generated by $H$ together with the path defined by $S_0$. If the optimal path given by $H$ is not better than the one provided by $S_0$, the algorithm executes the next step of $S_0$ and stores the next maximal suffix $S_1 = (i_2, ..., i_m, \diff{i}$. If the path provided by $H$ is better, its first step is executed and the algorithm stores its maximal suffix. This procedure is followed until reaching one of the terminal nodes.
+Consider that at a given roll-out step, the heuristic $H$ generates the optimal path $(i_0, i_1,..., i_m, \diff{i})$. Then the fortified roll-out algorithm stores the maximal suffix $S_0 = (i_1, ..., i_m, \diff{i})$ and, in the next roll-out iteration, it will consider the paths generated by $H$ together with the path defined by $S_0$. If the optimal path given by $H$ is not better than the one provided by $S_0$, the algorithm executes the next step of $S_0$ and stores the next maximal suffix $S_1 = (i_2, ..., i_m, \diff{i})$. If the path provided by $H$ is better, its first step is executed and the algorithm stores its maximal suffix. This procedure is followed until reaching one of the terminal nodes.
 
 The main idea behind this modified roll-out technique is to simply keep comparing all the possible paths at a certain step with the best path from the previous step. This way the sequential improvement of the algorithm is clearly guaranteed.
 
@@ -496,13 +509,13 @@ The main idea behind this modified roll-out technique is to simply keep comparin
 
 To solve MPC problems fast enough to implement them online in a control problem is an open problem of interest for the robotics manipulation community, as explained in section \ref{subsec:MPC}. We consider that Hogan's work in the FOM technique is a good way to provide an heuristic-based approximate solution to this problem. The main objective of this study is to bring this method close to the research community by:
 \begin{enumerate}
-\item {\textbf{Improving the properties of FOM:}} In section \ref{subsec:chameleon} we will discuss some of it's sequential weaknesses and the solutions we provided and in section \ref{subsec:dynfom} we will present a new FOM-based method to track complex trajectories.
+\item {\textbf{Improving the properties of FOM:}} In section \ref{subsec:nominal_mode} we will discuss the differences in the formulation used in Hogan's study and the one used in this one, as well as why is it fundamental for the proper execution of the FOM method. In section \ref{subsec:chameleon} we will discuss some of its sequential weaknesses and how we addressed them, and in section \ref{subsec:dynfom} we will present a new FOM-based method to track complex trajectories.
 
-\item{\textbf{Comparing it to other techniques:}} In section \ref{subsec:miqp} we will discuss some of the difficulties we found while trying to compare it to MIQP and we present a modified version of the method to address this problem.
+\item{\textbf{Comparing it to other techniques:}} In section \ref{subsec:miqp} we will discuss some of the difficulties we found while trying to compare it to MIQP or MIQP approximations.
 
 \item{\textbf{Providing a systematic set-up:}} In chapter \ref{sec:modeselection} we will present a systematic protocol with an stochastic approach to choose the modes of the family.
 
-\item{\textbf{Showing the system scalability and robustness:}} We want to track more complex trajectories, more complex systems, and use models of a simple system to solve a problem that uses a more complex one. This study contains results for some of these studies, and they will be discussed through chapters \ref{sec:sim} and \ref{sec:modeselection}. We will also present the studies and experiments we are currently developing for ISRR in chapter \ref{sec:todo}.
+\item{\textbf{Showing the system scalability and robustness:}} We want to track more complex trajectories, more complex systems, and use models of a simple system to solve a problem that uses a more complex one. Some of these goals will be reached in this study and will be discussed through chapters \ref{sec:sim} and \ref{sec:modeselection}. We will also present our current line of research and experiments we are currently developing for ISRR in chapter \ref{sec:todo}.
 \end{enumerate} 
 
 In order to achieve this goals, we provided quantitative tools to evaluate the obtained trajectories that will be presented in section \ref{subsec:costfunc} and we implemented a general simulation interface (presented in chapter \ref{sec:sim}) that allowed us to easily formulate and solve general trajectories and hybrid systems.
@@ -600,7 +613,7 @@ Given a pressure distribution, the associated surface distribution can be numeri
 \begin{enumerate}
 \item Compute the maximum momentum value. This occurs when the object is in pure rotation, so we can use equation \ref{eq:momentum_cor} considering $\textbf{r}_{IC}$ to be the center of mass (CM) of the slider:
 \begin{equation} \label{eq:max_momentum}
-n_{max} =  \left| - \mu \, sign(\dot{\theta}) \int_F \textbf{r} \cdot \dfrac{\textbf{r} - \textbf{r}_{CM}}{|\textbf{r} - \textbf{r}_{CM}|} p(\textbf{r}) dA \right| = \mu \dfrac{g m}{A} \int_F ||\diff{\textbf{r}}|| dA
+n_{max} =  \left| - \mu \, sign(\dot{\theta}) \int_F \textbf{r} \, \dfrac{\textbf{r} - \textbf{r}_{CM}}{|\textbf{r} - \textbf{r}_{CM}|} p(\textbf{r}) dA \right| = \mu \dfrac{g m}{A} \int_F ||\diff{\textbf{r}}|| dA
 \end{equation}
 where $\diff{\textbf{r}}$ is the vector from $\textbf{r}_{CM}$ to \textbf{r}. This gives us the value of the moment semi-axis (the maximum and minimum values of m in the ellipse are going to be $\pm n_{max}$).
 \item Similarly, to obtain the force semi-axes, we need the maximum force in the x and y directions, which is going to be $f_{max} = f_n$.
@@ -656,29 +669,25 @@ We will define $\gamma := \dfrac{v_y}{v_x}$. If the velocity vector lies inside 
 \textbf{Sliding Left:}\,\,\,\,\, \textbf{u} < MC: v_y < \gamma_b v_x
 \end{equation}
 
-TODO: Decide what to do with Maria's piece of advice on these equations.
-
 In our single finger point pusher system the three possible hybrid states of the system will be these. The quasistatic assumption guarantees that the slider doesn't move away from the pusher by virtual inertial forces and we will impose constraints on the pusher to prevent it to move away from the slider: the normal velocity of the pusher with respect to the contact surface will be non-negative and the tangential displacement from the contact surface center ($p_y$) will be constrained to prevent the pusher from slipping through the slider sides.
 
 \subsection{Motion Equations} \label{subsec:motion_equations}
 The motion equations are adapted from the ones used in Hogan's work. They were originally inspired in a pusher-slider system study by Lynch et al. \cite{motion_equations} and can be expressed as follows:
 
-(TODO: Should I add the derivation from Lynch?)
-
 \begin{equation} \label{eq:motion_equation}
 \dot{\textbf{x}} = \begin{cases}
-					f_1(\textbf{x}, \textbf{u}) \,\, \text{if \textbf{u} $\in$ MC} \\
-					f_2(\textbf{x}, \textbf{u}) \,\, \text{if \textbf{u} $>$ MC} \\
-					f_3(\textbf{x}, \textbf{u}) \,\, \text{if \textbf{u} $<$ MC}
+					\textbf{f}_1(\textbf{x}, \textbf{u}) \,\, \text{if \textbf{u} $\in$ MC} \\
+					\textbf{f}_2(\textbf{x}, \textbf{u}) \,\, \text{if \textbf{u} $>$ MC} \\
+					\textbf{f}_3(\textbf{x}, \textbf{u}) \,\, \text{if \textbf{u} $<$ MC}
 \end{cases}
 \end{equation}
 \begin{equation}
-f_i(\textbf{x}, \textbf{u}) = 
+\textbf{f}_i(\textbf{x}, \textbf{u}) = 
 \begin{pmatrix} 
 	\textbf{CQP}_i \\ 
 	\textbf{b}_i \\
 	\textbf{c}_i 
-\end{pmatrix} \textbf{u} := \hat{\textbf{B}}_j(\textbf{x})\cdot\textbf{u}
+\end{pmatrix} \textbf{u} := \hat{\textbf{B}}_j(\textbf{x})\, \textbf{u}
 \end{equation}
 where 
 $\textbf{C} = \begin{pmatrix} 
@@ -714,29 +723,29 @@ On the other hand the possibility of separation is included in the simulator, in
 
 The motion equations are going to be used to define constraints in the MPC problem and, in turn, the MPC formulation is going to be fed into a commercial optimizer to obtain the optimal values of \textbf{x} and \textbf{u} that fulfil all the constraints. The fact that the motion equations are nonlinear would require using a nonlinear optimizer, which would represent too much computational cost to solve the problem online at every control iteration. In order to obtain a more tractable formulation the motion equations will be linearized around a nominal trajectory $\textbf{x}^*(t)$ and control input $\textbf{u}^*(t)$. We will use $(.)^*$ to denote elements of the nominal problem and $\diff{(.)}$ to denote perturbations around the nominal value. Using this notation, the linearization of the motion equation \ref{eq:motion_equation} is:
 \begin{equation} \label{eq:condensed_motion_linear}
-\dot{\diff{\textbf{x}}} = \textbf{A}_i(\textbf{x}^*, \textbf{u}^*)\cdot \diff{\textbf{x}} + \textbf{B}_i(\textbf{x}^*, \textbf{u}^*)\cdot \diff{\textbf{u}} + f_i(\textbf{x}^*, \textbf{u}^*) - \dot{\textbf{x}}^*
+\dot{\diff{\textbf{x}}} = \textbf{A}_i(\textbf{x}^*, \textbf{u}^*) \, \diff{\textbf{x}} + \textbf{B}_i(\textbf{x}^*, \textbf{u}^*)\, \diff{\textbf{u}} + \textbf{f}_i(\textbf{x}^*, \textbf{u}^*) - \dot{\textbf{x}}^*
 \end{equation}
-$\textbf{A}_i(\textbf{x'}, \textbf{u'}) = \left.\dfrac{\partial f_i(\textbf{x}, \textbf{u})}{\partial \textbf{x}}\right|_{\textbf{x'}, \textbf{u'}}$, $\textbf{B}_i(\textbf{x'}, \textbf{u'}) = \left.\dfrac{\partial f_i(\textbf{x}, \textbf{u})}{\partial \textbf{u}}\right|_{\textbf{x'}, \textbf{u'}} = \hat{\textbf{B}}_i(\textbf{x'})$
+$\textbf{A}_i(\textbf{x'}, \textbf{u'}) = \left.\dfrac{\partial \textbf{f}_i(\textbf{x}, \textbf{u})}{\partial \textbf{x}}\right|_{\textbf{x'}, \textbf{u'}}$, $\textbf{B}_i(\textbf{x'}, \textbf{u'}) = \left.\dfrac{\partial \textbf{f}_i(\textbf{x}, \textbf{u})}{\partial \textbf{u}}\right|_{\textbf{x'}, \textbf{u'}} = \hat{\textbf{B}}_i(\textbf{x'})$
 ,with $\diff{\textbf{x}} = \textbf{x} - \textbf{x}^*$ and $\diff{\textbf{u}} = \textbf{u} - \textbf{u}^*$ \\
 
-It should be noted that equation \ref{eq:condensed_motion_linear} is different from the linearized motion equation presented in Hogan's work. This fact will be discussed further in section \ref{subsec:nominal_mode} but the main idea is that the term $f_i(\textbf{x}^*, \textbf{u}^*) - \dot{\textbf{x}}^*$ cannot generally be cancelled as in other traditional control problems because $f_i(\textbf{x}^*, \textbf{u}^*)$ will not describe the instantaneous motion of the nominal trajectory if the nominal trajectory is in a hybrid state different from the one defined by $i$.
+It should be noted that equation \ref{eq:condensed_motion_linear} is different from the linearized motion equation presented in Hogan's work. This fact will be discussed further in section \ref{subsec:nominal_mode} but the main idea is that the term $\textbf{f}_i(\textbf{x}^*, \textbf{u}^*) - \dot{\textbf{x}}^*$ cannot generally be cancelled as in other traditional control problems because $\textbf{f}_i(\textbf{x}^*, \textbf{u}^*)$ will not describe the instantaneous motion of the nominal trajectory if the nominal trajectory is in a hybrid state different from the one defined by $i$.
 
 Similarly to the linearization of the motion equation, the friction constraint equations from \ref{eq:sticking_cone} to \ref{eq:left_cone} can also be linearized with respect to $\diff{\textbf{x}}$. For consistency with the variables used for the motion equations ($\diff{\textbf{x}}$ and $\diff{\textbf{u}}$) $v_x$ and $v_y$ are expressed as $v_x^* + \diff{v}_x$ and $v_y^* + \diff{v}_y$ respectively:
 
 \begin{equation} \label{eq:sticking_cone_linear}
 \textbf{Sticking:}\,\,\,\,\, 
 			\begin{cases}
-              (v_y^* + \diff{v}_y) \leq (\gamma_t(\textbf{x}^*) + \textbf{C}_t(\textbf{x}^*)\cdot \diff{\textbf{x}})(v_x^* + \diff{v}_x)\\
-              (v_y^* + \diff{v}_y) \geq (\gamma_b(\textbf{x}^*) + \textbf{C}_b(\textbf{x}^*)\cdot \diff{\textbf{x}})(v_x^* + \diff{v}_x)\\
+              (v_y^* + \diff{v}_y) \leq (\gamma_t(\textbf{x}^*) + \textbf{C}_t(\textbf{x}^*)\, \diff{\textbf{x}})\,(v_x^* + \diff{v}_x)\\
+              (v_y^* + \diff{v}_y) \geq (\gamma_b(\textbf{x}^*) + \textbf{C}_b(\textbf{x}^*)\, \diff{\textbf{x}})\,(v_x^* + \diff{v}_x)\\
             \end{cases}
 \end{equation}
 
 \begin{equation}\label{eq:right_cone_linear}
-\textbf{Sliding Right:}\,\,\,\,\, (v_y^* + \diff{v}_y) > (\gamma_t(\textbf{x}^*) + \textbf{C}_t(\textbf{x}^*)\cdot \diff{\textbf{x}})(v_x^* + \diff{v}_x)            
+\textbf{Sliding Right:}\,\,\,\,\, (v_y^* + \diff{v}_y) > (\gamma_t(\textbf{x}^*) + \textbf{C}_t(\textbf{x}^*)\, \diff{\textbf{x}})\,(v_x^* + \diff{v}_x)            
 \end{equation}
 
 \begin{equation}\label{eq:left_cone_linear}
-\textbf{Sliding Left:}\,\,\,\,\, (v_y^* + \diff{v}_y) < (\gamma_b(\textbf{x}^*) + \textbf{C}_b(\textbf{x}^*)\cdot \diff{\textbf{x}})(v_x^* + \diff{v}_x)
+\textbf{Sliding Left:}\,\,\,\,\, (v_y^* + \diff{v}_y) < (\gamma_b(\textbf{x}^*) + \textbf{C}_b(\textbf{x}^*)\, \diff{\textbf{x}})\,(v_x^* + \diff{v}_x)
 \end{equation}
 
 where $\textbf{C}_t(\textbf{x'}) = \left.\dfrac{\partial \gamma_t}{\partial \diff{\textbf{x}}}\right|_{\textbf{x'}}$ and $\textbf{C}_b(\textbf{x'}) = \left.\dfrac{\partial \gamma_b}{\partial \diff{\textbf{x}}}\right|_{\textbf{x'}}$
@@ -745,7 +754,7 @@ where $\textbf{C}_t(\textbf{x'}) = \left.\dfrac{\partial \gamma_t}{\partial \dif
 This notation allows us to write all the linearized motion cone constraints in a condensed form suitable for a linear programming optimizer, as equation \ref{eq:condensed_motion_linear}:
 
 \begin{equation} \label{eq:condensed_cone_linear}
-\textbf{E}_i(\textbf{x}^*, \textbf{u}^*)\cdot \diff{\textbf{x}} + \textbf{D}_i(\textbf{x}^*)\cdot \diff{\textbf{u}} \leq g_i(\textbf{x}^*, \textbf{u}^*)
+\textbf{E}_i(\textbf{x}^*, \textbf{u}^*)\, \diff{\textbf{x}} + \textbf{D}_i(\textbf{x}^*)\, \diff{\textbf{u}} \leq g_i(\textbf{x}^*, \textbf{u}^*)
 \end{equation} \\ \\
 $\textbf{E}_1(\textbf{x'}, \textbf{u'}) = v_y' \begin{pmatrix}
 -\textbf{C}_t(\textbf{x'}) \\
@@ -773,14 +782,14 @@ $\epsilon$ is just a small positive scalar used to express strict inequalities, 
 As explained in section \ref{subsec:MPC}, each MPC mode fixed sub-problem will compute the optimal values for the state and control variables for a discrete finite horizon of N steps, a time step h, and a given initial position $\diff{\textbf{x}}_0$ to minimize the cost equation provided in equation \ref{eq:cost_function}, subject to motion and cone constraints. We will use the perturbation dynamics, so the state and control variables will be $(\diff{\textbf{x}}_1, ..., \diff{\textbf{x}}_N)$ and $(\diff{\textbf{u}}_0, ..., \diff{\textbf{u}}_{N-1})$; and the initial state will be $\textbf{x}_0$. As MPC considers a discrete framework, we need to discretize the motion equations from previous section. After a first order discretization, the MPC constraints at step j are:
 \begin{equation} \label{eq:mpc_constraints_initial_step}
 \text{if } j = 0: \begin{cases}
-\diff{\textbf{x}}_1 = \diff{\textbf{x}}_0 +  h \textbf{B}_{i0}(\textbf{x}_0) \cdot \diff{\textbf{u}}_0 + h \textbf{f}_{i0} + \textbf{x}_0^* - \textbf{x}_1^*\\
-\textbf{D}_{i0} \cdot \diff{\textbf{u}}_0 \leq \textbf{g}_{i0}
+\diff{\textbf{x}}_1 = \diff{\textbf{x}}_0 +  h \textbf{B}_{i0}(\textbf{x}_0) \, \diff{\textbf{u}}_0 + h \textbf{f}_{i0} + \textbf{x}_0^* - \textbf{x}_1^*\\
+\textbf{D}_{i0} \, \diff{\textbf{u}}_0 \leq \textbf{g}_{i0}
 \end{cases}
 \end{equation}
 \begin{equation} \label{eq:mpc_constraints_non_initial_step}
 \text{if } j > 0: \begin{cases}
-\diff{\textbf{x}}_{j+1} = (\textbf{I} + h \textbf{A}_{ij})\cdot \diff{\textbf{x}}_j + h \textbf{B}_{ij} \cdot \diff{\textbf{u}}_j + h \textbf{f}_{ij}  + \textbf{x}_{j}^* - \textbf{x}_{j+1}^*\\
-\textbf{E}_{ij} \cdot \diff{\textbf{x}}_j + \textbf{D}_{ij} \cdot \diff{\textbf{u}}_j \leq \textbf{g}_{ij}
+\diff{\textbf{x}}_{j+1} = (\textbf{I} + h \textbf{A}_{ij})\, \diff{\textbf{x}}_j + h \textbf{B}_{ij} \, \diff{\textbf{u}}_j + h \textbf{f}_{ij}  + \textbf{x}_{j}^* - \textbf{x}_{j+1}^*\\
+\textbf{E}_{ij} \, \diff{\textbf{x}}_j + \textbf{D}_{ij} \, \diff{\textbf{u}}_j \leq \textbf{g}_{ij}
 \end{cases}
 \end{equation}
 where $\textbf{A}_{ij} = \textbf{A}_i(\textbf{x}_j^*, \textbf{u}_j^*)$, and $\textbf{E}_{ij} = \textbf{E}_i(\textbf{x}_j^*, \textbf{u}_j^*)$, using the notation from section \ref{subsec:motion_equations}. $\textbf{f}_{ij}$ is defined differently depending on the iteration step:
@@ -804,9 +813,9 @@ As will be explained in section \ref{subsec:miqp}, we also implemented an MIQP s
 \begin{equation} \label{eq:big_m_first_step}
 \text{if } j = 0: \begin{cases}
 
-\textbf{x}_1 \leq (\diff{\textbf{x}}_0 +  h \textbf{B}_{i0}(\textbf{x}_0) \cdot \diff{\textbf{u}}_0 + h \textbf{f}_{i0} + \textbf{x}_0^* - \textbf{x}_1^*) + M (1 - z_{i0})\\
+\textbf{x}_1 \leq (\diff{\textbf{x}}_0 +  h \textbf{B}_{i0}(\textbf{x}_0) \, \diff{\textbf{u}}_0 + h \textbf{f}_{i0} + \textbf{x}_0^* - \textbf{x}_1^*) + M (1 - z_{i0})\\
 
--\textbf{x}_1 \leq -(\diff{\textbf{x}}_0 +  h \textbf{B}_{i0}(\textbf{x}_0) \cdot \diff{\textbf{u}}_0 + h \textbf{f}_{i0} + \textbf{x}_0^* - \textbf{x}_1^*) + M (1 - z_{i0})\\
+-\textbf{x}_1 \leq -(\diff{\textbf{x}}_0 +  h \textbf{B}_{i0}(\textbf{x}_0) \, \diff{\textbf{u}}_0 + h \textbf{f}_{i0} + \textbf{x}_0^* - \textbf{x}_1^*) + M (1 - z_{i0})\\
 
 \textbf{D}_{i0} \diff{\textbf{u}}_0 \leq \textbf{g}_{i0} + \textbf{1}_{2\times1}M(1 - z_{i0})
 \end{cases}
@@ -814,9 +823,9 @@ As will be explained in section \ref{subsec:miqp}, we also implemented an MIQP s
 \begin{equation} \label{eq:big_m_other_steps}
 \text{if } j > 0: \begin{cases}
 
-\diff{\textbf{x}}_{j+1} \leq [(\textbf{I} + h \textbf{A}_{ij})\cdot \diff{\textbf{x}}_j + h \textbf{B}_{ij} \cdot \diff{\textbf{u}}_j + h \textbf{f}_{ij}  + \textbf{x}_{j}^* - \textbf{x}_{j+1}^*] + M(1-z_{ij})\\
+\diff{\textbf{x}}_{j+1} \leq [(\textbf{I} + h \textbf{A}_{ij})\, \diff{\textbf{x}}_j + h \textbf{B}_{ij} \, \diff{\textbf{u}}_j + h \textbf{f}_{ij}  + \textbf{x}_{j}^* - \textbf{x}_{j+1}^*] + M(1-z_{ij})\\
 
--\diff{\textbf{x}}_{j+1} \leq -[(\textbf{I} + h \textbf{A}_{ij})\cdot \diff{\textbf{x}}_j + h \textbf{B}_{ij} \cdot \diff{\textbf{u}}_j + h \textbf{f}_{ij}  + \textbf{x}_{j}^* - \textbf{x}_{j+1}^*] + M(1-z_{ij})\\
+-\diff{\textbf{x}}_{j+1} \leq -[(\textbf{I} + h \textbf{A}_{ij})\, \diff{\textbf{x}}_j + h \textbf{B}_{ij} \, \diff{\textbf{u}}_j + h \textbf{f}_{ij}  + \textbf{x}_{j}^* - \textbf{x}_{j+1}^*] + M(1-z_{ij})\\
 
 \textbf{E}_{ij} \diff{\textbf{x}}_j + \textbf{D}_{ij} \diff{\textbf{u}}_j \leq \textbf{g}_{ij} + \textbf{1}_{2\times1}M(1 - z_{ij})
 \end{cases}
@@ -832,9 +841,9 @@ The equality constraints $a = b$ (where a and u are functions of \textbf{x} and 
 
 The simulations of Hogan's study were mainly designed for an specific choice of modes and a specific trajectory to follow. In this study, we wanted to study general properties of the FOM problem, to generalize the results to more complex pusher-slider systems and trajectories, and to compare our different FOM strategies to solve the MPC problem with other conventional methods as MIQP. In order to satisfy this needs, we decided to implement a general simulation tool. The code main structure can be described as follows:
 
-An abstract state interface is implemented to provide the dynamics and cone constraints of the state as well as their linearized versions at a certain objective state space and control input. To define a certain experimental problem, the dynamics function and constraint equations are derived depending on a general state space variable \textbf{x} and controller action \textbf{u} and the necessary state instances are implemented and a mode is then defined by a vector of state handles. An MPC solver class it's also implemented to get an initial condition and an objective trajectory and return a control input. Each MPC solver implementation can include its own member states or modes (as well as other optimization set-up variables) and internally decides how to handle them.
+An abstract state interface is implemented to provide the dynamics and cone constraints of the state as well as their linearized versions at a certain objective state space and control input. To define a certain experimental problem, the dynamics function and constraint equations are derived depending on a general state space variable \textbf{x} and controller action \textbf{u} and the necessary state instances are implemented and a mode is then defined by a vector of state handles. An MPC solver class is also implemented to get an initial condition and an objective trajectory and return a control input. Each MPC solver implementation can include its own member states or modes (as well as other optimization set-up variables) and internally decides how to handle them.
 
-At the same time, an Euler integration simulator is implemented. This simulator uses it's own state classes to describe the dynamics of the pusher slider system. These states are independent from the optimization ones so that discrepancies between model and reality can be simulated (for example the MPC solver can use linearized dynamics or cone constraints while the Euler integrator uses the non-linearized version, which is more similar to the real experimental set-up than using linearized dynamics in both places). The Euler integration class also holds a member MPC solver that returns the control input to be applied. The integrator then computes the value of the state variable derivative $\dot{x}$ and uses a simple quadrature to approximate the next state variable value.
+At the same time, an Euler integration simulator is implemented. This simulator uses its own state classes to describe the dynamics of the pusher slider system. These states are independent from the optimization ones so that discrepancies between model and reality can be simulated (for example the MPC solver can use linearized dynamics or cone constraints while the Euler integrator uses the non-linearized version, which is more similar to the real experimental set-up than using linearized dynamics in both places). The Euler integration class also holds a member MPC solver that returns the control input to be applied. The integrator then computes the value of the state variable derivative $\dot{\textbf{x}}$ and uses a simple quadrature to approximate the next state variable value.
 
 The controller (MPC solver) and simulator are decoupled, so they can consider different hybrid states. This allows us to consider more realistic models for the euler integration step of the simulation (we always use non-linearized motion equations for the integration step), to use different parameters in their states (to test controllers designed for a certain slider shape, $\mu_g$, and $\mu_p$ together with a simulator set-up with different parameters, to show the robustness of the controller to uncertainties in the models).
 
@@ -844,19 +853,19 @@ During the previous work at MCubelab, there was no systematic and objective way 
 
 For this thesis we wanted a more objective way to evaluate how good a control trajectory was and this required a certain notion of metric or score for the global trajectory. We tried to keep coherence between the global and local cost functions, but removed the $\diff{\textbf{x}}_N^T \textbf{Q}_{f}^{} \diff{\textbf{x}}_N^{}$ term of the cost function. As presented in section \ref{subsec:MPC}, this term is used to account for the information missing because of the finite horizon. When scoring the final trajectory, we have the full horizon information, so this term is no longer required. The obtained cost function is $S = \sum\limits_{i = 0}^{M}(\diff{\textbf{x}}_{i}^{T} \textbf{Q} \diff{\textbf{x}}_i^{} + \diff{\textbf{u}}_{i}^{T} \textbf{R} \diff{\textbf{u}}_i^{})$, where $M$ is the number of euler integration steps. We will denote by local cost over time each of the $\diff{\textbf{x}}_{i}^{T} \textbf{Q} \diff{\textbf{x}}_i^{} + \diff{\textbf{u}}_{i}^{T} \textbf{R} \diff{\textbf{u}}_i^{}$ values.
 
-It is important to note that even if this global cost function is used score how close the obtained trajectory was from the desired one, it is not a direct indicator of the MPC solving performance. We will denote the cost function provided in section \ref{subsec:MPC} as MPC cost. Then optimizing the MPC cost at each iteration could incur in a larger optimal cost for the global trajectory. If we are currently at the state $x_i$ and we consider two modes $M_1$ and $M_2$ with local costs $c_1$ and $c_2$, with $c_1 < c_2$ there's no guarantee that executing the first step of the trajectory obtained from mode $M_1$ will translate in a smaller global cost function. Some causes for this effect are exposed and fixed in \ref{subsec:chameleon} but, even after fixing them and considering an ideal world scenario (where the models are completely accurate and there's no sensor noise), the fact that the receding finite horizon adds new information to the problem at every control iteration implies that the optimal state and control pair $(x_{i+1}, u_{i})$ computed at the control iteration $i$ could technically lose their optimal property when the information from control iteration $i+1$ is introduced.
+It is important to note that even if this global cost function is used score how close the obtained trajectory was from the desired one, it is not a direct indicator of the MPC solving performance. We will denote the cost function provided in section \ref{subsec:MPC} as MPC cost. Then optimizing the MPC cost at each iteration could incur in a larger optimal cost for the global trajectory. If we are currently at the state $x_i$ and we consider two modes $M_1$ and $M_2$ with local costs $c_1$ and $c_2$, with $c_1 < c_2$ there's no guarantee that executing the first step of the trajectory obtained from mode $M_1$ will translate in a smaller global cost function. Some causes for this effect are exposed and fixed in \ref{subsec:chameleon} but, even after fixing them and considering an ideal world scenario (where the models are completely accurate and there's no sensor noise), the fact that the receding finite horizon adds new information to the problem at every control iteration implies that the optimal state and control pair $(\textbf{x}_{i+1}, \textbf{u}_{i})$ computed at the control iteration $i$ could technically lose their optimal property when the information from control iteration $i+1$ is introduced.
 
-This effect is common in all receding finite horizon problems and there's usually no way to completely solve it. In order to evaluate the MPC solving performance of our method, some of the simulation results we expose in the following sections show a plot of the local MPC cost over time in addition to a graphical representation of the trajectory and it's global or local cost. It will be shown that, when extending a family $F_1$ into a family $F_2$ by adding more modes, the local cost of $F_2$ descends with respect ot $F_1$ in the first bifurcation of the local MPC cost over time plot. This will be further discussed in section \ref{subsec:simresults}.
+This effect is common in all receding finite horizon problems and there's usually no way to completely solve it. In order to evaluate the MPC solving performance of our method, some of the simulation results we expose in the following sections show a plot of the local MPC cost over time in addition to a graphical representation of the trajectory and its global or local cost. It will be shown that, when extending a family $F_1$ into a family $F_2$ by adding more modes, the local cost of $F_2$ descends with respect ot $F_1$ in the first bifurcation of the local MPC cost over time plot. This will be further discussed in section \ref{subsec:simresults}.
 
 \subsection{Nominal Mode}
 \label{subsec:nominal_mode}
-In section \ref{subsec:motion_equations} we noted that, as opposed to the previous study, we do not simplify the term $f_i(\textbf{x}^*, \textbf{u}^*) + \dot{\textbf{x}}^*$ in equation \ref{eq:condensed_motion_linear}. $\textbf{x}^*$ can be described by the same motion equations as $\textbf{x}$ using the hybrid state friction constraints to determine the hybrid state, but it is important to realize that, once we constrain out system to be in a state $i$ at a time instant $t_j$, the specific motion equation that describes this instant-state system $f_i(\textbf{x}_j, \textbf{u}_j)$ may not describe the instantaneous motion of the nominal trajectory. The nominal trajectory will clearly be described by $f_{i'}(\textbf{x}_j^*, \textbf{u}_j^*)$, but there's no guarantee that $i = i'$. The error introduced by assuming $f_i(\textbf{x}^*, \textbf{u}^*) + \dot{\textbf{x}}^* = 0$ can be critical for the performance of the controller. In Figure \ref{fig:without_nominal_trajectory} we can see the behaviour of the FOM approach when trying to track a circle using a family of modes learned using the procedure described in section \ref{subsec:learningsimple}. The red slider follows the nominal trajectory. The trajectory followed by its center of mass trajectory is represented with the black line. The blue slider follows the simulated trajectory and its center of mass follows the blue line. The last position of the simulated slider is highlighted and the other snapshots are faded away. The considered optimal paths the MPC considers are shown at the center of each simulated slider. The chosen path is the yellow one. As can be seen the obtained trajectory diverges from the nominal one. Furthermore, it can be seen how the optimal finite horizon trajectory computed in the MPC problem is completely different from the realized trajectory. In Figure \ref{fig:without_nominal_local_cost} the correspondent local cost over time is shown.
+In section \ref{subsec:motion_equations} we noted that, as opposed to the previous study, we do not simplify the term $\textbf{f}_i(\textbf{x}^*, \textbf{u}^*) + \dot{\textbf{x}}^*$ in equation \ref{eq:condensed_motion_linear}. $\textbf{x}^*$ can be described by the same motion equations as $\textbf{x}$ using the hybrid state friction constraints to determine the hybrid state, but it is important to realize that, once we constrain out system to be in a state $i$ at a time instant $t_j$, the specific motion equation that describes this instant-state system $\textbf{f}_i(\textbf{x}_j, \textbf{u}_j)$ may not describe the instantaneous motion of the nominal trajectory. The nominal trajectory will clearly be described by $\textbf{f}_{i'}(\textbf{x}_j^*, \textbf{u}_j^*)$, but there's no guarantee that $i = i'$. The error introduced by assuming $\textbf{f}_i(\textbf{x}^*, \textbf{u}^*) + \dot{\textbf{x}}^* = 0$ can be critical for the performance of the controller. In Figure \ref{fig:without_nominal_trajectory} we can see the behaviour of the FOM approach when trying to track a circle using a family of modes learned using the procedure described in section \ref{subsec:learningsimple}. The red slider follows the nominal trajectory. The trajectory followed by its center of mass trajectory is represented with the black line. The blue slider follows the simulated trajectory and its center of mass follows the blue line. The last position of the simulated slider is highlighted and the other snapshots are faded away. The considered optimal paths the MPC considers are shown at the center of each simulated slider. The chosen path is the yellow one. As can be seen the obtained trajectory diverges from the nominal one. Furthermore, it can be seen how the optimal finite horizon trajectory computed in the MPC problem is completely different from the realized trajectory. In Figure \ref{fig:without_nominal_local_cost} the correspondent local cost over time is shown.
 
 \begin{figure}[htb!]
 \begin{center}
 \includegraphics[width=16cm]{without_nominal_trajectory.jpg}
 \end{center}
-\caption{\label{fig:without_nominal_trajectory} \small Snapshot from the video simulating the trajectory obtained when tracking a circular trajectory with the 8 best modes obtained using section \ref{subsec:learningsimple} procedure.}
+\caption{\label{fig:without_nominal_trajectory} \small Snapshot from the video simulating the trajectory obtained when tracking a circular trajectory provided by equation , with $d = 0.0249$. with the 8 best modes obtained using the procedure presented in section \ref{subsec:learningsimple}.}
 \end{figure}
 
 \begin{figure}[htb!]
@@ -866,7 +875,7 @@ In section \ref{subsec:motion_equations} we noted that, as opposed to the previo
 \caption{\label{fig:without_nominal_local_cost} \small Local cost over time associated to the trajectory in Figure \ref{fig:without_nominal_trajectory}}
 \end{figure}
 
-The possibility of the hybrid states associated the nominal trajectory to be different from the ones associated with the real trajectory has another important implication. The perturbation state motion equation \ref{eq:condensed_motion_linear} has the nominal trajectory as an equilibrium point only when $i = i'$. Otherwise, if we consider $\textbf{x} = \textbf{x}^*$ and $\textbf{u} = \textbf{u}^*$, we obtain $\diff{\textbf{x}} = \textbf{A}_i \cdot \textbf{0} + \textbf{B}_i \cdot \textbf{0} + f_i(\textbf{x}^*, \textbf{u}^*) - \dot{\textbf{x}}^* = f_i(\textbf{x}^*, \textbf{u}^*) - f_{i'}(\textbf{x}^*, \textbf{u}^*)$. If none of the MPC modes is the one that the nominal trajectory follows, the solution $\diff{\textbf{x}}_j = \diff{\textbf{u}}_j = \textbf{0}$ will never be feasible, and we will never be able to stabilize the planned trajectory on the nominal one, even if the initial state is on the nominal trajectory ($\textbf{x}_0 = \textbf{0}$). In order to force the MPC to consider the nominal mode, we can simply compute it at every MPC step (it can be easily determined applying the friction constraints to each pair $\textbf{x}_j^*$, $\textbf{u}_j^*$) and add it as one of the modes of the family.
+The possibility of the hybrid states associated the nominal trajectory to be different from the ones associated with the real trajectory has another important implication. The perturbation state motion equation \ref{eq:condensed_motion_linear} has the nominal trajectory as an equilibrium point only when $i = i'$. Otherwise, if we consider $\textbf{x} = \textbf{x}^*$ and $\textbf{u} = \textbf{u}^*$, we obtain $\diff{\textbf{x}} = \textbf{A}_i \cdot \textbf{0} + \textbf{B}_i \cdot \textbf{0} + f_i(\textbf{x}^*, \textbf{u}^*) - \dot{\textbf{x}}^* = \textbf{f}_i(\textbf{x}^*, \textbf{u}^*) - \textbf{f}_{i'}(\textbf{x}^*, \textbf{u}^*)$. If none of the MPC modes is the one that the nominal trajectory follows, the solution $\diff{\textbf{x}}_j = \diff{\textbf{u}}_j = \textbf{0}$ will never be feasible, and we will never be able to stabilize the planned trajectory on the nominal one, even if the initial state is on the nominal trajectory ($\textbf{x}_0 = \textbf{0}$). In order to force the MPC to consider the nominal mode, we can simply compute it at every MPC step (it can be easily determined applying the friction constraints to each pair $\textbf{x}_j^*$, $\textbf{u}_j^*$) and add it as one of the modes of the family.
 
 \subsection{MIQP and Clustered MIQP}
 \label{subsec:miqp}
@@ -911,7 +920,7 @@ The conclusion these experiences led us to was that, using Bersekas' terminology
 
 Solving the MPC using the FOM approach has similarities with the roll-out algorithm presented in their study: Each of the modes can be considered a heuristic and the strategy of recomputing the control policy at a certain frequency by using the same heuristics can be viewed as a roll-out-like technique. In fact, we could easily reformulate any family of our FOM approach to behave as their roll-out by increasing the finite horizon by one step and substitute each of the original modes by a triplet of copies preceded with an S, L, and R state respectively. We decided not to use an exact roll-out because, as we will show in this section, we were able to find a strategy to guarantee a sense of improvement without having to increase the number of MPC sub-problems to solve by a multiples of the number of possible states.
 
-It's important to note that the concepts of sequential consistency or optimality cannot be applied to our case without some previous modifications, because of the existence of a receding finite time horizon, but for every FOM problem we can formulate an associated Full Horizon Family of Modes (FFOM) problem as follows:
+It is important to note that the concepts of sequential consistency or optimality cannot be applied to our case without some previous modifications, because of the existence of a receding finite time horizon, but for every FOM problem we can formulate an associated Full Horizon Family of Modes (FFOM) problem as follows:
 
 \begin{definition} {\textbf{FFOM:}}\\
 Given a FOM problem defined by a finite horizon of $N$ steps, a set $H$ of possible hybrid states, a cost function J, and a family $F^{(0)} = \{M_1^{(0)}, ..., M_k^{(0)}\}$ containing k modes, where $M_i^{(0)}$ is a general mode described as $M_i^{(0)} = (s_{i,1}, s_{i,2}, ..., s_{i,N})$, with $s_{ij} \in H$. Furthermore, consider a cost function $J_k = \sum\limits_{i = k}^{N} \left( \diff{\textbf{x}}_i^T \textbf{Q} \diff{\textbf{x}}_i^{} + \diff{\textbf{u}}_{i}^T \textbf{R} \diff{\textbf{u}}_{i}^{} \right)$ (defined using the $\textbf{Q}$ and $\textbf{R}$ matrices from the FOM cost function J) and the prefixes of each of the modes of the family $M_i^{(j)} = (s_{i,1}, ..., s_{i,N-j})$. Then the associated FFOM problem is defined iteratively as follows:
@@ -928,7 +937,7 @@ Given a FOM problem defined by a finite horizon of $N$ steps, a set $H$ of possi
 
 This formulation represents how the FOM problem would behave be if we had enough computation power to cover a finite horizon that reaches the desired final time step. Using it, we can study the FFOM problem associated to the example families presented at the beginning of this section. For simplicity, we will consider the realized states and control inputs to describe the considered trajectories.
 
-\begin{example} \label{ex:f1consistent} $\textbf{F}_1$ \textbf{is sequentially consistent in it's FFOM version and assuming an ideal world:}
+\begin{example} \label{ex:f1consistent} $\textbf{F}_1$ \textbf{is sequentially consistent in its FFOM version and assuming an ideal world:}
 
 Consider that at a certain control iteration there's a full horizon of N steps to reach the end of the trajectory. The only considered mode, $\textbf{S}$, get the optimal path to reach the goal while keeping the sticking contact at all times, obtaining a sequence of position states $\textbf{x}^{\textbf{S}}(\textbf{x}_0) = (\textbf{x}_{1,1}, \textbf{x}_{1,2}, ..., \textbf{x}_{1,N})$ and control inputs $\textbf{u}^{\textbf{S}}(\textbf{x}_0) = (\textbf{u}_{0,1}, \textbf{u}_{1,1}, ... \textbf{u}_{1,N-1})$ for the optimal path from the initial position to the goal. Then, the controller will execute $\textbf{u}_0$ for one control step and the pusher slider system will move to $\textbf{x}_1$. The only heuristic it considers in the next optimization step is to stick until reaching the goal, so the optimal trajectory obtained will be $\textbf{x}^{\textbf{S}}(\textbf{x}_1) = (\textbf{x}_{1,2}, ..., \textbf{x}_{1,N})$ and $\textbf{u}^{\textbf{S}}(\textbf{x}_1) = (\textbf{u}_{1,1}, ... \textbf{u}_{1,N-1})$, being sequentially consistent.
 \end{example}
@@ -971,11 +980,9 @@ We considered important to guarantee sequential improvement for the FFOM problem
 
 In order to guarantee it we decided first decided to only use families that were closed by the suffix operation obtained using $\textbf{S}$ as the extension mode. The problem with this approach is that for any mode $M = (s_1, ..., s_N)$ you add to a family F you need to include all of its possible $\textbf{S}$-extended suffixes. Different modes required adding a different number of suffix modes. For example, an $\textbf{S}$ mode required no extra modes (as it is itself closed by the suffix operation) and for a $\textbf{R}_n$ one you only need to extend the family with an $\textbf{S}$ mode and all the $\textbf{R}_i$ modes for $i < n$. Even taking this into account, we considered adopting this strategy constrained the problem of family design more than we wanted to and added more extra nodes that was strictly necessary, so we decided to adopt another strategy. This translated into changing from static families to dynamical ones.
 
-(TODO: Explain why $\textbf{S}$)
-
 The strategy we used consisted in including a dynamic mode that we called chameleon mode. If, at a certain step $i$, the optimal FOM mode is mode $M$, the chameleon mode is defined in step $i + 1$ as $suff(M)$ (using, as before, $\textbf{S}$ as the extension state). This guaranteed sequential improvement by applying lemma \ref{lem:seq_imp} in an analogue way as in corollary \ref{cor:seq_imp}.
 
-The chameleon mode functionality was added in the simulation interface and it's performance was tested in simulation. As we will show in section \ref{subsec:simresults}, implementing this functionality resulted in an improvement of the sequential behaviour of the FOM algorithm. Being able to safely add arbitrary new modes to the FOM family without fear of losing its sequential properties allowed us to develop an strategy to learn a good family set-up for a general trajectory tracking problem, as will be shown in chapter \ref{sec:modeselection}.
+The chameleon mode functionality was added in the simulation interface and its performance was tested in simulation. As we will show in section \ref{subsec:simresults}, implementing this functionality resulted in an improvement of the sequential behaviour of the FOM algorithm. Being able to safely add arbitrary new modes to the FOM family without fear of losing its sequential properties allowed us to develop an strategy to learn a good family set-up for a general trajectory tracking problem, as will be shown in chapter \ref{sec:modeselection}.
 
 Given the good properties of the chameleon mode, we decided to include it in the FOM formulation so, from now on,we will use FOM to refer to the family of modes with chameleon mode implementation, unless specified otherwise.
 
@@ -1054,24 +1061,28 @@ The local cost sufficiency assumption was listed as a new assumption, but it was
 
 The locally invariant trajectories assumption motivation will be used in combination with section \ref{subsec:dynfom}, where we will use them to approximate general trajectories. It should be noted that for a trajectory to be locally invariant, it has to be defined by the same hybrid state at every instant. Furthermore, the only state which allows infinite locally invariant trajectories is the sticking state (in the other two the pusher would keep slipping until losing contact with the slider). So, the only trajectories we will consider are the ones which keep the sticking state at every instant. In the next section we will characterize the considered trajectories.
 
+\begin{remark}
+Note that in all the considered trajectories, the nominal mode is $\textbf{S}$. We will use this fact at the end of this section.
+\end{remark}
+
 The main motivation for the single step sufficiency assumption has to be understood in combination with the previous assumption. The locally invariant property implies that the only difference between an MPC step and another is their initial condition random variable $\diff{\textbf{x}}_i$. Consider a distribution law $\textbf{X}$ that focusses more on covering a wide range of possible values of any $\diff{\textbf{x}}_i$ rather than on their frequency as, for example an appropriate uniform distribution. We can then optimize the modes to reduce the expected value of $C(\diff{\textbf{x}_0})$ of a single controlling step tracking problem, where $\diff{\textbf{x}}_0 \sim \textbf{X}$. Optimizing the mode selection this will simultaneously reduce the local costs expected value for all $\diff{\textbf{x}_i}$ implicitly assuming that each of these values are equally distributed.
 
 This implicit assumption is clearly false. The fact that some trajectories converge is already a counterexample of it. We consider assuming a uniform to describe all $\diff{\textbf{x}}_i$ is a conservative approach, as will consider rare big disturbances (that can usually only happen with an external perturbation or a bad initial position) to be equally likely to appear at any time step as small disturbances characteristic of proper control around the objective trajectory. We expected this approach would be sufficient to provide a mode selection robust enough to track a wide range of trajectories and initial conditions.
 
-These assumptions result in a great cost reduction and simplification of the learning algorithm because the optimization problem can be now be easily written as a function of $\diff{\textbf{x}}_0$:
+These assumptions result in a great cost reduction and simplification of the learning algorithm because the optimization problem can be now be easily approximated as a function of samples of $\diff{\textbf{x}}_0$:
 \begin{corollary} \textbf{The optimization problem to select the FOM modes can be expressed as:} \label{cor:costfunction} 
- $$\min\limits_{m_1, ..., m_K \in M}\mathbb{E}(C(\diff{\textbf{x}_0}; m_1, ..., m_K)) = \min\limits_{m_1, ..., m_K \in M}\mathbb{E}(\min\limits_{i = 0}^{K}{C_i(\diff{\textbf{x}}_0)})$$
- 
+ $$\min\limits_{m_1, ..., m_K \in M}\mathbb{E}(C(\diff{\textbf{x}_0}; m_1, ..., m_K)) = \min\limits_{m_1, ..., m_K \in M}\mathbb{E}(\min\limits_{i = 0}^{K}{C_{m_i}(\diff{\textbf{x}}_0)}) \approx \min\limits_{m_1, ..., m_K \in M} \dfrac{\sum\limits_{j = 0}^{E}(\min\limits_{i = 0}^{K}{C_{m_i}(\diff{\textbf{x}}_j)})}{E}$$
+
+Where E is the number of samples of $\diff{\textbf{x}}_0$ we consider.
 \end{corollary}
 Where $C_i$ is the cost associated to mode $m_i$ in the MPC optimization. This further implies that solving the MPC problem for all the possible sets of $K$ modes is no longer necessary, as we announced at the beginning of this section because, if $C_i(\diff{\textbf{x}}_0)$ is computed for every mode $m_i \in M$, then $C(\diff{\textbf{x}}_0; m_1, ..., m_K)$ is defined for any set of $K$ modes by corollary \ref{cor:costfunction}.
 
-In Figure \ref{fig:hist_pre} 
 
 \begin{figure}[htb!]
 \begin{center}
 \includegraphics[width=16cm]{hist_pre_std.jpg}
 \end{center}
-\caption{\label{fig:hist_pre} \small Example histogram of $C_i(\diff{x_j})$ of the local costs obtained while tracking a horizontal line for 1000 initial conditions. The costs are clearly non-comparable}
+\caption{\label{fig:hist_pre} \small Example histogram of $C_i(\diff{x_j})$ of the local costs obtained while tracking a circle for 1000 initial conditions and 253 possible modes. The histogram is taken by fixing an initial condition $\diff{\textbf{x}}_j$ and evaluating the values of $C_i(\diff{x_j})$ for all possible $i$. Each color represents a different initial condition. The costs are clearly non-comparable}
 \end{figure}
 
 \begin{figure}[htb!]
@@ -1081,127 +1092,111 @@ In Figure \ref{fig:hist_pre}
 \end{center}
 \end{figure}
 
-We were concerned that the initial condition would probably have a lot of effect in the overall cost of the mode-condition pair, because higher or smaller disturbances would lead to higher or smaller overall cost (independently of the mode chosen) and the simulation results from section \ref{subsec:simresults} confirmed it, as can be seen in Figure \ref{fig:hist_pre}. We wanted to reduce the impact of the initial condition in the range of possible values of the local costs to obtain comparable experiments, so we decided to standardize the results obtained within each experiment. Consider a specific sample $\diff{\textbf{x}}^{(j)}$ of the random variable $\diff{\textbf{x}}_0$, then we can compute the statistical mean of the local costs over all the modes $\mean{C}^{(j)} = \dfrac{\sum\limits_{i = 0}^{K}{C_i(\diff{x_j})}}{K}$ and $\sigma^{(j)} = \sqrt{\sum\limits_{i=0}^{K}{\dfrac{(C_i(\diff{x_j}) - \diff{C}^{(j)})^2} {K - 1}}}$ and we can use them to compute the normalize costs $\hat{C_i}(\diff{\textbf{x}}_j) = \dfrac{C_i(\diff{\textbf{x}}^{j}) - \diff{C}^{(j)}}{\sigma_i}$. Figure \ref{fig:hist_post} shows the distribution of the local costs over modes after the normalization. As this values were more comparable, we minimized the normalized costs instead of the original ones.
+We were concerned that the initial condition would probably have a lot of effect in the overall cost of the mode-condition pair, because higher or smaller disturbances would lead to higher or smaller overall cost (independently of the mode chosen) and the simulation results from section \ref{subsec:simresults} confirmed it, as can be seen in Figure \ref{fig:hist_pre}. We wanted to reduce the impact of the initial condition in the range of possible values of the local costs to obtain comparable experiments, so we decided to standardize the results obtained within each experiment. Consider a specific sample $\diff{\textbf{x}}_j$ of the random variable $\diff{\textbf{x}}_0$, then we can compute the statistical mean of the local costs over all the modes $\mean{C}^{(j)} = \dfrac{\sum\limits_{i = 0}^{K}{C_i(\diff{\textbf{x}_j})}}{K}$ and $\sigma^{(j)} = \sqrt{\sum\limits_{i=0}^{K}{\dfrac{(C_i(\diff{\textbf{x}_j}) - \diff{C}^{(j)})^2} {K - 1}}}$ and we can use them to compute the normalize costs $\hat{C_i}(\diff{\textbf{x}}_j) = \dfrac{C_i(\diff{\textbf{x}}_{j}) - \diff{C}^{(j)}}{\sigma^{(j)}}$. Figure \ref{fig:hist_post} shows the distribution of the local costs over modes after the normalization. As this values were more comparable, we minimized the normalized costs instead of the original ones.
 
-The algorithmic cost reduction obtained from corollary \ref{cor:costfunction} was not enough to face the full learning problem. We no longer had to study the full space of families F, but we still had no alternative to explore the full space of modes M, even if we just try to obtain a local minimum. Many local optimization techniques can avoid considering the full space it by relying on the structure of the optimization problem. For example, when the parameters are on a continuous metric space, the concept of gradient arises and methods as gradient descent can be used. Some structures can also be used to guarantee stronger properties as in convex problems, were local solutions are also global.
+The algorithmic cost reduction obtained from corollary \ref{cor:costfunction} was not enough to face the full optimization problem. We no longer had to study the full space of families $F$, but we still had no alternative to explore the full space of modes $M$, which grows exponentially with the length of the finite horizon. Inspiring ourselves in the original modes from Hogan's study, that concentrate all their variability on the first step, we devised the following protocol:
 
+\begin{enumerate}
+\item Consider short horizons that allow to compute $\hat{C}_i$ for all the possible modes fast.
+\item Gather a number samples of $\hat{C}_i$ relatively big compared to the number of possible modes.
+\item Select the modes that minimize the cost function in the small horizon environment.
+\item Extend the families to a longer horizon with simple S state tails.
+\end{enumerate}
+
+As we will show in section \ref{subsec:dynfom}, this approach is sufficient in our pusher-slider system to track complex trajectories, but in section \ref{sec:todo} we discuss an iterative procedure to extend the considered finite horizon.
+
+Choosing the set of K modes that minimizes the desired expression can depend exponentially on K, so we used a greedy upper bound approximation to compute it. The greedy approach was defined iteratively as follows:
+\begin{enumerate}
+\item Consider $m_1 = \textbf{S}$ (it is the nominal mode, so we always need to include it in the family) and $C_1(\diff{\textbf{x}}_j) = C_{m_1}(\diff{\textbf{x}}_j)$ 
+\item Select $m_{i + 1}$ to be the one that minimizes $\dfrac{\sum\limits_{j = 0}^{E}\min(C_i(\diff{\textbf{x}}_j), C_{m_{i+1}}(\diff{\textbf{x}}_j))}{E}$
+\item Let $C_{i+1}(\diff{\textbf{x}}_j) = \min(C_i(\diff{\textbf{x}}_j), C_{m_{i+1}}(\diff{\textbf{x}}_j))$
+\end{enumerate}
+
+This algorithm provides an upper bound for $\min\limits_{m_1, ..., m_K \in M} \dfrac{\sum\limits_{j = 0}^{E}(\min\limits_{i = 0}^{K}{C_{m_i}(\diff{\textbf{x}}_j)})}{E}$ we implemented the algorithm and we determined the lower bound of $ \bar{C}(\diff{\textbf{x}}_0; m_1, ..., m_K)$ by computing the statistical mean over the minimum of all the modes: $\dfrac{\sum\limits_{j = 0}^{E}(\min\limits_{i = 0}^{|M|}{C_{m_i}(\diff{\textbf{x}}_j)})}{E}$. Figure \ref{fig:cost_greedy_over_modes} shows the evolution of the cost provided by our greedy algorithm as more modes are added to the family. It can be seen that the upper bound quickly converges to the lower one.
 
 \begin{figure}[htb!]
 \begin{center}
-\includegraphics[width=16cm]{costs_over_mode_straight_line.jpg}
+\includegraphics[width=16cm]{cost_greedy_over_modes.jpg}
+\caption{\label{fig:cost_greedy_over_modes} \small Plot of our greedy approximation to the minimum value of $\diff{C}(\diff{\textbf{x}}; m_1, ... m_K)$ obtained by using families with K modes. The horizontal bar shows the optimal lower bound obtained when all the families are used. Its exact value is -1.5819.}
 \end{center}
-\caption{\label{fig:costs_over_mode_straight_line} \small Example histogram of $C_i(\diff{x_j})$ of the local costs obtained while tracking a horizontal line for 1000 initial conditions. The costs are clearly non-comparable}
 \end{figure}
 
-Considering all these aspects, we devised a systematic approach to study the structure of a general MPC problem and optimization techniques. We then provided a set of optimization techniques to be applied to obtain an approximate solution for the optimization problem. It has to be noted that the studies and techniques we will present are not proofs of a certain structure and thus, the techniques do not guarantee any kind of optimal solution. We considered proving any of these properties in an specific problem to be an object of research study in itself and it escaped the goal of this thesis, as we wanted to provide general simple tools to expand the FOM usage in the manipulation community.
+In the following section we will apply this procedure to linear and circular trajectories.
 
 \subsection{Simulation Results. Simple trajectory learning}
 \label{subsec:learningsimple}
-For our initial study, we tried to learn the best modes for single locally invariant trajectories. As proposed in the previous section, we started by obtaining 1000 samples of $\diff{x}$ from a uniform distribution in a cube in $\mathbb{R}^4$ the $\diff{x}$ and $\diff{y}$ disturbances on the x and y position of the slider center of mass were bounded between 0.5 and 0.5 meters. The slider angle disturbance $\diff{\theta}$ was bound between -$\dfrac{\pi}{4}$ and $\dfrac{\pi}{4}$ and the value of $p_y$ could lay in any point on the slider surface. For each initial condition the tracking problem was solved for all the possible modes with a small finite horizon of 5 steps. This implied 243 possible modes to be solved for each of the 1000 initial conditions, for a total of 243.000 single step tracking problems. The cost functions $C_i(\diff{x_j})$ were computed for each mode-initial condition pair.
-
-% trajectory described by $\textbf{x}(t) = (0.05 t, 0, 0, 0)^T$, $\textbf{u}(t) = (0.05, 0)$ with a finite horizon of 5 steps. The initial conditions were of the form $\textbf{x}_0 = (0, -0.5 + (i-1) \cdot 0.001, 0, 0)^T$, and a line as objective trajectory.
-
-
-TODO: FIX That is, given $C_i(\diff{x_j})$ we computed. The resulting standardized costs can be observed in Figure \ref{fig:hist_post}.
-
-We were not able to determine a clear probabilistic distribution for $\hat{C_i}(\diff{x_j})$ so we decided to minimize the statistical mean for each distribution $ \bar{C}(\diff{x}; m_1, ..., m_K) = \frac{\sum\limits_{j=0}^{N}{\min\limits_{i = 0}^{K}{C_i(\diff{x_j})}}}{N}$.
-
-Choosing the set of K modes that minimizes the desired expression can depend exponentially on K, so we used a greedy upper bound approximation to compute it. The greedy approach was defined recursively as follows:
-\begin{lemma}\textbf{Upper bound to } $ \bar{C}(\diff{x}; m_1, ..., m_K)$\textbf{:}
-(TODO: Define)
-\end{lemma}
-A dynamic programming algorithm was then implemented to simulate the recursion. Furthermore, we determined the lower bound of $ \bar{C}(\diff{x}; m_1, ..., m_K)$ by computing the minimum over all the modes for each experiment and computing the statistical mean.  $\min\limits_{m_1, ..., m_K \in M}\mathbb{E}(\min\limits_{i = 0}^{K}{\hat{C_i}(\diff{x})})$. By comparing the evolution of our computed upper bound with the lower bound we can see that the approximate algorithm quickly converges to the optimal solution (see Figure \ref{fig:cost_over_modes}) this properly captures relations between modes. The algorithm can choose modes that, even if they would not provide small means by themselves, can greatly increase their performance by associating with modes that specialize in initial conditions where they fail to give a good result. (TODO: Explain Better. For example say that the min mean for one is -1.6 and that it get's closer)
 
 \begin{figure}[htb!]
 \begin{center}
-\includegraphics[width=16cm]{cost_over_modes.jpg}
-\caption{\label{fig:cost_over_modes} \small Plot of our greedy approximation to the minimum value of $\diff{C}(\diff{\textbf{x}}; m_1, ... m_K)$ obtained by using families with K modes. The horizontal bar shows the optimal lower bound obtained when all the families are used. It's exact value is -1.9633.}
+\includegraphics[width=13cm]{line_costs_definitive.jpg}
+\caption{\label{fig:line_costs_definitive} \small Comparison between the original FOM from Hogan's study and the families obtained by applying the learning algorithm to a the linear trajectory $\textbf{x}^* =(v t, 0, 0, 0)^T$ $\textbf{u}^*(t) = (v, 0)^T$. The initial condition is $\diff{\textbf{x}}_0 = (0, .05, \dfrac{\pi}{6}, 0)^T$. The vertical axis correspond to the optimal value of the finite horizon MPC over time.}
 \end{center}
+
 \end{figure}
-
-We then proceeded to follow the strategies cited in the previous section. We successfully computed an approximation of the best modes for a 35 step length horizon by iteratively selecting the 5 best modes for $5 \cdot i$ steps for $i \in [1, 6]$ and extending them to $5 \cdot (i + 1)$ steps by adding all the possible tails to the previous best modes. Experimental results showed that state differences were more important when they occurred near the beginning of the mode than the end. This motivated us to compare the results obtained by following the full iterative procedure and the results obtained by computing the best modes for a short horizon and extending it with a long simple tail.
-
-(TODO: add pictures of the comparisons)
-
 \begin{figure}[htb!]
 \begin{center}
-\includegraphics[width=16cm]{learning_straight.jpg}
-\caption{\label{fig:cost_over_time_line} \small Comparison between the original FOM from Hogan's study and the families obtained by the learning algorithm. The initial condition is $\diff{\textbf{x}}_0 = (0, .05, \dfrac{\pi}{6}, 0)^T$. The vertical axis correspond to the optimal value of the finite horizon MPC over time.}
+\includegraphics[width=13cm]{line_4_modes_definitive.jpg}
+\caption{\label{fig:line_4_modes_definitive} \small Trajectory obtained when tracking the system described in Figure \ref{fig:line_costs_definitive} with a family containing the best 4 line modes learned using this section's procedure.}
 \end{center}
 \end{figure}
 
-\begin{figure}
-    \centering
-    \begin{minipage}{0.45\textwidth}
-        \centering
-        \includegraphics[width=1\textwidth]{learning_straight_original.jpg} % first figure itself
-        \caption{Trajectory obtained with the family from Hogan's work. Overall cost: 11.8847}
-    \end{minipage}\hfill
-    \begin{minipage}{0.5\textwidth}
-        \centering
-        \includegraphics[width=1\textwidth]{learning_straight_3_modes.jpg} % second figure itself
-        \caption{Trajectory obtained with the best combination of three modes computed using our learning procedure. Overall cost: 11.8664}
-    \end{minipage}
-\end{figure}
+For our initial study, we tried to learn the best modes for single locally invariant trajectories. As proposed in the previous section, we started by obtaining 1000 samples of $\diff{\textbf{x}}$ from a uniform distribution in a cube in $\mathbb{R}^4$. The $\diff{x}$ and $\diff{y}$ disturbances on the $x$ and $y$ position of the slider center of mass were bounded between 0.5 and 0.5 meters. The slider angle disturbance $\diff{\theta}$ was bound between -$\dfrac{\pi}{4}$ and $\dfrac{\pi}{4}$ and the value of $p_y$ could lay in any point on the slider surface. For each initial condition, the tracking problem was solved for all the possible modes with a small finite horizon of 5 steps. The number of possible modes was then 243 and each pair mode-sample had an associated single step FOM tracking problem. The cost functions $C_i(\diff{x_j})$ were computed for each mode-initial condition pair and were normalized following the procedure described in the previous section.
 
-The results obtained showed that adding a simple sticking tail to the best K modes chosen for a short trajectory was enough to successfully track a trajectory. (TODO: study with different tail)
+We then used the greedy algorithm we developed to compute and store our approximate ordering of modes and we extend them to a longer horizon of 35 steps and we used the k best modes to track base trajectories.
 
-(TODO: add graph with this)
+We applied this procedure to several circular trajectories and a horizontal line trajectory defined by $\textbf{x}^* =(v t, 0, 0, 0)^T$ $\textbf{u}^*(t) = (v, 0)^T$ for a certain pusher velocity $v$. The results for linear trajectories are shown in Figures \ref{fig:line_costs_definitive} and \ref{fig:line_4_modes_definitive}. All the learned families properly converge approximately at the same time and have a similar behaviour.
 
-Experimental results also showed that the improvement obtained by adding new modes decreased exponentially (TODO: check the proper name for this) before reaching the optimal value, as can be seen in Figure \ref{cost_over_modes}. After a few modes, the results are highly stable and the changes in the cost function are small.
+The circular trajectories were imposed by continuously pushing perpendicular to the slider side ($\textbf{u}^*(t) = (v, 0)^T$) at a distance $d$ of the center of the slider side $(p_y(t) = d$.
+Applying the motion equations derived in section \ref{subsec:motion_equations} and using the following definitions allows us to nicely compute the analytical nominal trajectory:
+Let $A = \dfrac{v}{c^2 + p_x^2 + d^2}$, $B = (c^2 + p_x^2)$, and $C = p_x d$. Then $\dot{\theta}(t) = -A$ so, assuming $\theta(0) = 0$, then $\theta(t) = -At$. Then:
+\begin{equation}
+\begin{pmatrix} \dot{x}(t)\\ \dot{y}(t) \end{pmatrix} = \dfrac{A}{d}\begin{pmatrix}
+cos(\theta(t))B - sin(\theta(t))C\\ sin(\theta(t))B + cos(\theta(t))C
+\end{pmatrix}
+\end{equation}
 
-
-
-\begin{figure}[htb!]
-\begin{center}
-\includegraphics[width=16cm]{old_vs_new_circle_interior.jpg}
-\caption{\label{fig:old_vs_new_circle_internal} \small Analogue to Figure \ref{fig:cost_over_time_line} for a circle trajectory with a internal disturbance. The initial condition is $\diff{\textbf{x}}_0 = (0.0, -0.03, -0.1, 0.0249)^T$}
-\end{center}
-\end{figure}
-
-\begin{figure}
-    \centering
-    \begin{minipage}{0.5\textwidth}
-        \centering
-        \includegraphics[width=1\textwidth]{frank_modes_circle_internal.jpg} % first figure itself
-        \caption{Trajectory obtained with the family from Hogan's work. Overall cost: 195.2719}
-    \end{minipage}\hfill
-    \begin{minipage}{0.5\textwidth}
-        \centering
-        \includegraphics[width=1\textwidth]{best_3_modes_circle_interior.jpg} % second figure itself
-        \caption{Trajectory obtained with the best combination of three modes computed using our learning procedure. Overall cost: 79.2438}
-    \end{minipage}
-\end{figure}
-
-\subsection{Dynamic FOM. Theory and results}
-\label{subsec:dynfom}
-The assumption of local invariance for the objective trajectories limited the range of application of the FOM approach as presented until now. In the previous section we could show a certain degree of robustness when using the modes learned on a simple straight line to track other trajectories, but the number of modes per family had to be increased while tracking circular trajectories in order to achieve the same results than while tracking straight lines. TODO: Check that it is true
-
-In section \ref{subsec:structure} we mentioned that we had a motivation to use locally invariant trajectories before obtaining the simulation results from the previous section. This motivation was to train the FOM method on several base locally invariant trajectories that could describe most of the situations the tracking problem would face (For the simple contact pusher-slider system this consisted in a straight line and several circular trajectories of different curvatures). Then we wanted to learn the best k modes for every base trajectory. To track complex trajectories, we would approximate them as a piece-wise composition of base ones and at each controller step we would use the best modes for each base trajectory depending on the base trajectory approximation of the current step.
+Which can be integrated to obtain:
+$$
+\begin{pmatrix} x(t)\\ y(t) \end{pmatrix} =\begin{pmatrix} x(0)\\ y(0) \end{pmatrix} + \dfrac{A}{d \dot{\theta}} \int\limits_0^T \dot{\theta}\begin{pmatrix}
+cos(\theta(t))B - sin(\theta(t))C\\ sin(\theta(t))B + cos(\theta(t))C
+\end{pmatrix} dt$$ considering $x(0) = y(0) = 0$, we obtain:
+\begin{equation} \label{eq:circular_trajectory}
+\begin{pmatrix} x(t)\\ y(t) \end{pmatrix} = \dfrac{-1}{d} \begin{pmatrix}
+sin(\theta(t))B + cos(\theta(t))C - C\\ -cos(\theta(t))B + sin(\theta(t))C + B
+\end{pmatrix}
+\end{equation}
+Also, from this expression we can easily compute the curvature associated with this curve, that we will use in the next section:
+\begin{equation} \label{eq:curvature}
+k = -sign(d) \dfrac{1}{R} = -sign(d) \dfrac{d}{\sqrt{B^2 + C^2}}
+\end{equation}
 
 \begin{remark}
 We will use the common mathematical notation for the curvature sign. That is, a positive curvature means that the unit tangent vector rotates counter-clockwise as a function of the parameter along the curve.
 \end{remark}
 
+Figures \ref{fig:old_vs_new_circle_internal} and \ref{fig:old_vs_new_circle_internal_trajectory} show the results of tracking one of the learned circular trajectories. As in the case of the linear trajectory, all the modes have similar behaviour. This is consistent with the properties shown in Figure \ref{fig:cost_greedy_over_modes}. The normalized cost the modes are minimizing quickly approaches the optimal in few iterations of the greedy algorithm and afterwards there's minimal improvement until reaching the optimal value.
+
+\begin{figure}[htb!]
+\begin{center}
+\includegraphics[width=16cm]{local_mpc_cost_over_time_circle_definitive.jpg}
+\caption{\label{fig:old_vs_new_circle_internal} \small Analogue to Figure \ref{fig:line_costs_definitive} for a circle trajectory with a internal disturbance. The circular trajectory corresponds to the one obtained by setting $d = 0.0249$. The initial condition is $\diff{\textbf{x}}_0 = (0.0, -0.05, -0.1, 0.0249)^T$}
+\end{center}
+\end{figure}
+
+\begin{figure}[htb!]
+\begin{center}
+\includegraphics[width=13cm]{trajectory_4_modes_circle_definitive.jpg}
+\caption{\label{fig:old_vs_new_circle_internal_trajectory} \small Trajectory obtained while tracking the system described in Figure \ref{fig:old_vs_new_circle_internal} with the family formed by the 4 best modes learned for this circle.}
+\end{center}
+\end{figure}
+
+\newpage
+
+\subsection{Dynamic FOM. Theory and results}
+\label{subsec:dynfom}
+The assumption of local invariance for the objective trajectories limited the range of application of the FOM approach as it was presented until now. In section \ref{subsec:structure} we mentioned that we had a motivation to use locally invariant trajectories before obtaining the simulation results from the previous section. This motivation was to train the FOM method on several base locally invariant trajectories that could describe most of the situations the tracking problem would face (For the simple contact pusher-slider system this consisted in a straight line and several circular trajectories of different curvatures). Then we wanted to learn the best k modes for every base trajectory and then approximate complex trajectories them as a piece-wise compositions of base ones. At each controller step we would use the best modes for each base trajectory depending on the base trajectory approximation of the current step.
+
 For simplicity, we decided to approximate the motion of the finite horizon by the local geometry of the instantaneous position in the nominal trajectory. We expected that a sufficient control frequency would allow the system to properly track the general trajectory even if its local properties undertook steep temporal changes. For the pusher-slider system mentioned before, the base trajectory was chosen by numerically computing the curvature of the objective trajectory at every control step and using the base trajectory with the most similar curvature value.
-
-We would then introduce dynamic families to the FOM problem. At each control step, the family used to track the trajectory would consist on the k best modes for the base trajectory that approximates the local geometry of the objective trajectory (together with the chameleon mode) to solve the MPC problem on that instant. The chameleon mode was shared between the dynamical families to ensure that the sequential consistency property was not lost.
-
-The main motivation for this method was to reduce the online cost of the FOM approach at the expense of more offline computations. We expected that choosing the best family dynamically would reduce the number of modes per family required to obtain good results in a broad range of trajectories. Having n modes in a family implies solving \textbf{n} convex optimization problems at every control step, so we wanted to keep it as low as possible.
-
-The learning algorithm was run on 10 pairs of curvatures (for each curvature $k$, we considered the complementary curvature $-k$) generated by setting the $p_x$ parameter uniformly from $-\dfrac{3b}{4}$ to  $\dfrac{3b}{4}$, where b is the length of the side of the slider. Using equation (TODO: add equation in previous section), the associated curvatures were obtained.
-
-Generating general feasible trajectories for the controller to stabilize is a complex problem in itself. We could use MPC to compute an optimal path to a certain destination using the distance to the destination as the cost function but this would have two important drawbacks. The first is that it would probably follow straight lines whenever possible, providing simple trajectories to stabilize. The second is that with MPC we can only obtain a discrete trajectory. We could approximate the obtained trajectory using splines, but we would not be able to guarantee feasibility of the trajectory defined by the state variable and the controller in the interpolated regions between control points.
-
-The planning problem escaped the scope of this study and, in order to both simplify it and to check the robustness of the controller, we decided to create trajectories by simple concatenation of linear and circular trajectories. This simplified the planning problem and created punctual discontinuities in the position of the pusher (for the straight lines the pusher was constantly at the center of the slider side, and for the circular trajectories the pusher was constantly at the distance $p_y$ associated to the circle and there were discontinuities at the changes between trajectories). We considered important to study whether the controller was capable to react to these temporally localized points of uncertainty were there was no feasible trajectory to immediately change from one trajectory to the next.
-
-With this formulation we were able to successfully track the general trajectory and we were able to reduce the required finite horizon to track properly the trajectory to 15 steps, as can be seen in Figure \ref{fig:dfom_trajectory_short_horizon}.
-
-TODO: Wrap-up
-
-\begin{remark}
-The circular trajectories used in the simulations of the DFOM had curvatures different than the ones used for the learning protocol, so the DFOM algorithm had to determine the base circle which was more similar to the nominal trajectory one.
-\end{remark}
 
 \begin{figure}
     \centering
@@ -1213,37 +1208,95 @@ The circular trajectories used in the simulations of the DFOM had curvatures dif
     \begin{minipage}{0.7\textwidth}
         \centering
         \includegraphics[width=1\textwidth]{dfom_trajectory_short_horizon_15_steps.jpg} % second figure itself
-        \label{fig:dfom_trajectory_short_horizon}
-        \caption{DFOM with 20 curvatures using the 4 best modes for each base trajectory. Finite horizon of 15 steps.}
+        \caption{DFOM with 20 curvatures using the 4 best modes for each base trajectory. Finite horizon of 15 steps.}\label{fig:dfom_trajectory_short_horizon}
     \end{minipage}
 \end{figure}
 
+We would then introduce dynamic families to the FOM problem. At each control step, the family used to track the trajectory would consist on the k best modes for the base trajectory that approximates the local geometry of the objective trajectory (together with the chameleon mode) to solve the MPC problem on that instant. The chameleon mode was shared between the dynamical families to ensure that the sequential consistency property was not lost.
+
+The main motivation for this method was to reduce the online cost of the FOM approach at the expense of more offline computations. We expected that choosing the best family dynamically would reduce the number of modes per family required to obtain good results in a broad range of trajectories. Having $n$ modes in a family implies solving $n$ convex optimization problems at every control step, so we wanted to keep it as low as possible.
+
+The learning algorithm was executed on 10 pairs of curvatures (for each curvature $k$, we considered the complementary curvature $-k$) generated by setting the $d$ parameter uniformly from $-\dfrac{3b}{4}$ to  $\dfrac{3b}{4}$, where b is the length of the side of the slider. Using equation \ref{eq:curvature}, the associated curvatures were obtained.
+
+Generating general feasible trajectories for the controller to stabilize is a complex problem in itself. We could use MPC to compute an optimal path to a certain destination using the distance to the destination as the cost function but this would have two important drawbacks. The first is that it would probably follow straight lines whenever possible, providing simple trajectories to stabilize. The second is that with MPC we can only obtain a discrete trajectory. We could approximate the obtained trajectory using splines, but we would not be able to guarantee feasibility of the trajectory defined by the state variable and the controller in the interpolated regions between control points.
+
+The planning problem escaped the scope of this study and, in order to both simplify it and to check the robustness of the controller, we decided to create trajectories by simple concatenation of linear and circular trajectories. This simplified the planning problem and created punctual discontinuities in the position of the pusher (for the straight lines the pusher was constantly at the center of the slider side, and for the circular trajectories the pusher was constantly at the distance $p_y$ associated to the circle and there were discontinuities at the changes between trajectories). We considered important to study whether the controller was capable to react to these temporally localized points of uncertainty were there was no feasible trajectory to immediately change from one trajectory to the next.
+
+\begin{remark}
+The circular trajectories used in the simulations of the DFOM had curvatures different than the ones used for the learning protocol, so the DFOM algorithm had to determine the base circle which was more similar to the nominal trajectory one.
+\end{remark}
+
+With this formulation we were able to successfully track the general trajectory and we were able to reduce the required finite horizon to track properly the trajectory to 15 steps, as can be seen in Figure \ref{fig:dfom_trajectory_short_horizon}
+
 \section{Discussion and Conclusion}
 \label{sec:conclusion}
+In the previous sections we obtained several positive results regarding the FOM algorithm. In this section we will expose them following the order in which they were presented in the thesis:
+
 \begin{enumerate}
-\item{MIQP} takes too long, it's execution time depends on the geometry of the problem (different time at each iteration). The results may depend on the implementation chosen. If you don't have a software that allows you to tune everything it is too complicated to implement. Clustered MIQP is no better. We should try MIQP with tail (we expect good results but bad time)
+
+\item The results obtained in sections \ref{subsec:nominal_mode} and \ref{subsec:chameleon} are fundamental to approach FOM to the research community. The change in formulation that ultimately lead to the presentation of the nominal mode is fundamental to obtain the good results showed along chapter \ref{sec:modeselection}. We want to emphasize that, without it, all the controllers we tested on circular trajectories diverged as the one showed in Figure \ref{fig:without_nominal_trajectory}.
+
+\item We would have liked to be able to compare the trajectories obtained by MIQP or by the clustered MIQP implementation we developed. In any case, showing the huge computational cost of MIQP in our velocity based formulation is useful to get an idea of the urge of the manipulation community to find fast solutions to it, even if they are approximated, as FOM. While implementing it, we realized that its drawbacks are not only the lack of scalability as the number of variables increases. Even if the same number of variables is uses, if the geometry of the optimization problem changes the computational cost of the problem can increase several orders of magnitude, as we explained in sections \ref{subsec:miqp} and \ref{subsec:simresults}.
+
+\item The sequential study of the FOM families that ultimately led to the chameleon mode has proven to be critical towards increasing the understanding of the FOM mode and towards keeping it simple. If we had not studied and addressed the sequential weaknesses of FOM, we could not have ultimately devised the mode selection procedure, as adding modes to families would generally imply loss of sequential properties and, thus, worse performance. If we had decided to constraint our families to be sequentially improving (by, for example, enforcing closure with respect to a suffix operation) the size of the FOM families would probably have increased a lot in order to keep the sequential improvement. 
+
+\item While implementing the mode selection protocol we were able to better understand why the fast and exact MPC solving is still an open problem. In order to be able to compute the best modes for a certain trajectory in a reasonable time we had to take several layers of assumptions. Fortunately, we were finally able to automatically provide minimal families of around 4 modes that successfully tracked the trajectories they were designed for.
+
+\item Showing that the DFOM is capable to track trajectories with punctual discontinuity is a great result toward proving the robustness and generality of the FOM approach, but we should be able to track other trajectories than compositions of circles and lines if we want to convince the manipulation community that the FOM can be a general controller.
 \end{enumerate}
 
-\section{Things to do if we had time}
+If we look at these results as related to the objectives we presented in chapter \ref{sec:goal_revisited}, we can conclude that:
+\begin{enumerate}
+\item The properties and formulation of the FOM have been clearly improved thanks to the concepts of chameleon and nominal modes and all their related theoretical background.
+
+\item We have not been able to compare the results of FOM with those of MIQP. We successfully compared FOM with clustered MIQP, but the fact that the second was worse doesn't allow us to have any ideal control trajectory to strive for.
+
+\item We successfully provided a simple set-up for the FOM method that is capable to track base trajectories described by straight lines, circles or a combination of both.
+
+\item Being able to track all these new trajectories also accounts to partially show the generality and robustness of the method, but we consider 
+\end{enumerate}
+
+In conclusion, we consider that all the results we obtained will bring the FOM method closer to the robotics manipulation community. However, we will continue this study to improve the FOM method further before presenting it to ISRR. In the next chapter we will expose the main lines of research we are currently studying and the list of studies/experiments we want to do before the symposium.
+
+\section{Current and Future Lines of Research}
 \label{sec:todo}
-\begin{itemize}
-\item Study modes correlation
-\item Study optimal mode dependency wrt initial condition.
-\item Change the uniformly distributed initial conditions by normally distributed.
-\end{itemize}
- 
- but that could fail to capture some feedback relations between modes. This will be further discussed in \ref{sec:todo}. (Correlation)
-(TODO: Make sure I discuss learning studies we would have done)
+
+\begin{figure}[h!]
+\centering
+{
+\includegraphics[width = 13cm]{curvature.pdf}
+\caption{Graphical representation of a pusher-slider system following a general trajectory. The osculating circle has been computed on the current trajectory state point.}
+\label{curvature}
+}
+\end{figure}
+
+We want to further study the generality and robustness of the method, as we feel that our current results would not completely convince the manipulation community.
+
+We are currently trying to expand the general trajectory tracking of the DFOM method by using a similar approach as in Hogan's work \cite{gt1} \cite{gt2}. Given a nominal trajectory $y^* = f(x^*)$ with $x^*(t) = t$ for simplicity, then the local curvature of the trajectory can be computed by:
+
+\beq
+k = \frac{f''(x)}{\left( 1 + f'(x)^2 \right)^{3/2}},
+\eeq
+
+Given the parametrization of the trajectory, we can assume $x(t)$ and $y(t)$ to be the ones defined by the trajectory, $\theta(t)$ to be $\theta(t) = f'(x)$ and we then assume that the trajectory is defined instantaneously by the osculating circle, so the value of $d$ can be computed numerically so that equation \ref{eq:curvature} holds. As in the trajectory from section \ref{subsec:dynfom}, the resulting equation has punctual discontinuities, so we cannot guarantee that the DFOM will be robust enough to track it until we finish the implementation and run the simulations.
+
+At the same time, we extended the formulation of the single point pusher to define the motion equations of a line pusher. We are currently trying to reproduce the learning protocol used for the single point pusher with this new system. We will try to analyse the robustness of the FOM approach by using a single point pusher FOM controller to control a line pusher and vice versa.
+
+
+On the learning protocol side, we will soon try an iterative method to learn the best modes for long horizons. The method starts as the procedure we presented in section \ref{subsec:structure}. That is by learning the best k modes for a horizon of 5 steps. We then extend these k modes to a horizon of 10 steps by adding all the possible $3^5$ tails to each of the best modes of the first iteration. We would then apply the same learning procedure to the new $253k$ modes, selecting again the k best.
+
+This procedure could be repeated iteratively until reaching a long horizon of around 35 steps.
+
 \newpage
 
 \bibliography{fom_bib}{}
 \bibliographystyle{plain}
 
 %______________________________________________________________
-\appendix
-\vfill\newpage \section{Simulation Interface Code}
-\label{app:code}
-You can include here an appendix with details that can not be included in the core of the document. You should reference the sections in this appendix in the core document.
+%\appendix
+%\vfill\newpage \section{Simulation Interface Code}
+%\label{app:code}
+%You can include here an appendix with details that can not be included in the core of the document. You should reference the sections in this appendix in the core document.
 
 \end{document}
 

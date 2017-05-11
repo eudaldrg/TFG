@@ -1,4 +1,4 @@
-\BOOKMARK [1][-]{section.1}{Goal of this study}{}% 1
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
 \BOOKMARK [1][-]{section.2}{Planar Pushing}{}% 2
 \BOOKMARK [2][-]{subsection.2.1}{Coulomb Friction}{section.2}% 3
 \BOOKMARK [2][-]{subsection.2.2}{Contact Slider-Support Surface}{section.2}% 4
@@ -28,5 +28,4 @@
 \BOOKMARK [2][-]{subsection.7.2}{Simulation Results. Simple trajectory learning}{section.7}% 28
 \BOOKMARK [2][-]{subsection.7.3}{Dynamic FOM. Theory and results}{section.7}% 29
 \BOOKMARK [1][-]{section.8}{Discussion and Conclusion}{}% 30
-\BOOKMARK [1][-]{section.9}{Things to do if we had time}{}% 31
-\BOOKMARK [1][-]{appendix.A}{Simulation Interface Code}{}% 32
+\BOOKMARK [1][-]{section.9}{Current and Future Lines of Research}{}% 31
